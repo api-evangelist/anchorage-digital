@@ -1,0 +1,16 @@
+generated: '2026-07-17'
+method: derived
+source: openapi/anchorage-digital-openapi-original.json
+summary:
+  types:
+  - apiKey
+  api_key_in:
+  - header
+schemes:
+- name: Api-Access-Key
+  type: apiKey
+  in: header
+  parameter: Api-Access-Key
+  description: An API key associated with a security role
+  sources:
+  - openapi/anchorage-digital-openapi-original.json
