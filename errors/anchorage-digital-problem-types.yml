@@ -1,0 +1,84 @@
+generated: '2026-07-17'
+method: derived
+source: openapi/anchorage-digital-openapi-original.json
+docs: https://docs.anchorage.com/knowledge-base/api-reference/errors-pagination
+format: custom-json
+envelope:
+  media_type: application/json
+  schema: '#/components/schemas/ErrorDetails'
+  fields:
+    errorType: enum discriminator (see error_types below)
+    message: human-readable description of the error
+error_types:
+- InternalError
+- InvalidRequest
+- Unauthenticated
+- Forbidden
+- NotFound
+- Conflict
+- UnprocessableEntity
+- TooManyRequests
+- ServiceUnavailable
+- QuoteExpired
+- InsufficientFunds
+- NotImplemented
+problems:
+- status: 400
+  error_type: InvalidRequest
+  title: Bad Request
+  detail: Improperly formed request — invalid syntax, insufficient funds, or a missing required parameter.
+  occurrences: 115
+- status: 401
+  error_type: Unauthenticated
+  title: Unauthorized
+  detail: The request was missing a valid API key.
+  occurrences: 134
+- status: 403
+  error_type: Forbidden
+  title: Forbidden
+  detail: The API key does not have permission (permission group) to perform the requested action.
+  occurrences: 134
+- status: 404
+  error_type: NotFound
+  title: Not Found
+  detail: The requested resource does not exist.
+  occurrences: 77
+- status: 409
+  error_type: Conflict
+  title: Conflict
+  detail: The resource is not in the required state (e.g. a withdrawal already in flight).
+  occurrences: 13
+- status: 422
+  error_type: UnprocessableEntity
+  title: Unprocessable Entity
+  detail: The request was well-formed but could not be processed.
+  occurrences: 7
+- status: 429
+  error_type: TooManyRequests
+  title: Too Many Requests
+  detail: The org-wide rate limit (20 req/s, burst 100) was exceeded. Back off and retry.
+  occurrences: 134
+- status: 500
+  error_type: InternalError
+  title: Internal Server Error
+  detail: Something went wrong on Anchorage Digital's side.
+  occurrences: 134
+- status: 501
+  error_type: NotImplemented
+  title: Not Implemented
+  detail: The requested operation is not implemented for this resource.
+  occurrences: 26
+- status: 503
+  error_type: ServiceUnavailable
+  title: Service Unavailable
+  detail: The service is temporarily unavailable; retry with backoff.
+  occurrences: 18
+domain_errors:
+- error_type: InsufficientFunds
+  detail: Amount plus network fee exceeds the wallet's available balance; lower the amount or set deductFeeFromAmountIfSameType.
+- error_type: QuoteExpired
+  detail: A trading quote is no longer valid; request a new quote before accepting.
+notes: >-
+  Errors are returned as application/json with an ErrorDetails envelope ({errorType, message}) —
+  not RFC 9457 application/problem+json. Occurrence counts are how many of the 134 operations
+  declare each status. A 201 can still fail later at execution (quorum/broadcast).

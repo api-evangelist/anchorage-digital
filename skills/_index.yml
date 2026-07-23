@@ -1,0 +1,16 @@
+generated: '2026-07-17'
+method: generated
+source: openapi/anchorage-digital-openapi-original.json
+skills:
+- file: anchorage-digital-transfer-assets.md
+  name: Transfer assets from a wallet
+  api: openapi/anchorage-digital-openapi-original.json
+  operations: [getVaults, getWallets, createTransfer, getTransfer]
+- file: anchorage-digital-execute-trade.md
+  name: Get a quote and execute a trade
+  api: openapi/anchorage-digital-openapi-original.json
+  operations: [requestQuote, acceptQuote, newOrderSingle, getOrderStatus]
+- file: anchorage-digital-register-webhook.md
+  name: Register a webhook endpoint and subscribe to events
+  api: openapi/anchorage-digital-openapi-original.json
+  operations: [listWebhookEventTypes, createWebhookEndpoints, createWebhookEndpointSubscriptions, getWebhookValidationKey]

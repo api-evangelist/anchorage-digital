@@ -1,0 +1,51 @@
+generated: '2026-07-17'
+method: derived
+source: openapi/anchorage-digital-openapi-original.json
+type: Webhooks
+spec_type: none
+delivery: HTTPS POST to subscriber-managed endpoints
+description: >-
+  Anchorage Digital exposes a Webhook Notifications management surface in the REST API v2.0.
+  Consumers register endpoints, subscribe to event types, and verify delivery signatures with a
+  published validation key. No AsyncAPI document is published; this catalogs the webhook surface
+  derived from the OpenAPI operations.
+management_operations:
+- operationId: getWebhookValidationKey
+  method: GET
+  path: /webhook/validation-key
+  summary: Retrieve the public key used to verify webhook payload signatures.
+- operationId: listWebhookEventTypes
+  method: GET
+  path: /webhook/event-types
+  summary: List the event types available to subscribe to.
+- operationId: createWebhookEndpoints
+  method: POST
+  path: /webhook/endpoints
+  summary: Register a webhook endpoint.
+- operationId: listWebhookEndpoints
+  method: GET
+  path: /webhook/endpoints
+  summary: List registered webhook endpoints.
+- operationId: getWebhookEndpoint
+  method: GET
+  path: /webhook/endpoints/{endpointId}
+  summary: Get a webhook endpoint by id.
+- operationId: updateWebhookEndpoint
+  method: PATCH
+  path: /webhook/endpoints/{endpointId}
+  summary: Update a webhook endpoint.
+- operationId: createWebhookEndpointSubscriptions
+  method: POST
+  path: /webhook/endpoints/{endpointId}/subscriptions
+  summary: Subscribe an endpoint to one or more event types.
+- operationId: listWebhookEndpointSubscriptions
+  method: GET
+  path: /webhook/endpoints/{endpointId}/subscriptions
+  summary: List an endpoint's event-type subscriptions.
+- operationId: cancelWebhookEndpointSubscription
+  method: DELETE
+  path: /webhook/endpoints/{endpointId}/subscriptions/{eventTypeId}
+  summary: Cancel an endpoint's subscription to an event type.
+verification:
+  note: Payloads are signed; fetch the validation key via getWebhookValidationKey and verify signatures on receipt.
+docs: https://docs.anchorage.com/knowledge-base/api-reference/introduction

@@ -1,0 +1,2639 @@
+openapi: 3.0.0
+info:
+  version: 2.0.0
+  title: Anchorage Digital API Reference Addresses Subaccounts API
+  contact:
+    email: api@anchorage.com
+  description: "# Introduction\n*CONFIDENTIAL: Please do not distribute this documentation externally without prior Anchorage Digital approval.*\n\n\nThe Anchorage Digital REST API v2.0 provides a set of operations and resources that allow Anchorage Digital clients and partners to:\n  - Programmatically transfer funds from an Anchorage Digital vault or wallet without human intervention\n  - Create and list deposit addresses in a vault\n  - Read and monitor vault balances\n  - Query transaction history including deposits\n  - Request quotes from and execute trades with the Anchorage Digital trading desk\n\n\nWant help or to share your opinion on how this API works for you? Please contact api@anchorage.com.\n\n\n# Authentication and Security\n\nThe Anchorage Digital API performs authentication and authorization via a combination of:\n\n\n* An API key, which is a bearer token\n\n* A permission group signed by the user's organization, which is linked to the API key\n\n* An Ed25519 Signature, which comes from a user-generated key and is required for certain requests\n\n\n## Permission Groups\n\n\nA permission group acts as a set of rules for how an organization and its resources can be accessed. Permission groups are created independently of API keys, and new permission groups must be created prior to making an API key.\n\n\nEach permission group has a name, a description and a set of permissions which can be applied to your organization's vaults. Updating, creating and deleting permissions groups require a quorum of approvals. After creation, a permission group can be freely assigned to an unlimited number of API keys.\n\n\nEach API key inherits its permissions from the associated permission group. When the permission group is updated, all API keys associated with it will inherit the updated permission set. If a permission group is deleted, all associated API keys will no longer work.\n\n\nEach organization is created with a default permission group that allows read-only access. This permission group may be modified or deleted at any time, and no API keys are created by default with this permission group.\n\n\n### Permissions\n\n\nPossible vault permissions include the following:\n\n\n<table>\n  <tr>\n    <td><b>Read vault activity (READ)</b></td>\n    <td>See an overview of your vault(s) and wallets. Read vault details, balances, asset types, transaction history and deposit addresses.</td>\n  </tr>\n  <tr>\n    <td><b>Create address (CREATE_DEPOSIT_ADDRESS)</b></td>\n    <td>Receive deposits in the vault from external sources. Create and read deposit addresses.</td>\n  </tr>\n  <tr>\n    <td><b>Transfer funds (TRANSFER)</b></td>\n    <td>This permission is configurable to enable an API key endowed with this permission to either 1) Transfer funds to any Anchorage Digital institutional account, including those outside of your organization or 2) Transfer funds to any blockchain address not custodied by Anchorage Digital that has gone through quorum approval.</td>\n  </tr>\n  <tr>\n    <td><b>Propose and accept settlements (PROPOSE_ACCEPT_SETTLEMENTS)</b></td>\n    <td>This is an Atlas specific permission for initiating settlements.</td>\n  </tr>\n  <tr>\n    <td><b>Authorize settlements (AUTHORIZE_SETTLEMENTS)</b></td>\n    <td>This is an Atlas specific permission for authorizing settlements after they've been proposed or accepted.</td>\n  </tr>\n</table>\n\n\nThere are also special vault permissions for enabled by Anchorage Digital on a per-organization basis:\n\nAdditionally, there are global permissions which apply to the entire organization:\n\n\n<table>\n  <tr>\n    <td><b>Initiate withdrawals (INITIATE_WITHDRAWAL)</b></td>\n    <td>Initiate withdrawals to external destinations. All withdrawals require quorum approval through the Anchorage Digital mobile app.</td>\n  </tr>\n  <tr>\n    <td><b>Execute trades (TRADE)</b></td>\n    <td>Request for quotes (RFQ) from the Anchorage Digital trading desk. Create and accept quotes. Read data of trades and settlements created by this key.</td>\n  </tr>\n  <tr>\n    <td><b>Read trade activity (READ_TRADE)</b></td>\n    <td>Read trade activity and trade settlements data of your organization.</td>\n  </tr>\n  <tr>\n    <td><b>Read lending activity (LENDER_READ)</b></td>\n    <td>Read lending activity of your organization.</td>\n  </tr>\n  <tr>\n    <td><b>Read facility data (FACILITY_ONLY)</b></td>\n    <td>Read lending facility data.</td>\n  </tr>\n  <tr>\n    <td><b>Read deposit attribution activity (READ_DEPOSIT_ATTRIBUTION)</b></td>\n    <td>Read deposit attribution activity of your organization.</td>\n  </tr>\n  <tr>\n    <td><b>Manage deposit attributions (DEPOSIT_ATTRIBUTION)</b></td>\n    <td>Read deposit attribution activity of your organization. Perform deposit attributions.</td>\n  </tr>\n  <tr>\n    <td><b>Initiate Staking and Unstaking (STAKE)</b></td>\n    <td>Initiate staking or unstaking operation. All operations require quorum approval through the Anchorage Digital mobile app.</td>\n  </tr>\n</table>\n\n\n### Example Workflow - Allow transfers from specific vaults\n\nTo create an API key with the ability to transfer funds from an Anchorage Digital vaults or wallet, a permission group must first be created with the **Transfer funds** permission for the desired source vaults. Creating this permission group requires a quorum of approvals on the Anchorage Digital iOS app. Once the creation is confirmed, any number of API keys may be created with this permission group in the Anchorage Digital Web Dashboard under the API 2.0 section.\n\nTo add additional permissions to the API key, update the associated permission group through the Anchorage Digital Web Dashboard. To revoke any permissions, the individual API key may be revoked, or the permission group may be updated or deleted to remove Transfer access.\n\n## API Keys\n\nAll API requests must be made over HTTPS and must include authentication using the following scheme.\n\n<!-- ReDoc-Inject: <security-definitions> -->\n\n### Generating an API Key\n\nIn order to make a valid API request, you must first create an API key. API keys can be created and managed in the Anchorage Digital Web Dashboard under the [API 2.0 tab](https://anchoragelogin.com/api). When you create an API key, there are 3 pieces of information you will need to remember:\n  - API access key\n  - Ed25519 public key (optional for read-only requests)\n  - Ed25519 private/signing key (optional for read-only requests)\n\nYou must generate an Ed25519 signing key pair and save the public portion in the Anchorage Digital Web Dashboard when creating the API access key. The signing key pair is used for added security with sensitive requests.\n\nPlease note, Anchorage Digital cannot recover your API access key or private signing key if you forget them. You may generate a new access key and signing key at any time if you lose access.\n\n### API Key Permissions\n\nEach API key is associated with a permission group. This permission group specifies the permitted actions for all associated API keys. Read more about permission groups [here](#section/Authentication-and-Security/Permission-Groups).\n\n### Creating a request\n\nAll requests must include the `Api-Access-Key` header, which contains your API access key as a string.\n\nEndpoints that require a signature must include the `Api-Signature` and `Api-Timestamp` headers. Read more about signatures [here](#section/Authentication-and-Security/Signatures).\n\nAll request bodies must be valid JSON and have the content type `application/json`.\n\n## Request Signatures\n\nCertain endpoints require an Ed25519 signature to be provided alongside the API key. These endpoints will specify the `Api-Signature` and `Api-Timestamp` headers as additional parameters.\n\nSignatures are optional unless explicitly required, but are encouraged for all requests. If a signature is provided, it will be verified.\n\n### Signing Keys\n\nA signing key pair is generated by the user and the corresponding public key must be provided when creating an API key.\n\nWhen creating an API key, you will be prompted to provide an Ed25519 public key. You must use the associated Ed25519 signing key (private key) when creating signatures for requests from this API key.\n\nPlease note that signing keys (Ed25519 private keys) should be stored securely by the user. The signing key should only be used to derive request signatures and should never be sent in a request. Anchorage Digital will never request you share your private key.\n\n### Generating a Signing Key\n\nThe user must securely generate an Ed25519 key pair on their own hardware and retain both the public and private portions. The Anchorage Digital API accepts a 64-character (32 bytes) hex-encoded Ed25519 public key when creating an API access key.\n\n\n#### Code sample (Python)\n\n*Generate a new signing key pair*\n\n```python\n# https://pypi.org/project/PyNaCl/\n\nimport nacl\nimport nacl.signing\nimport secrets\n\nseed = secrets.token_bytes(32)\n\n# Generate a new random signing key\nsigning_key = nacl.signing.SigningKey(seed)\n\n# Obtain the hex-encoded signing key\nprint('Signing key:')\nprint(signing_key.encode().hex())\n\n# Obtain the hex-encoded verify key for the given signing key\n# Use this in the Anchorage Digital Web Dashboard when creating an API key\nprint('Public key:')\nprint(signing_key.verify_key.encode().hex())\n```\n\n\n### Signing a Request\n\nTo sign a request, generate a request signature using the Ed25519 private (signing) key and provide it alongside the request in the `Api-Signature` header.\n\nTo create a request signature, first concatenate the `timestamp`, `method`, `request path`, and `body` into a string. Then, create a signature of this message using the Ed25519 private key and hex-encode the output. Use this value as the `Api-Signature` header and use the `timestamp` value as the `Api-Timestamp` header.\n\n- The `method` is an uppercase HTTP method (ex. `GET`, `POST`, `DELETE`)\n- The `request path` should contain all query parameters (ex. `/v2/transfers?foo=bar&baz=bang`)\n- The `body` is a stringified HTTP request body\n- The `body` should be omitted if the request does not contain a body (ex. a `GET` or `DELETE` request)\n- The `timestamp` is the same as the `Api-Timestamp` header\n- The `timestamp` is a number of seconds since the Unix Epoch in UTC, and must be within one minute of the API service's time when the request is received\n\n### Reference signature\n\nTo verify your signature generation code is correct, generate a signature for the following request and timestamp using the provided signing key. If the generated signature matches the signature below, your signature generation code is correct.\n\n\n<table>\n  <tr>\n    <td>Timestamp</td>\n    <td>1577880000</td>\n  </tr>\n  <tr>\n    <td>HTTP Method (Uppercase)</td>\n    <td>POST</td>\n  </tr>\n  <tr>\n    <td>HTTP Path + query</td>\n    <td>/v2/transfers?foo=bar&baz=bang</td>\n  </tr>\n  <tr>\n    <td>HTTP Body</td>\n    <td>{\"source\": {\"id\": \"1c920f4241b78a1d483a29f3c24b6c4c\", \"type\": \"VAULT\"}, \"assetType\": \"ETH\", \"destination\": {\"id\": \"55e89d4a644d736b01533a2ea9b32a20\", \"type\": \"VAULT\"}, \"amount\": \"1000.00000000\"}</td>\n  </tr>\n  <tr>\n    <td>Signing Key (Ed25519 Private Key Seed)</td>\n    <td>0101010101010101010101010101010101010101010101010101010101010101</td>\n  </tr>\n  <tr>\n    <td>Public Key</td>\n    <td>8a88e3dd7409f195fd52db2d3cba5d72ca6709bf1d94121bf3748801b40f6f5c</td>\n  </tr>\n  <tr>\n    <td>Signature</td>\n    <td>4bf42054bf7db1f8a2a2bc83d2a108502ee7a9d2ac7a2738adc2f932922446786fb9be1bd1eb475023296c6cba4ddbe28b04baca4b7521b1f1840a4ffd2b4d0d</td>\n  </tr>\n</table>\n\n## Reference clients\n\n### Python (with `requests` library)\n\n*Authorize and sign requests*\n\n```python\n\n# https://pypi.org/project/PyNaCl/\n\nfrom nacl import signing\n\nimport time\n\nimport requests\n\n\nclass AnchorageAuth(requests.auth.AuthBase):\n    ACCESS_KEY_HEADER = \"Api-Access-Key\"\n    SIGNATURE_HEADER = \"Api-Signature\"\n    TIMESTAMP_HEADER = \"Api-Timestamp\"\n\n    access_key: str\n    signing_key: signing.SigningKey\n\n    def __init__(self, access_key: str, signing_key_seed: bytes):\n        self.access_key = access_key\n        self.signing_key = signing.SigningKey(signing_key_seed)\n\n    def __call__(self, r: requests.PreparedRequest):\n        r.headers[self.ACCESS_KEY_HEADER] = self.access_key\n\n        timestamp = str(int(time.time()))\n        method = r.method.upper() if r.method else \"GET\"\n        body: bytes = bytes()\n        if r.body and isinstance(r.body, bytes):\n            body = r.body\n        elif r.body and isinstance(r.body, str):\n            body = bytearray(r.body, \"utf-8\")\n        message = b\"\".join(\n            [bytearray(timestamp, \"utf-8\"), bytearray(method, \"utf-8\"), bytearray(r.path_url, \"utf-8\"), body]\n        )\n        signature = self.signing_key.sign(message).signature.hex()\n        r.headers[self.SIGNATURE_HEADER] = signature\n        r.headers[self.TIMESTAMP_HEADER] = timestamp\n        return r\n\n\n# load secrets\n\n# Use the API key generated in the Anchorage Digital Web Dashboard\n\naccess_key = ...\n\n# Use the Ed25519 signing private key\n\nsigning_key_str = ... # load the raw string\n\nsigning_key = bytes(bytearray.fromhex(signing_key_str))\n\ndata = {}\n\nanchorage_auth = AnchorageAuth(access_key, signing_key)\n\nr = requests.post(\"https://api.anchorage.com/v2/transfers\", data=data, auth=anchorage_auth)\n\n```\n\n### Ruby - Reproduce reference signature\n```ruby\n  require \"ed25519\"\n  require \"net/http\"\n  require \"time\"\n\n  def hex_to_bin(s)\n      [s].pack('H*')\n  end\n\n  def bin_to_hex(s)\n      s.unpack('H*').first\n  end\n\n  private_key_seed_hex = '0101010101010101010101010101010101010101010101010101010101010101'\n  public_key_hex = '8a88e3dd7409f195fd52db2d3cba5d72ca6709bf1d94121bf3748801b40f6f5c'\n  key_pair_hex = private_key_seed_hex + public_key_hex\n\n  key_pair = hex_to_bin(key_pair_hex)\n\n  signing_key = Ed25519::SigningKey.from_keypair(key_pair)\n\n  timestamp = '1577880000' # Time.now.to_i.to_s\n\n  req = Net::HTTP::Post.new('/v2/transfers?foo=bar&baz=bang')\n  req.body = '{\"source\": {\"id\": \"1c920f4241b78a1d483a29f3c24b6c4c\", \"type\": \"VAULT\"}, \"assetType\": \"ETH\", \"destination\": {\"id\": \"55e89d4a644d736b01533a2ea9b32a20\", \"type\": VAULT\"}, \"amount\": \"1000.00000000\"}'\n\n  signature = signing_key.sign(timestamp + req.method + req.path + req.body)\n\n  req['Api-Access-Key'] = 'YOUR_ACCESS_KEY'\n  req['Api-Timestamp'] = timestamp\n  req['Api-Signature'] = bin_to_hex(signature)\n\n  puts bin_to_hex(signature)\n```\n\n# Errors\n\n\nThe Anchorage Digital API returns standard HTTP error codes for each API request.\n\n\n<table>\n  <tr>\n    <th style=\"width: 30%;\">Response Code</th>\n    <th>Description</th>\n  <tr>\n  <tr>\n    <td>200 OK</td>\n    <td>The request was successful.</td>\n  </tr>\n  <tr>\n    <td>400 Bad Request</td>\n    <td>The request was improperly formed and could not be understood by the server, often due to invalid syntax, insufficient funds, or a missing required parameter.</td>\n  </tr>\n  <tr>\n    <td>401 Unauthorized</td>\n    <td>The request was missing a valid API key.</td>\n  </tr>\n  <tr>\n    <td>403 Forbidden</td>\n    <td>The provided API key does not have permission to perform the requested action.</td>\n  </tr>\n  <tr>\n    <td>404 Not Found</td>\n    <td>The requested resource does not exist.</td>\n  </tr>\n  <tr>\n    <td>409 Conflict</td>\n    <td>The requested resource cannot proceed with the requested action because it is not in the required state.</td>\n  </tr>\n   <tr>\n    <td>429 Too Many Requests</td>\n    <td>Too many requests have been sent in a given amount of time.</td>\n  </tr>\n  <tr>\n    <td>\n      500 Internal Server Error\n      <br />\n      502 Bad Gateway\n      <br />\n      503 Service Unavailable\n      <br />\n      504 Gateway Timeout\n    </td>\n    <td>Something went wrong on Anchorage’s side. We have been alerted and are working on it.</td>\n  </tr>\n</table>\n\n\nIn addition to returning HTTP error codes for failed requests, the Anchorage Digital API includes a readable error message describing what went wrong in the response body.\n\n\n<SchemaDefinition schemaRef=\"#/components/schemas/ErrorDetails\" showReadOnly={true} showWriteOnly={true} />\n\n\n# Idempotency\n\n\nCertain endpoints support idempotent requests so that a given request can be safely retried without performing the same operation twice. For example, if a request to transfer funds does not respond due to network issues, you can retry the request using the same idempotent ID to ensure that only one transfer is created.\n\n\nEndpoints that support idempotent requests have an optional `idempotentId` field that can be included in the body of the `POST` request. Provide a unique string using your method of choice (such as a v4 UUID).\n\n\nIf a request is valid, Anchorage Digital will save the request indefinitely. If a subsequent request is received with the same `idempotentId` we will return the previously saved response for that `idempotentId`.\n\n\n# Rate Limits\n\n\nKeys provisioned by an Organization share one common rate limit. API requests are limited to 20 requests per second per Organization, allowing for bursts of up to 100 requests within a single second.\n\n\n# Pagination\n\n\nCursor pagination is used for REST endpoints which return multiple data points. Pagination allows for fetching data after the current page and specifying how many records to return. The `next` cursor is available in responses with the `page` attribute. Requests should use the `next` cursor URL to query subsequent data. Query parameter `afterId` specifies the last record previously retrieved. Some endpoints instead use the `endDate` parameter to specify the end date and older for records to retrieve. Query parameter `limit` specifies the maximum number of records in a response.\n\n## Parameters\n\n<table>\n  <tr>\n    <th style=\"width: 30%;\">Parameter</th>\n    <th>Description</th\n  </tr>\n  <tr>\n    <td>afterId</td>\n    <td>Request page after (older than) this pagination id.</td>\n  </tr>\n  <tr>\n    <td>endDate</td>\n    <td>Request records older than this date (YYYY-MM-DD format). Used for /trading/trades and /trading/settlements resources.</td>\n  </tr>\n  <tr>\n    <td>limit</td>\n    <td>Maximum number of results requested. Default usually 25, but varies depending on resource.</td>\n  </tr>\n</table>\n\n## Example\n\n`GET /v2/transfers?afterId=1968b94b09b8a1a8a381775d1f04978c424d891d50e517774bf984297985b471&limit=100`\n\n## Next cursor\n\nThe `next` cursor is a URL which references the last record in a set of records. When queried, the `next` cursor URL will return subsequent records, but otherwise using the same query parameters."
+servers:
+- url: https://api.anchorage-staging.com/v2
+security:
+- Api-Access-Key: []
+tags:
+- description: 'These endpoints allow the organization to manage subaccounts.
+
+    '
+  name: Subaccounts
+paths:
+  /subaccounts/accounts/{subaccountId}/wallets:
+    get:
+      operationId: getSubaccountWallets
+      summary: Return wallets linked to a subaccount
+      description: 'Permissions required: **Subaccount** or **Read Subaccount**
+
+
+        Return wallets linked to a subaccount
+
+        '
+      parameters:
+      - name: networkIds
+        in: query
+        schema:
+          type: array
+          items:
+            type: string
+        explode: false
+        style: form
+      - name: subaccountId
+        in: path
+        description: Unique Identifier for the subaccount
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Successfully returned linked wallets
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/SubaccountWalletResponse'
+                required:
+                - data
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '401':
+          description: Unauthenticated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+      tags:
+      - Subaccounts
+      x-security:
+        Subaccount: present
+        Read Subaccount: present
+  /subaccounts/accounts/{subaccountId}/bank-info:
+    get:
+      operationId: subaccountBankInfo
+      summary: Return bank information for a subaccount
+      description: 'Permissions required: **Subaccount** or **Read Subaccount**
+
+
+        Return bank information for a subaccount
+
+        '
+      parameters:
+      - name: subaccountId
+        in: path
+        description: Unique Identifier for the subaccount
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Successfully returned bank info
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BankInfoResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '401':
+          description: Unauthenticated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '404':
+          description: NotFound
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+      tags:
+      - Subaccounts
+      x-security:
+        Subaccount: present
+        Read Subaccount: present
+  /subaccounts/customers/{customerId}/accounts:
+    post:
+      operationId: createSubaccount
+      summary: Create a new subaccount for a given program customer
+      description: 'Permissions required: **Subaccount**
+
+
+        Open a new subaccount for the program customer
+
+
+        DEPRECATED, please use /onboarding/accounts'
+      parameters:
+      - name: customerId
+        in: path
+        description: Unique Identifier for the program customer
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateSubaccountRequest'
+      responses:
+        '200':
+          description: Successfully created the subaccount
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateSubaccountResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '401':
+          description: Unauthenticated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+      deprecated: true
+      tags:
+      - Subaccounts
+      x-security:
+        Subaccount: present
+    get:
+      operationId: getSubaccountsByCustomerId
+      summary: List subaccounts
+      description: 'Permissions required: **Subaccount** or **Read Subaccount**
+
+
+        Return all subaccounts associated to a customerId
+
+        '
+      parameters:
+      - name: customerId
+        in: path
+        description: Unique Identifier for the customer
+        required: true
+        schema:
+          type: string
+      - name: endDate
+        in: query
+        description: The end date (inclusive) in `YYYY-MM-DD` format. The latest valid end date is the current date. Dates are always in UTC [RFC 3339](https://datatracker.ietf.org/doc/html/rfc3339#section-5.6) 'full-date'.
+        schema:
+          type: string
+          format: date
+      - name: afterId
+        in: query
+        description: When paginating this is used to provide the starting point for the page to fetch (retrieved from the previous response body)
+        schema:
+          type: string
+      - name: statuses
+        in: query
+        description: Filter subaccounts by status
+        schema:
+          type: array
+          items:
+            type: string
+        explode: false
+        style: form
+      - name: limit
+        in: query
+        description: Maximum number of results to return per query
+        schema:
+          type: integer
+          format: int64
+          default: 25
+          maximum: 100
+          minimum: 1
+      responses:
+        '200':
+          description: Successfully returned subaccounts
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubaccountsResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '401':
+          description: Unauthenticated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+      tags:
+      - Subaccounts
+      x-security:
+        Subaccount: present
+        Read Subaccount: present
+  /subaccounts/customers/accounts:
+    get:
+      operationId: getAllSubaccounts
+      summary: List all subaccounts
+      description: 'Permissions required: **Subaccount**
+
+
+        Return all subaccounts associated for an organization
+
+        '
+      parameters:
+      - name: subaccountIds
+        in: query
+        description: Array of Unique Identifiers for the subaccount
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+        explode: false
+        style: form
+      - name: externalIds
+        in: query
+        description: Array of Unique Identifiers within an external system
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+        explode: false
+        style: form
+      - name: endDate
+        in: query
+        description: The end date (inclusive) in `YYYY-MM-DD` format. The latest valid end date is the current date. Dates are always in UTC [RFC 3339](https://datatracker.ietf.org/doc/html/rfc3339#section-5.6) 'full-date'.
+        schema:
+          type: string
+          format: date
+      - name: afterId
+        in: query
+        description: When paginating this is used to provide the starting point for the page to fetch (retrieved from the previous response body)
+        schema:
+          type: string
+      - name: statuses
+        in: query
+        description: Filter subaccounts by status
+        schema:
+          type: array
+          items:
+            type: string
+        explode: false
+        style: form
+      - name: limit
+        in: query
+        description: Maximum number of results to return per query
+        schema:
+          type: integer
+          format: int64
+          default: 25
+          maximum: 100
+          minimum: 1
+      responses:
+        '200':
+          description: Successfully returned subaccounts
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubaccountsResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '401':
+          description: Unauthenticated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+      tags:
+      - Subaccounts
+      x-security:
+        Subaccount: present
+  /subaccounts/accounts/{subaccountId}:
+    patch:
+      operationId: updateSubaccount
+      summary: Update an existing subaccount
+      description: 'Permissions required: **Subaccount**
+
+
+        Update a subaccount
+
+        '
+      parameters:
+      - name: subaccountId
+        in: path
+        description: Unique Identifier for the subaccount
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateSubaccountRequest'
+      responses:
+        '200':
+          description: Successfully updated the subaccount
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateSubaccountResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '401':
+          description: Unauthenticated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+      tags:
+      - Subaccounts
+      x-security:
+        Subaccount: present
+  /subaccounts/transactions:
+    post:
+      operationId: createSubaccountTransaction
+      summary: Create new transactions
+      description: 'Permissions required: **Subaccount**
+
+
+
+        Create new transactions between subaccounts of the same Program Customer. This is a transactional operation, all transactions will be created successfully or none will.
+
+        '
+      parameters:
+      - name: Api-Signature
+        in: header
+        description: "A hex-encoded Ed25519 signature of `timestamp_epoch_seconds + uppercase(http_method) + request_path + request_body`.\n\n\n\nConstruction example:\n\n  ```\n  toHex(\n    ed25519Sign(\n      signing_key,\n      '{}{}{}{}'.format(timestamp_epoch_seconds, toUpper(httpMethod), httpRequestPath, httpBody)\n    )\n  )\n  ```\n"
+        required: true
+        schema:
+          type: string
+          pattern: ^[0-9A-Fa-f]{128,160}$
+      - name: Api-Timestamp
+        in: header
+        description: Current timestamp, represented as unix epoch seconds
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateSubaccountTransactionRequest'
+      responses:
+        '200':
+          description: Successfully created the transactions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateSubaccountTransactionResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '401':
+          description: Unauthenticated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+      tags:
+      - Subaccounts
+      x-security:
+        Subaccount: present
+    get:
+      operationId: getSubaccountTransactions
+      summary: List all transactions
+      description: 'Permissions required: **Subaccount** or **Read Subaccount**
+
+
+
+        Return all the transactions, sorted by the creation date, the client has access to
+
+        '
+      parameters:
+      - name: subaccountId
+        in: query
+        description: Unique Identifier for the Subaccount
+        required: false
+        schema:
+          type: string
+      - name: afterId
+        in: query
+        description: When paginating this is used to provide the starting point for the page to fetch (retrieved from the previous response body)
+        schema:
+          type: string
+      - name: limit
+        in: query
+        description: Maximum number of results to return per query
+        schema:
+          type: integer
+          format: int64
+          default: 25
+          maximum: 100
+          minimum: 1
+      - name: statuses
+        in: query
+        description: One or more transaction statuses to filter results
+        schema:
+          type: array
+          items:
+            type: string
+            enum:
+            - POSTED
+            - PENDING
+            - CANCELED
+          uniqueItems: true
+        explode: false
+        style: form
+      - name: types
+        in: query
+        description: One or more transaction types to filter results
+        schema:
+          type: array
+          items:
+            type: string
+            enum:
+            - DEPOSIT
+            - WITHDRAWAL
+            - TRADE
+            - TRADE_SETTLEMENT
+            - MANAGEMENT_FEE
+            - CUSTODY_FEE
+            - ADVISORY_FEE
+            - MODEL_FEE
+            - FEE_SETTLEMENT
+            - SUBACCOUNT_TRANSFER
+            - STAKING_REWARD
+            - DELEGATION_REWARD
+          uniqueItems: true
+        explode: false
+        style: form
+      - name: startDate
+        in: query
+        description: The start date (inclusive) in `YYYY-MM-DD` format. The earliest valid start date is '2017-01-01`. Dates are always in UTC [RFC 3339](https://datatracker.ietf.org/doc/html/rfc3339#section-5.6) 'full-date'.
+        required: false
+        schema:
+          type: string
+          format: date
+      - name: endDate
+        in: query
+        description: The end date (inclusive) in `YYYY-MM-DD` format. The earliest valid start date is '2017-01-01`. Dates are always in UTC [RFC 3339](https://datatracker.ietf.org/doc/html/rfc3339#section-5.6) 'full-date'.
+        required: false
+        schema:
+          type: string
+          format: date
+      responses:
+        '200':
+          description: A list of transactions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubaccountTransactionsResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '401':
+          description: Unauthenticated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+      tags:
+      - Subaccounts
+      x-security:
+        Subaccount: present
+        Read Subaccount: present
+  /subaccounts/transactions/{transactionsIds}:
+    get:
+      operationId: getSubaccountTransactionsById
+      summary: Get list of transactions filter by ID
+      description: 'Permissions required: **Subaccount** or **Read Subaccount**
+
+
+
+        Return the requested transactions, sorted by the creation date, the client has access too
+
+        '
+      parameters:
+      - name: transactionsIds
+        in: path
+        description: Unique Identifiers for the transaction. Invalid transactionIds will be ignored.
+        required: true
+        schema:
+          type: array
+          items:
+            type: string
+        style: simple
+      - name: startDate
+        in: query
+        description: The start date (inclusive) in `YYYY-MM-DD` format. The earliest valid start date is '2017-01-01`. Dates are always in UTC [RFC 3339](https://datatracker.ietf.org/doc/html/rfc3339#section-5.6) 'full-date'.
+        required: false
+        schema:
+          type: string
+          format: date
+      - name: endDate
+        in: query
+        description: The end date (inclusive) in `YYYY-MM-DD` format. The latest valid end date is the current date. Dates are always in UTC [RFC 3339](https://datatracker.ietf.org/doc/html/rfc3339#section-5.6) 'full-date'.
+        schema:
+          type: string
+          format: date
+      - name: afterId
+        in: query
+        description: When paginating this is used to provide the starting point for the page to fetch (retrieved from the previous response body)
+        schema:
+          type: string
+      - name: limit
+        in: query
+        description: Maximum number of results to return per query
+        schema:
+          type: integer
+          format: int64
+          default: 25
+          maximum: 100
+          minimum: 1
+      responses:
+        '200':
+          description: A list of requested transactions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubaccountTransactionsByIdResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '401':
+          description: Unauthenticated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+      tags:
+      - Subaccounts
+      x-security:
+        Subaccount: present
+        Read Subaccount: present
+  /subaccounts/transactions/allocations:
+    post:
+      operationId: createFundingAllocations
+      summary: Create new allocations
+      description: 'Permissions required: **Subaccount**
+
+
+
+        Create new allocation of pre-funded values between the Funding and Program Customers'' subaccounts. This is a transactional operation, all transactions will be created successfully or none will.
+
+        '
+      parameters:
+      - name: Api-Signature
+        in: header
+        description: "A hex-encoded Ed25519 signature of `timestamp_epoch_seconds + uppercase(http_method) + request_path + request_body`.\n\n\n\nConstruction example:\n\n  ```\n  toHex(\n    ed25519Sign(\n      signing_key,\n      '{}{}{}{}'.format(timestamp_epoch_seconds, toUpper(httpMethod), httpRequestPath, httpBody)\n    )\n  )\n  ```\n"
+        required: true
+        schema:
+          type: string
+          pattern: ^[0-9A-Fa-f]{128,160}$
+      - name: Api-Timestamp
+        in: header
+        description: Current timestamp, represented as unix epoch seconds
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateFundingAllocationsRequest'
+      responses:
+        '200':
+          description: Successfully created the transactions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateFundingAllocationsResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '401':
+          description: Unauthenticated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+      tags:
+      - Subaccounts
+      x-security:
+        Subaccount: present
+    get:
+      operationId: getFundingAllocations
+      summary: Fetches a set of filtered transactions allocations
+      description: 'Permissions required: **Subaccount** or **Read Subaccount**
+
+
+
+        Retrieves a filtered set of transactions that are connected to funding allocations.
+
+        '
+      parameters:
+      - name: subaccountIds
+        in: query
+        description: Array of Unique Identifiers for the subaccount
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+        explode: false
+        style: form
+      - name: startDate
+        in: query
+        description: The start date (inclusive) in `YYYY-MM-DD` format. The earliest valid start date is '2017-01-01`. Dates are always in UTC [RFC 3339](https://datatracker.ietf.org/doc/html/rfc3339#section-5.6) 'full-date'.
+        required: false
+        schema:
+          type: string
+          format: date
+      - name: endDate
+        in: query
+        description: The end date (inclusive) in `YYYY-MM-DD` format. The latest valid end date is the current date. Dates are always in UTC [RFC 3339](https://datatracker.ietf.org/doc/html/rfc3339#section-5.6) 'full-date'.
+        required: false
+        schema:
+          type: string
+          format: date
+      - name: transactionsTypes
+        in: query
+        description: Filters by DEPOSITs, WITHDRAWALs or both (default)
+        schema:
+          type: array
+          items:
+            type: string
+            enum:
+            - DEPOSIT
+            - WITHDRAWAL
+          uniqueItems: true
+        explode: false
+        style: form
+      - name: afterId
+        in: query
+        description: When paginating this is used to provide the starting point for the page to fetch (retrieved from the previous response body)
+        schema:
+          type: string
+      - name: limit
+        in: query
+        description: Maximum number of results to return per query
+        schema:
+          type: integer
+          format: int64
+          default: 25
+          maximum: 100
+          minimum: 1
+      responses:
+        '200':
+          description: A list of transactions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubaccountTransactionsResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '401':
+          description: Unauthenticated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+      tags:
+      - Subaccounts
+      x-security:
+        Subaccount: present
+        Read Subaccount: present
+  /subaccounts/{subaccountId}/fiat/withdrawals:
+    post:
+      operationId: createSubaccountWithdrawal
+      summary: Create a USD Withdrawal Request for a subaccount
+      description: 'Permissions required: **Subaccount**
+
+
+
+        Creates a USD Withdrawal Request for an Asset within a Subaccount (FIAT only for now)
+
+
+        This will trigger an e-mail to be sent to the program customer to authorize the withdrawal.'
+      parameters:
+      - name: subaccountId
+        in: path
+        description: Unique Identifier for the subaccount
+        required: true
+        schema:
+          type: string
+      - name: Api-Signature
+        in: header
+        description: "A hex-encoded Ed25519 signature of `timestamp_epoch_seconds + uppercase(http_method) + request_path + request_body`.\n\n\n\nConstruction example:\n\n```\n\ntoHex(\n\n\ted25519Sign( \tsigning_key, \t'{}{}{}{}'.format(timestamp_epoch_seconds, toUpper(httpMethod), httpRequestPath, httpBody) \t) )\n\n```\n"
+        required: true
+        schema:
+          type: string
+          pattern: ^[0-9A-Fa-f]{128,160}$
+      - name: Api-Timestamp
+        in: header
+        description: Current timestamp, represented as unix epoch seconds
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateSubaccountWithdrawalRequest'
+      responses:
+        '200':
+          description: The ID of the created Transaction
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateSubaccountWithdrawalResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '401':
+          description: Unauthenticated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+      tags:
+      - Subaccounts
+      x-security:
+        Subaccount: present
+    get:
+      operationId: listSubaccountWithdrawals
+      summary: Fetches a set of Withdrawals Requests for a subaccount
+      description: 'Permissions required: **Subaccount** or **Read Subaccount**
+
+
+
+        Retrieves a filtered set of Withdrawal Requests within a Subaccount (FIAT only for now).'
+      parameters:
+      - name: subaccountId
+        in: path
+        description: Unique Identifier for the subaccount
+        required: true
+        schema:
+          type: string
+      - name: withdrawalStatuses
+        in: query
+        description: One or more withdrawal statuses to filter results. If no value is passed, it filter by all statuses.
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+            enum:
+            - INITIATED
+            - FAILED
+            - PENDING_ENDORSEMENT
+            - PENDING_REVIEW
+            - BROADCASTING
+            - COMPLETED
+            - CANCELED
+          uniqueItems: true
+        explode: false
+        style: form
+      - name: startDate
+        in: query
+        description: The start date (inclusive) in `YYYY-MM-DD` format. The earliest valid start date is '2017-01-01`. Dates are always in UTC [RFC 3339](https://datatracker.ietf.org/doc/html/rfc3339#section-5.6) 'full-date'.
+        required: false
+        schema:
+          type: string
+          format: date
+      - name: endDate
+        in: query
+        description: The end date (inclusive) in `YYYY-MM-DD` format. The latest valid end date is the current date. Dates are always in UTC [RFC 3339](https://datatracker.ietf.org/doc/html/rfc3339#section-5.6) 'full-date'.
+        required: false
+        schema:
+          type: string
+          format: date
+      - name: afterId
+        in: query
+        description: When paginating this is used to provide the starting point for the page to fetch (retrieved from the previous response body)
+        required: false
+        schema:
+          type: string
+      - name: limit
+        in: query
+        description: Maximum number of results to return per query
+        required: false
+        schema:
+          type: integer
+          format: int64
+          default: 25
+          maximum: 100
+          minimum: 1
+      responses:
+        '200':
+          description: List the Withdrawal Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListSubaccountWithdrawalsResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '401':
+          description: Unauthenticated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+      tags:
+      - Subaccounts
+      x-security:
+        Subaccount: present
+        Read Subaccount: present
+  /subaccounts/{subaccountId}/fiat/withdrawals/{transactionId}:
+    delete:
+      operationId: cancelSubaccountWithdrawal
+      summary: Cancels a Withdrawal Request for a subaccount
+      description: 'Permissions required: **Subaccount**
+
+        Cancels a Withdrawal Request
+
+        '
+      parameters:
+      - name: subaccountId
+        in: path
+        description: Unique Identifier for the subaccount
+        required: true
+        schema:
+          type: string
+      - name: transactionId
+        in: path
+        description: Unique Identifier for the Withdrawal Transaction
+        required: true
+        schema:
+          type: string
+      - name: Api-Signature
+        in: header
+        description: "A hex-encoded Ed25519 signature of `timestamp_epoch_seconds + uppercase(http_method) + request_path + request_body`.\n\n\n\nConstruction example:\n\n  ```\n  toHex(\n    ed25519Sign(\n      signing_key,\n      '{}{}{}{}'.format(timestamp_epoch_seconds, toUpper(httpMethod), httpRequestPath, httpBody)\n    )\n  )\n  ```\n"
+        required: true
+        schema:
+          type: string
+          pattern: ^[0-9A-Fa-f]{128,160}$
+      - name: Api-Timestamp
+        in: header
+        description: Current timestamp, represented as unix epoch seconds
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: Success or Failure of the request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CancelSubaccountWithdrawalResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '401':
+          description: Unauthenticated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+      tags:
+      - Subaccounts
+      x-security:
+        Subaccount: present
+    get:
+      operationId: getSubaccountWithdrawal
+      summary: Get USD Withdrawal Request for a subaccount
+      description: 'Permissions required: **Subaccount**
+
+        Get a USD Withdrawal Request
+
+        '
+      parameters:
+      - name: subaccountId
+        in: path
+        description: Unique Identifier for the subaccount
+        required: true
+        schema:
+          type: string
+      - name: transactionId
+        in: path
+        description: Unique Identifier for the Withdrawal Transaction
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Get the Withdrawal Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetSubaccountWithdrawalResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '401':
+          description: Unauthenticated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+      tags:
+      - Subaccounts
+      x-security:
+        Subaccount: present
+  /subaccounts/billing/charges:
+    post:
+      operationId: createSubaccountBillingCharges
+      summary: Create Manual Billing Charge
+      description: 'Permissions required: **Subaccount**
+
+
+        Create Manual Billing Charge'
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateSubaccountBillingChargesRequest'
+      responses:
+        '200':
+          description: Ids of the created billing charges
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateSubaccountBillingChargesResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '401':
+          description: Unauthenticated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+      tags:
+      - Subaccounts
+      x-security:
+        Subaccount: present
+  /subaccounts/billing/charges/{chargeId}:
+    delete:
+      operationId: cancelSubaccountBillingCharge
+      summary: Cancel Manual Billing Charge
+      description: 'Permissions required: **Subaccount**
+
+
+        Cancel Manual Billing Charge'
+      parameters:
+      - name: chargeId
+        in: path
+        description: The id for your billing charge
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Successfully deleted the billing charge
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CancelSubaccountBillingChargeResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '401':
+          description: Unauthenticated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '404':
+          description: Billing charge not found
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+      tags:
+      - Subaccounts
+      x-security:
+        Subaccount: present
+components:
+  schemas:
+    SubaccountCustomers:
+      description: List of account owners with their respective roles (can only be changed during onboarding)
+      type: array
+      items:
+        $ref: '#/components/schemas/SubaccountCustomer'
+    CreateSubaccountBillingChargesRequest:
+      description: Details of the billing charge to create
+      type: object
+      properties:
+        charges:
+          type: array
+          items:
+            type: object
+            properties:
+              amount:
+                description: The amount to transfer
+                type: string
+                example: '1000.00'
+              subaccountId:
+                description: Unique Identifier for the subaccount
+                type: string
+                example: ec761b5e-fd2c-497a-a9a0-f8738ac97bdf
+            required:
+            - subaccountId
+            - amount
+          maxItems: 100
+          minItems: 1
+        feeType:
+          $ref: '#/components/schemas/CreateFeeType'
+        idempotentId:
+          type: string
+        interval:
+          type: object
+          properties:
+            endDate:
+              type: string
+              format: date
+            startDate:
+              type: string
+              format: date
+          required:
+          - startDate
+          - endDate
+      required:
+      - idempotentId
+      - feeType
+      - charges
+      title: CreateSubaccountBillingChargesRequest
+    DestinationAddress:
+      description: Information related to the Address of the Benificiary
+      type: object
+      properties:
+        address:
+          description: Street Address
+          type: string
+          maxLength: 35
+        address2:
+          description: Street Address Continued
+          type: string
+          maxLength: 35
+        city:
+          description: City of the Address
+          type: string
+        country:
+          description: Country of the Address
+          type: string
+        state:
+          description: State of the Address
+          type: string
+        zipcode:
+          description: Zip Code of the Address
+          type: string
+      example:
+        address: 123 Main Street
+        city: Windsor
+        state: Iowa
+        zipcode: '12312'
+      required:
+      - address
+      - city
+      - state
+      - zipcode
+      title: DestinationAddress
+    SubaccountTransaction:
+      type: object
+      properties:
+        createdAt:
+          description: The timestamp when the transaction request was created.
+          type: string
+          format: date-time
+          example: '2019-01-02T12:34:56.000Z'
+        endedAt:
+          description: The timestamp when the transaction request reached a final state - POSTED or CANCELED (optional).
+          type: string
+          format: date-time
+          example: '2019-01-03T12:34:56.000Z'
+          nullable: true
+        status:
+          $ref: '#/components/schemas/SubaccountTransactionStatus'
+        subaccounts:
+          type: array
+          items:
+            $ref: '#/components/schemas/SubaccountTransactionEntry'
+        transactionId:
+          description: The transaction ID which can be used to reference this transaction in other queries.
+          type: string
+          example: c4c4652f-0c07-472c-a7f8-955fbe07775d
+        transactionType:
+          $ref: '#/components/schemas/SubaccountTransactionType'
+      example:
+        transactionId: c4c4652f-0c07-472c-a7f8-955fbe07775d
+        subaccounts:
+        - subaccountId: ec761b5e-fd2c-497a-a9a0-f8738ac97bdf
+          balances:
+          - assetType: BTC
+            hold: '1000.00'
+            pending: '1000.00'
+            posted: '1000.00'
+        status: POSTED
+        createdAt: '2019-01-02T12:34:56.000Z'
+        endedAt: '2019-01-03T12:34:56.000Z'
+        transactionType: WITHDRAWAL
+      required:
+      - transactionId
+      - status
+      - subaccounts
+      - createdAt
+      title: SubaccountTransaction
+    Beneficiary:
+      type: object
+      properties:
+        beneficiaryAllocation:
+          type: number
+          maximum: 100
+          minimum: 0
+        beneficiaryName:
+          type: string
+        beneficiaryType:
+          $ref: '#/components/schemas/BeneficiaryType'
+      required:
+      - beneficiaryType
+      - beneficiaryName
+      - beneficiaryAllocation
+      title: Beneficiary
+    CreateSubaccountWithdrawalResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/SubaccountWithdrawalResponse'
+      required:
+      - data
+      title: CreateSubaccountWithdrawalResponse
+    BeneficiaryType:
+      type: string
+      enum:
+      - SPOUSE
+      - FAMILY_OR_FRIEND
+      - CHARITY
+      - TRUST
+      - ESTATE
+      title: BeneficiaryType
+    TransactionIdResponse:
+      type: object
+      properties:
+        transactionIds:
+          type: array
+          items:
+            type: object
+            properties:
+              idempotentId:
+                description: A client-provided unique ID for idempotent transaction
+                type: string
+                example: '12838927347'
+                maxLength: 128
+              transactionId:
+                description: Unique Identifier for the transaction
+                type: string
+                example: c4c4652f-0c07-472c-a7f8-955fbe07775d
+            required:
+            - transactionId
+            - idempotentId
+      title: TransactionIdResponse
+    CreateSubaccountTransactionRequest:
+      description: Details of the transactions to create
+      type: object
+      properties:
+        transactions:
+          type: array
+          items:
+            $ref: '#/components/schemas/CreateSubaccountTransaction'
+          maxItems: 100
+          minItems: 1
+      required:
+      - transactions
+      title: CreateSubaccountTransactionRequest
+    WithdrawalBankInfo:
+      description: Information needed to trigger the wire transfer
+      type: object
+      properties:
+        beneficiary:
+          description: Beneficiary Information
+          type: object
+          properties:
+            accountNumber:
+              description: Bank Account Number
+              type: string
+            address:
+              $ref: '#/components/schemas/DestinationAddress'
+            name:
+              description: Name of the Beneficiary
+              type: string
+          required:
+          - address
+          - name
+        financialInstitution:
+          $ref: '#/components/schemas/RoutingDetails'
+        intermediateFinancialInstitution:
+          $ref: '#/components/schemas/RoutingDetails'
+        memo:
+          description: Memo field of the wire
+          type: string
+      required:
+      - beneficiary
+      title: WithdrawalBankInfo
+    AccruedFeeType:
+      type: object
+      properties:
+        accruedValue:
+          description: Accrued fee value for the period.
+          type: string
+        endPeriod:
+          description: The end date (inclusive) in `YYYY-MM-DD` format of the period accrued. Dates are always in UTC [RFC 3339](https://datatracker.ietf.org/doc/html/rfc3339#section-5.6) 'full-date'.
+          type: string
+          format: date
+        rate:
+          description: The rate should be in percentage format. The rate should be a value between 0 and 1 where 0.01 is 1%.
+          type: number
+          maximum: 1
+          minimum: 0
+        startPeriod:
+          description: The start date (inclusive) in `YYYY-MM-DD` format of the period accrued. Dates are always in UTC [RFC 3339](https://datatracker.ietf.org/doc/html/rfc3339#section-5.6) 'full-date'.
+          type: string
+          format: date
+        state:
+          $ref: '#/components/schemas/FeeCalculationStateType'
+        totalBalanceInUSD:
+          description: Assets under custody value in USD at the time of accrual.
+          type: string
+        type:
+          $ref: '#/components/schemas/FeeType'
+      required:
+      - startPeriod
+      - endPeriod
+      - accruedValue
+      - type
+      - rate
+      - state
+      title: AccruedFee
+    CancelSubaccountWithdrawalResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/CancelSubaccountWithdrawalObject'
+      required:
+      - data
+      title: CancelSubaccountWithdrawalResponse
+    CreateFeeType:
+      type: string
+      enum:
+      - ADVISORY
+      - MODEL
+      - MANAGEMENT
+      title: CreateFeeType
+    UpdateSubaccountResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/SubaccountIdResponse'
+      required:
+      - data
+      title: UpdateSubaccountResponse
+    CreateFundingAllocationsRequest:
+      description: Details of the allocations to create
+      type: object
+      properties:
+        allocations:
+          type: array
+          items:
+            $ref: '#/components/schemas/CreateFundingAllocation'
+          maxItems: 100
+          minItems: 1
+        idempotentId:
+          description: A client-provided unique ID for idempotent requests
+          type: string
+          example: '12838927347'
+          maxLength: 128
+      required:
+      - allocations
+      - idempotentId
+      title: CreateFundingAllocationsRequest
+    SubaccountWithdrawalResponse:
+      type: object
+      properties:
+        transactionId:
+          description: Unique Identifier for the transaction
+          type: string
+          example: c4c4652f-0c07-472c-a7f8-955fbe07775d
+      required:
+      - transactionId
+      title: SubaccountWithdrawalResponse
+    CreateFeeDetailType:
+      type: object
+      properties:
+        isBillable:
+          description: Defines if a fee will be billed directly to the subaccount.
+          type: boolean
+          default: true
+        rate:
+          description: The rate should be in percentage format. The rate should be a value between 0 and 1 where 0.01 is 1%.
+          type: number
+          default: 0
+          maximum: 1
+          minimum: 0
+        type:
+          $ref: '#/components/schemas/CreateFeeType'
+      required:
+      - type
+      title: CreateFeeDetailType
+    UpdateFeeDetailType:
+      type: object
+      properties:
+        isBillable:
+          description: Defines if a fee will be billed directly to the subaccount.
+          type: boolean
+          default: true
+        rate:
+          description: The rate should be in percentage format. The rate should be a value between 0 and 1 where 0.01 is 1%.
+          type: number
+          default: 0
+          maximum: 1
+          minimum: 0
+        startDate:
+          description: The start date (inclusive) in `YYYY-MM-DD` format. This date should always be set in the future. Dates are always in UTC [RFC 3339](https://datatracker.ietf.org/doc/html/rfc3339#section-5.6) 'full-date'.
+          type: string
+          format: date
+        type:
+          $ref: '#/components/schemas/CreateFeeType'
+      required:
+      - type
+      - startDate
+      title: UpdateFeeDetailType
+    SubaccountIdResponse:
+      type: object
+      properties:
+        subaccountId:
+          description: Unique Identifier for the subaccount
+          type: string
+          example: ec761b5e-fd2c-497a-a9a0-f8738ac97bdf
+      required:
+      - subaccountId
+      title: SubaccountIdResponse
+    ListSubaccountWithdrawalsObject:
+      type: object
+      properties:
+        asset:
+          $ref: '#/components/schemas/AssetAmount'
+        createdAt:
+          description: The timestamp when the withdrawal request was created.
+          type: string
+          format: date-time
+          example: '2019-01-02T12:34:56.000Z'
+        customerDetails:
+          $ref: '#/components/schemas/WithdrawalBankInfo'
+        endedAt:
+          description: The timestamp when the withdrawal request reached a final state - COMPLETED or FAILED (optional).
+          type: string
+          format: date-time
+          example: '2019-01-03T12:34:56.000Z'
+          nullable: true
+        transactionId:
+          description: Unique Identifier for the transaction
+          type: string
+          example: c4c4652f-0c07-472c-a7f8-955fbe07775d
+        updatedAt:
+          description: The timestamp of the last update to the request.
+          type: string
+          format: date-time
+          example: '2019-01-03T12:34:56.000Z'
+        withdrawalStatus:
+          description: Identifies the status of the withdrawal transaction
+          type: string
+          enum:
+          - INITIATED
+          - PENDING_ENDORSEMENT
+          - PENDING_REVIEW
+          - BROADCASTING
+          - COMPLETED
+          - FAILED
+          - CANCELED
+      title: ListSubaccountWithdrawalsObject
+    GetSubaccountWithdrawalObject:
+      type: object
+      properties:
+        asset:
+          $ref: '#/components/schemas/AssetAmount'
+        customerDetails:
+          $ref: '#/components/schemas/WithdrawalBankInfo'
+        status:
+          type: string
+          enum:
+          - INITIATED
+          - PENDING_ENDORSEMENT
+          - PENDING_REVIEW
+          - BROADCASTING
+          - COMPLETED
+          - FAILED
+          - CANCELED
+      title: GetSubaccountWithdrawalObject
+    SubaccountSubType:
+      description: SubType of the subaccount, may not always apply
+      type: string
+      enum:
+      - ROLLOVER
+      - CONVERSION
+    RoutingDetails:
+      type: object
+      properties:
+        address:
+          $ref: '#/components/schemas/DestinationAddress'
+        code:
+          type: string
+          enum:
+          - ABA
+          - BIC
+          - DDA
+        id:
+          type: string
+        name:
+          description: Name of the Beneficiary
+          type: string
+      required:
+      - id
+      - code
+      title: RoutingDetails
+    UpdateSubaccountRequest:
+      description: Details of the subaccount to open for the customer
+      type: object
+      properties:
+        beneficiaryGroup:
+          $ref: '#/components/schemas/BeneficiaryGroup'
+        contingencyBeneficiaryGroup:
+          $ref: '#/components/schemas/BeneficiaryGroup'
+        fees:
+          description: List of fees to be update
+          type: array
+          items:
+            $ref: '#/components/schemas/UpdateFeeDetailType'
+        programSignerGroup:
+          $ref: '#/components/schemas/ProgramSignerGroup'
+      example:
+        fees:
+        - type: ADVISORY
+          rate: 0.01
+          startDate: '2023-12-01'
+      title: UpdateSubaccountRequest
+    SubaccountTransactionsResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/SubaccountTransaction'
+        page:
+          $ref: '#/components/schemas/Page'
+      required:
+      - data
+      title: SubaccountTransactionsResponse
+    CreateSubaccountTransaction:
+      description: Details of a transaction to create
+      type: object
+      properties:
+        amount:
+          description: The amount to transfer
+          type: string
+          example: '1000.00'
+        assetType:
+          description: A string representing a type of crypto-asset, which usually corresponds to the crypto asset's ticker symbol. Use `/asset-types` to list all of the supported asset types for your organization.
+          type: string
+          example: BTC
+        destinationSubaccountId:
+          description: Unique Identifier for the subaccount
+          type: string
+          example: 3eeaf765-0df2-49c9-9e1f-db9cf3e796dd
+        idempotentId:
+          description: A client-provided unique ID for idempotent transaction
+          type: string
+          example: '12838927347'
+          maxLength: 128
+        sourceSubaccountId:
+          description: Unique Identifier for the subaccount
+          type: string
+          example: ec761b5e-fd2c-497a-a9a0-f8738ac97bdf
+        transactionMemo:
+          description: A memo to be included with the transaction
+          type: string
+          example: This is a memo
+      required:
+      - sourceSubaccountId
+      - destinationSubaccountId
+      - assetType
+      - amount
+      - idempotentId
+      title: CreateSubaccountTransaction
+    SubaccountType:
+      description: Type of the subaccount
+      type: string
+      enum:
+      - IRA
+      - ROTH
+      - JOINT
+      - CUSTODIAL
+      - INDIVIDUAL_TAXABLE
+      - INSTITUTIONAL_TAXABLE
+    FeeType:
+      type: string
+      enum:
+      - ADVISORY
+      - MODEL
+      - MANAGEMENT
+      - CUSTODY
+      title: FeeType
+    SubaccountTransactionAmount:
+      type: object
+      properties:
+        assetType:
+          description: 'A string representing a type of crypto-asset, which usually corresponds to the crypto asset''s ticker symbol. Use `/asset-types` to list all of the supported asset types for your organization.
+
+
+            * Posted - Amount is fully settled and available
+
+
+            * Hold - Amount is held and not available
+
+
+            * Pending - Amount is available for trading but not for withdrawal as it not settled yet
+
+
+            * A list with the supported types of balance available for this asset and transaction'
+          type: string
+          example: BTC
+        balances:
+          type: array
+          items:
+            type: object
+            properties:
+              amount:
+                type: string
+              balanceType:
+                type: string
+      title: SubaccountTransactionAmount
+    BalanceDetails:
+      type: object
+      properties:
+        assetType:
+          description: A string representing a type of crypto-asset, which usually corresponds to the crypto asset's ticker symbol. Use `/asset-types` to list all of the supported asset types for your organization.
+          type: string
+          example: BTC
+        availableForTrading:
+          type: string
+        availableForWithdrawal:
+          type: string
+        entries:
+          type: array
+          items:
+            $ref: '#/components/schemas/Balance'
+        totalBalance:
+          type: string
+      title: BalanceDetails
+    ErrorDetails:
+      type: object
+      properties:
+        errorType:
+          $ref: '#/components/schemas/ErrorType'
+        message:
+          description: A human-readable message providing more details about the error.
+          type: string
+          example: Missing required field 'amount'.
+      required:
+      - errorType
+      - message
+      title: ErrorDetails
+    CreateSubaccountResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/SubaccountIdResponse'
+      required:
+      - data
+      title: CreateSubaccountResponse
+    BeneficiaryGroup:
+      type: array
+      items:
+        $ref: '#/components/schemas/Beneficiary'
+      title: BeneficiaryGroup
+    SubaccountCustomer:
+      description: Unique Identifier and role for the program customer in subaccount
+      type: object
+      properties:
+        customerId:
+          description: Unique Identifier for the program customer
+          type: string
+        role:
+          description: Role of the program customer in the subaccount
+          type: string
+          enum:
+          - PRIMARY
+          - SECONDARY
+    CancelSubaccountBillingChargeResponse:
+      type: object
+      properties:
+        data:
+          type: object
+          properties:
+            success:
+              type: boolean
+          required:
+          - success
+      required:
+      - data
+      title: CancelSubaccountBillingChargeResponse
+    SubaccountsResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/SubaccountsDetails'
+        page:
+          $ref: '#/components/schemas/Page'
+      required:
+      - data
+      title: SubaccountsResponse
+    GetSubaccountWithdrawalResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/GetSubaccountWithdrawalObject'
+      required:
+      - data
+      title: GetSubaccountWithdrawalResponse
+    SubaccountsDetails:
+      type: object
+      properties:
+        accruedFees:
+          type: array
+          items:
+            $ref: '#/components/schemas/AccruedFeeType'
+          example:
+          - startPeriod: '2024-06-01'
+            endPeriod: '2024-06-15'
+            accruedValue: '1.21'
+            rate: 0.01
+            type: MANAGEMENT
+            totalBalanceInUSD: '121.33'
+            state: ONGOING
+          - startPeriod: '2024-05-01'
+            endPeriod: '2024-05-31'
+            accruedValue: '1.12'
+            rate: 0.01
+            type: MANAGEMENT
+            totalBalanceInUSD: '112.33'
+            state: DONE
+          - startPeriod: '2024-04-01'
+            endPeriod: '2024-04-30'
+            accruedValue: '1.21'
+            rate: 0.01
+            type: MANAGEMENT
+            totalBalanceInUSD: '121.33'
+            state: DONE
+          - startPeriod: '2024-06-01'
+            endPeriod: '2024-06-15'
+            accruedValue: '1.21'
+            rate: 0.01
+            type: MODEL
+            totalBalanceInUSD: '121.33'
+            state: ONGOING
+          - startPeriod: '2024-05-01'
+            endPeriod: '2024-05-31'
+            accruedValue: '1.21'
+            rate: 0.01
+            type: MODEL
+            totalBalanceInUSD: '121.33'
+            state: DONE
+          - startPeriod: '2024-04-01'
+            endPeriod: '2024-04-30'
+            accruedValue: '1.21'
+            rate: 0.01
+            type: MODEL
+            totalBalanceInUSD: '121.33'
+            state: DONE
+        balances:
+          type: array
+          items:
+            $ref: '#/components/schemas/BalanceDetails'
+        createdAt:
+          description: The timestamp when the subaccount was created.
+          type: string
+          format: date-time
+          example: '2019-01-02T12:34:56.000Z'
+        customerId:
+          description: 'Unique identifier for the customer
+
+
+            DEPRECATED, please use `customers` field instead'
+          type: string
+        customers:
+          $ref: '#/components/schemas/SubaccountCustomers'
+        externalSubaccountId:
+          description: The external unique identifier used to identify this subaccount
+          type: string
+        fees:
+          type: array
+          items:
+            $ref: '#/components/schemas/FeeDetailType'
+          example:
+          - type: ADVISORY
+            rate: 0.01
+            startDate: '2023-08-01'
+            isBillable: true
+          - type: MODEL
+            rate: 0.01
+            startDate: '2023-08-01'
+            isBillable: true
+          - type: MANAGEMENT
+            rate: 0.01
+            startDate: '2023-08-01'
+            isBillable: true
+          - type: CUSTODY
+            rate: 0.01
+            startDate: '2023-08-01'
+            isBillable: true
+        name:
+          description: The name of the subaccount
+          type: string
+        status:
+          $ref: '#/components/schemas/SubaccountStatus'
+        subaccountId:
+          description: Unique Identifier for the subaccount
+          type: string
+          example: ec761b5e-fd2c-497a-a9a0-f8738ac97bdf
+        subType:
+          $ref: '#/components/schemas/SubaccountSubType'
+        type:
+          $ref: '#/components/schemas/SubaccountType'
+      required:
+      - subaccountId
+      - name
+      - customerId
+      - externalSubaccountId
+      - balances
+      - fees
+      - createdAt
+      - accruedFees
+      title: SubaccountsDetails
+    CancelSubaccountWithdrawalObject:
+      type: object
+      properties:
+        success:
+          type: boolean
+      title: CancelSubaccountWithdrawalObject
+    ErrorType:
+      description: The type of error returned.
+      type: string
+      enum:
+      - InternalError
+      - InvalidRequest
+      - Unauthenticated
+      - Forbidden
+      - NotFound
+      - Conflict
+      - UnprocessableEntity
+      - TooManyRequests
+      - ServiceUnavailable
+      - QuoteExpired
+      - InsufficientFunds
+      - NotImplemented
+      title: ErrorType
+    SubaccountTransactionEntry:
+      type: object
+      properties:
+        amounts:
+          type: array
+          items:
+            $ref: '#/components/schemas/SubaccountTransactionAmount'
+        subaccountId:
+          description: Unique Identifier for the subaccount
+          type: string
+          example: ec761b5e-fd2c-497a-a9a0-f8738ac97bdf
+      title: SubaccountTransactionEntry
+    SubaccountStatus:
+      description: Status of the subaccount
+      type: string
+      enum:
+      - OPEN
+      - CLOSED
+      - SUBMITTED
+    BankInfoResponse:
+      type: object
+      properties:
+        data:
+          type: object
+          properties:
+            bank:
+              description: Bank name
+              type: string
+            bankAccountNr:
+              description: Bank Account Number
+              type: string
+            bankAddress:
+              description: Bank Address
+              type: string
+            bankRoutingNr:
+              description: Bank Routing Number
+              type: string
+              pattern: ^\d{9}$
+            bankSwiftCode:
+              description: Bank Swift Code
+              type: string
+            beneficiaryAddress:
+              description: Beneficiary Address
+              type: string
+            beneficiaryName:
+              description: Beneficiary Name
+              type: string
+            memo:
+              description: Memo field to use on a Wire deposit
+              type: string
+      title: BankInfoResponse
+    CreateSubaccountBillingChargesResponse:
+      type: object
+      properties:
+        data:
+          type: object
+          properties:
+            ids:
+              type: array
+              items:
+                type: string
+          required:
+          - ids
+      required:
+      - data
+      title: CreateSubaccountBillingChargeResponse
+    SubaccountWalletResponse:
+      type: object
+      properties:
+        networkId:
+          type: string
+        walletId:
+          type: string
+      title: SubaccountWalletReponse
+    CreateSubaccountRequest:
+      description: Details of the subaccount to open for the program customer
+      type: object
+      properties:
+        externalSubaccountId:
+          description: The external unique identifier you wish to use to identify this subaccount.
+          type: string
+        fees:
+          description: List of fees applied to the subaccount. All fees need to be defined.
+          type: array
+          items:
+            $ref: '#/components/schemas/CreateFeeDetailType'
+        name:
+          description: The name of the subaccount. Needs to be unique per program customer.
+          type: string
+      example:
+        name: Subaccount Name
+        externalSubaccountId: EXTERNAL_ID_001
+        fees:
+        - type: ADVISORY
+          rate: 0.01
+        - type: MODEL
+          rate: 0.01
+          isBillable: false
+        - type: MANAGEMENT
+          rate: 0.01
+      required:
+      - externalSubaccountId
+      - fees
+      - name
+      title: CreateSubaccountRequest
+    ListSubaccountWithdrawalsResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/ListSubaccountWithdrawalsObject'
+        page:
+          $ref: '#/components/schemas/Page'
+      required:
+      - data
+      title: ListSubaccountWithdrawalsResponse
+    CreateSubaccountTransactionResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/TransactionIdResponse'
+      required:
+      - data
+      title: CreateSubaccountTransactionResponse
+    CreateFundingAllocationsResponse:
+      type: object
+      properties:
+        idempotentId:
+          description: A client-provided unique ID for idempotent requests
+          type: string
+          example: '12838927347'
+          maxLength: 128
+        transactionIds:
+          type: array
+          items:
+            type: string
+      required:
+      - idempotentId
+      title: CreateFundingAllocationsResponse
+    SubaccountTransactionsByIdResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/SubaccountTransaction'
+        page:
+          $ref: '#/components/schemas/Page'
+      required:
+      - data
+      title: SubaccountTransactionsByIdResponse
+    FeeDetailType:
+      type: object
+      properties:
+        isBillable:
+          description: Defines if a fee will be billed directly to the subaccount.
+          type: boolean
+        rate:
+          description: The rate should be in percentage format. The rate should be a value between 0 and 1 where 0.01 is 1%.
+          type: number
+          maximum: 1
+          minimum: 0
+        startDate:
+          description: The start date (inclusive) in `YYYY-MM-DD` format. This date should always be set in the future. Dates are always in UTC [RFC 3339](https://datatracker.ietf.org/doc/html/rfc3339#section-5.6) 'full-date'.
+          type: string
+          format: date
+        type:
+          $ref: '#/components/schemas/FeeType'
+      required:
+      - type
+      - rate
+      - startDate
+      - isBillable
+      title: FeeDetailType
+    SubaccountTransactionStatus:
+      description: 'A string describing the status of the given transaction
+
+
+
+        * POSTED - This transaction has been completed and is confirmed on the blockchain.
+
+
+
+        * CANCELED - This transaction has been cancel. Funds were not successfully transferred.
+
+
+
+        * PENDING - This transaction has been queued and the funds are being held until the transaction is POSTED or CANCELED.
+
+        '
+      type: string
+      enum:
+      - POSTED
+      - PENDING
+      - CANCELED
+      title: SubaccountTransactionStatus
+    ProgramSigner:
+      type: object
+      properties:
+        programSignerEmail:
+          type: string
+        programSignerFirstName:
+          type: string
+        programSignerLastName:
+          type: string
+      required:
+      - programSignerFirstName
+      - programSignerLastName
+      - programSignerEmail
+      title: ProgramSigner
+    FeeCalculationStateType:
+      type: string
+      enum:
+      - ONGOING
+      - DONE
+      title: FeeStateType
+    AssetAmount:
+      type: object
+      properties:
+        amount:
+          description: An amount of a crypto-asset to transfer, without units. The unit is derived from the asset type. The amount must be positive
+          type: string
+          example: '1000.0'
+        assetType:
+          description: 'A string representing a type of asset, which usually corresponds to the crypto asset''s ticker symbol.
+
+
+            Use `/asset-types` to list all of the supported asset types for your organization.
+
+
+            For now only USD is available'
+          type: string
+          example: USD
+      required:
+      - assetType
+      - amount
+      title: AssetAmount
+    SubaccountTransactionType:
+      description: 'A string describing the type of the given transaction
+
+
+        * DEPOSIT - Deposit transaction
+
+
+        * WITHDRAWAL - Withdrawal transaction
+
+
+        * TRADE - Trade transaction
+
+
+        * MANAGEMENT_FEE - Management fee
+
+
+        * CUSTODY_FEE - Custody fee
+
+
+        * ADVISORY_FEE - Advisory fee
+
+
+        * MODEL_FEE - Model fee
+
+
+        * SUBACCOUNT_TRANSFER - subaccount transfer
+
+
+        * TRADE_SETTLEMENT - Trade settlement
+
+
+        * DEPOSIT_SWEEP - Deposit sweep
+
+
+        * GAS_FILL - Gas fill transaction
+
+
+        * FEE_SETTLEMENT - Fee settlement
+
+
+        * TRANSACTION_FEE - Transaction fee
+
+
+        * RETURN - Return transaction
+
+
+        * STAKE - Stake transaction
+
+
+        * UNSTAKE - Stake transaction
+
+
+        * CLAIM - Claim rewards
+
+
+        * STAKING_REWARD - Staking rewards
+
+
+        * DELEGATION_REWARD - Delegation rewards
+
+        '
+      type: string
+      enum:
+      - DEPOSIT
+      - WITHDRAWAL
+      - TRADE
+      - MANAGEMENT_FEE
+      - CUSTODY_FEE
+      - ADVISORY_FEE
+      - MODEL_FEE
+      - SUBACCOUNT_TRANSFER
+      - TRADE_SETTLEMENT
+      - DEPOSIT_SWEEP
+      - GAS_FILL
+      - FEE_SETTLEMENT
+      - TRANSACTION_FEE
+      - RETURN
+      - STAKE
+      - UNSTAKE
+      - CLAIM
+      - STAKING_REWARD
+      - DELEGATION_REWARD
+      title: SubaccountTransactionType
+    CreateSubaccountWithdrawalRequest:
+      description: Details of the withdrawal to create for the subaccount
+      type: object
+      properties:
+        asset:
+          $ref: '#/components/schemas/AssetAmount'
+        customerDetails:
+          $ref: '#/components/schemas/WithdrawalBankInfo'
+      example:
+        asset:
+          assetType: USD
+          amount: '10.01'
+        customerDetails:
+          beneficiary:
+            name: John Doe
+            accountNumber: '123'
+            address:
+              address: 123 Main Street
+              city: Windsor
+              state: Iowa
+              zipcode: '12312'
+          financialInstitution:
+            address:
+              address: '123'
+              address2: '123'
+              city: '123'
+              zipcode: '123'
+              state: '123'
+            name: name
+            id: '123'
+            code: ABA
+          memo: '12312312'
+      required:
+      - asset
+      - customerDetails
+      title: CreateSubaccountWithdrawalRequest
+    CreateFundingAllocation:
+      type: object
+      properties:
+        amount:
+          description: The amount to allocate
+          type: string
+          example: '1000.00'
+        assetType:
+          description: A string representing a type of asset. At the moment, only USD is supported.
+          type: string
+          example: USD
+        subaccountId:
+          description: Unique Identifier for the subaccount
+          type: string
+          example: ec761b5e-fd2c-497a-a9a0-f8738ac97bdf
+        transactionType:
+          description: 'A string describing the type of the given allocation
+
+
+            * DEPOSIT - Deposit allocation (Client to Program Customer)
+
+
+            * WITHDRAWAL - Withdrawal allocation (Program Customer to Client)
+
+            '
+          type: string
+          enum:
+          - DEPOSIT
+          - WITHDRAWAL
+      required:
+      - subaccountId
+      - assetType
+      - amount
+      - transactionType
+      title: CreateFundingAllocation
+    ProgramSignerGroup:
+      type: array
+      items:
+        $ref: '#/components/schemas/ProgramSigner'
+      title: ProgramSignerGroup
+    Page:
+      description: Pagination info
+      type: object
+      properties:
+        next:
+          description: URL to use to query for the next page or null if no additional results are available
+          type: string
+          example: <next page url>
+          nullable: true
+          x-omitempty: false
+      title: Page
+    Balance:
+      type: object
+      properties:
+        amount:
+          type: string
+        description:
+          description: A description of the balance type and its meaning
+          type: string
+      title: Balance
+  securitySchemes:
+    Api-Access-Key:
+      type: apiKey
+      name: Api-Access-Key
+      in: header
+      description: An API key associated with a security role
+x-tagGroups:
+- name: Under Development
+  tags:
+  - Collateral Management
+  - Holds
+  - Deposit Attribution
+  - Onboarding
+  - Trusted Destinations
+  - Atlas Settlement Network
+  - Tax
+- name: API Endpoints
+  tags:
+  - Addresses
+  - Asset Types
+  - Transactions
+  - Transfers
+  - Wallets
+  - Vaults
+  - Vesting
+  - Subaccounts
+  - Stablecoins
+  - Webhook Notifications
+  - API Key
+  - Statements
+  - Tax Reporting
+  - Trading
+- name: Models
+  tags:
+  - Transfer Model
+  - Transaction Model
+  - Vault Model
+  - Deposit Attribution Model

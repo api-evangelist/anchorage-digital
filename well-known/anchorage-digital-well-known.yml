@@ -1,0 +1,41 @@
+generated: '2026-07-17'
+method: searched
+source: live /.well-known/ probes of Anchorage Digital hosts
+hosts:
+- host: https://agentic.anchorage.com
+  documents:
+  - path: /.well-known/oauth-authorization-server   # RFC 8414
+    status: 200
+    file: anchorage-digital-oauth-authorization-server.json
+  - path: /.well-known/oauth-protected-resource
+    status: 404
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/security.txt
+    status: 404
+- host: https://api.anchorage.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+- host: https://docs.anchorage.com
+  documents:
+  - path: /.well-known/openid-configuration
+    status: 308
+  - path: /.well-known/security.txt
+    status: 404
+- host: https://anchorage.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+notes: >-
+  The Agentic Banking OAuth 2.0 authorization server (agentic.anchorage.com)
+  publishes RFC 8414 authorization-server metadata, including OAuth Dynamic Client
+  Registration (registration_endpoint) and PKCE (S256). This backs the Agentic
+  Banking MCP server. The core REST API (api.anchorage.com) uses API-key +
+  Ed25519 signature auth and exposes no /.well-known/ discovery documents.

@@ -1,0 +1,30 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for Anchorage Digital API v2.0
+  version: 1.0.0
+extends: openapi/anchorage-digital-openapi-original.json
+actions:
+- target: $.info
+  update:
+    x-apievangelist-enriched: '2026-07-17'
+    x-api-evangelist-conventions: conventions/anchorage-digital-conventions.yml
+    x-api-evangelist-errors: errors/anchorage-digital-problem-types.yml
+    x-api-evangelist-authentication: authentication/anchorage-digital-authentication.yml
+    x-api-evangelist-rate-limits: rate-limits/anchorage-digital-rate-limits.yml
+- target: $.servers
+  update:
+  - url: https://api.anchorage.com/v2
+    description: Production
+  - url: https://api.anchorage-staging.com/v2
+    description: Sandbox / staging
+- target: $.info
+  update:
+    x-agentic-access: agentic-access/anchorage-digital-agentic-access.yml
+    x-idempotency:
+      field: idempotentId
+      location: request-body
+      scope: money-movement POST operations
+notes: >-
+  Non-destructive overlay capturing API Evangelist enrichments. The original spec lists only the
+  staging server; this overlay adds the production server and cross-links our derived artifacts.
+  The scorer parses the original spec, so this improves our derived views, not the raw content score.

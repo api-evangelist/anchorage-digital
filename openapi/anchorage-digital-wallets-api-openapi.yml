@@ -1,0 +1,1111 @@
+openapi: 3.0.0
+info:
+  version: 2.0.0
+  title: Anchorage Digital API Reference Addresses Wallets API
+  contact:
+    email: api@anchorage.com
+  description: "# Introduction\n*CONFIDENTIAL: Please do not distribute this documentation externally without prior Anchorage Digital approval.*\n\n\nThe Anchorage Digital REST API v2.0 provides a set of operations and resources that allow Anchorage Digital clients and partners to:\n  - Programmatically transfer funds from an Anchorage Digital vault or wallet without human intervention\n  - Create and list deposit addresses in a vault\n  - Read and monitor vault balances\n  - Query transaction history including deposits\n  - Request quotes from and execute trades with the Anchorage Digital trading desk\n\n\nWant help or to share your opinion on how this API works for you? Please contact api@anchorage.com.\n\n\n# Authentication and Security\n\nThe Anchorage Digital API performs authentication and authorization via a combination of:\n\n\n* An API key, which is a bearer token\n\n* A permission group signed by the user's organization, which is linked to the API key\n\n* An Ed25519 Signature, which comes from a user-generated key and is required for certain requests\n\n\n## Permission Groups\n\n\nA permission group acts as a set of rules for how an organization and its resources can be accessed. Permission groups are created independently of API keys, and new permission groups must be created prior to making an API key.\n\n\nEach permission group has a name, a description and a set of permissions which can be applied to your organization's vaults. Updating, creating and deleting permissions groups require a quorum of approvals. After creation, a permission group can be freely assigned to an unlimited number of API keys.\n\n\nEach API key inherits its permissions from the associated permission group. When the permission group is updated, all API keys associated with it will inherit the updated permission set. If a permission group is deleted, all associated API keys will no longer work.\n\n\nEach organization is created with a default permission group that allows read-only access. This permission group may be modified or deleted at any time, and no API keys are created by default with this permission group.\n\n\n### Permissions\n\n\nPossible vault permissions include the following:\n\n\n<table>\n  <tr>\n    <td><b>Read vault activity (READ)</b></td>\n    <td>See an overview of your vault(s) and wallets. Read vault details, balances, asset types, transaction history and deposit addresses.</td>\n  </tr>\n  <tr>\n    <td><b>Create address (CREATE_DEPOSIT_ADDRESS)</b></td>\n    <td>Receive deposits in the vault from external sources. Create and read deposit addresses.</td>\n  </tr>\n  <tr>\n    <td><b>Transfer funds (TRANSFER)</b></td>\n    <td>This permission is configurable to enable an API key endowed with this permission to either 1) Transfer funds to any Anchorage Digital institutional account, including those outside of your organization or 2) Transfer funds to any blockchain address not custodied by Anchorage Digital that has gone through quorum approval.</td>\n  </tr>\n  <tr>\n    <td><b>Propose and accept settlements (PROPOSE_ACCEPT_SETTLEMENTS)</b></td>\n    <td>This is an Atlas specific permission for initiating settlements.</td>\n  </tr>\n  <tr>\n    <td><b>Authorize settlements (AUTHORIZE_SETTLEMENTS)</b></td>\n    <td>This is an Atlas specific permission for authorizing settlements after they've been proposed or accepted.</td>\n  </tr>\n</table>\n\n\nThere are also special vault permissions for enabled by Anchorage Digital on a per-organization basis:\n\nAdditionally, there are global permissions which apply to the entire organization:\n\n\n<table>\n  <tr>\n    <td><b>Initiate withdrawals (INITIATE_WITHDRAWAL)</b></td>\n    <td>Initiate withdrawals to external destinations. All withdrawals require quorum approval through the Anchorage Digital mobile app.</td>\n  </tr>\n  <tr>\n    <td><b>Execute trades (TRADE)</b></td>\n    <td>Request for quotes (RFQ) from the Anchorage Digital trading desk. Create and accept quotes. Read data of trades and settlements created by this key.</td>\n  </tr>\n  <tr>\n    <td><b>Read trade activity (READ_TRADE)</b></td>\n    <td>Read trade activity and trade settlements data of your organization.</td>\n  </tr>\n  <tr>\n    <td><b>Read lending activity (LENDER_READ)</b></td>\n    <td>Read lending activity of your organization.</td>\n  </tr>\n  <tr>\n    <td><b>Read facility data (FACILITY_ONLY)</b></td>\n    <td>Read lending facility data.</td>\n  </tr>\n  <tr>\n    <td><b>Read deposit attribution activity (READ_DEPOSIT_ATTRIBUTION)</b></td>\n    <td>Read deposit attribution activity of your organization.</td>\n  </tr>\n  <tr>\n    <td><b>Manage deposit attributions (DEPOSIT_ATTRIBUTION)</b></td>\n    <td>Read deposit attribution activity of your organization. Perform deposit attributions.</td>\n  </tr>\n  <tr>\n    <td><b>Initiate Staking and Unstaking (STAKE)</b></td>\n    <td>Initiate staking or unstaking operation. All operations require quorum approval through the Anchorage Digital mobile app.</td>\n  </tr>\n</table>\n\n\n### Example Workflow - Allow transfers from specific vaults\n\nTo create an API key with the ability to transfer funds from an Anchorage Digital vaults or wallet, a permission group must first be created with the **Transfer funds** permission for the desired source vaults. Creating this permission group requires a quorum of approvals on the Anchorage Digital iOS app. Once the creation is confirmed, any number of API keys may be created with this permission group in the Anchorage Digital Web Dashboard under the API 2.0 section.\n\nTo add additional permissions to the API key, update the associated permission group through the Anchorage Digital Web Dashboard. To revoke any permissions, the individual API key may be revoked, or the permission group may be updated or deleted to remove Transfer access.\n\n## API Keys\n\nAll API requests must be made over HTTPS and must include authentication using the following scheme.\n\n<!-- ReDoc-Inject: <security-definitions> -->\n\n### Generating an API Key\n\nIn order to make a valid API request, you must first create an API key. API keys can be created and managed in the Anchorage Digital Web Dashboard under the [API 2.0 tab](https://anchoragelogin.com/api). When you create an API key, there are 3 pieces of information you will need to remember:\n  - API access key\n  - Ed25519 public key (optional for read-only requests)\n  - Ed25519 private/signing key (optional for read-only requests)\n\nYou must generate an Ed25519 signing key pair and save the public portion in the Anchorage Digital Web Dashboard when creating the API access key. The signing key pair is used for added security with sensitive requests.\n\nPlease note, Anchorage Digital cannot recover your API access key or private signing key if you forget them. You may generate a new access key and signing key at any time if you lose access.\n\n### API Key Permissions\n\nEach API key is associated with a permission group. This permission group specifies the permitted actions for all associated API keys. Read more about permission groups [here](#section/Authentication-and-Security/Permission-Groups).\n\n### Creating a request\n\nAll requests must include the `Api-Access-Key` header, which contains your API access key as a string.\n\nEndpoints that require a signature must include the `Api-Signature` and `Api-Timestamp` headers. Read more about signatures [here](#section/Authentication-and-Security/Signatures).\n\nAll request bodies must be valid JSON and have the content type `application/json`.\n\n## Request Signatures\n\nCertain endpoints require an Ed25519 signature to be provided alongside the API key. These endpoints will specify the `Api-Signature` and `Api-Timestamp` headers as additional parameters.\n\nSignatures are optional unless explicitly required, but are encouraged for all requests. If a signature is provided, it will be verified.\n\n### Signing Keys\n\nA signing key pair is generated by the user and the corresponding public key must be provided when creating an API key.\n\nWhen creating an API key, you will be prompted to provide an Ed25519 public key. You must use the associated Ed25519 signing key (private key) when creating signatures for requests from this API key.\n\nPlease note that signing keys (Ed25519 private keys) should be stored securely by the user. The signing key should only be used to derive request signatures and should never be sent in a request. Anchorage Digital will never request you share your private key.\n\n### Generating a Signing Key\n\nThe user must securely generate an Ed25519 key pair on their own hardware and retain both the public and private portions. The Anchorage Digital API accepts a 64-character (32 bytes) hex-encoded Ed25519 public key when creating an API access key.\n\n\n#### Code sample (Python)\n\n*Generate a new signing key pair*\n\n```python\n# https://pypi.org/project/PyNaCl/\n\nimport nacl\nimport nacl.signing\nimport secrets\n\nseed = secrets.token_bytes(32)\n\n# Generate a new random signing key\nsigning_key = nacl.signing.SigningKey(seed)\n\n# Obtain the hex-encoded signing key\nprint('Signing key:')\nprint(signing_key.encode().hex())\n\n# Obtain the hex-encoded verify key for the given signing key\n# Use this in the Anchorage Digital Web Dashboard when creating an API key\nprint('Public key:')\nprint(signing_key.verify_key.encode().hex())\n```\n\n\n### Signing a Request\n\nTo sign a request, generate a request signature using the Ed25519 private (signing) key and provide it alongside the request in the `Api-Signature` header.\n\nTo create a request signature, first concatenate the `timestamp`, `method`, `request path`, and `body` into a string. Then, create a signature of this message using the Ed25519 private key and hex-encode the output. Use this value as the `Api-Signature` header and use the `timestamp` value as the `Api-Timestamp` header.\n\n- The `method` is an uppercase HTTP method (ex. `GET`, `POST`, `DELETE`)\n- The `request path` should contain all query parameters (ex. `/v2/transfers?foo=bar&baz=bang`)\n- The `body` is a stringified HTTP request body\n- The `body` should be omitted if the request does not contain a body (ex. a `GET` or `DELETE` request)\n- The `timestamp` is the same as the `Api-Timestamp` header\n- The `timestamp` is a number of seconds since the Unix Epoch in UTC, and must be within one minute of the API service's time when the request is received\n\n### Reference signature\n\nTo verify your signature generation code is correct, generate a signature for the following request and timestamp using the provided signing key. If the generated signature matches the signature below, your signature generation code is correct.\n\n\n<table>\n  <tr>\n    <td>Timestamp</td>\n    <td>1577880000</td>\n  </tr>\n  <tr>\n    <td>HTTP Method (Uppercase)</td>\n    <td>POST</td>\n  </tr>\n  <tr>\n    <td>HTTP Path + query</td>\n    <td>/v2/transfers?foo=bar&baz=bang</td>\n  </tr>\n  <tr>\n    <td>HTTP Body</td>\n    <td>{\"source\": {\"id\": \"1c920f4241b78a1d483a29f3c24b6c4c\", \"type\": \"VAULT\"}, \"assetType\": \"ETH\", \"destination\": {\"id\": \"55e89d4a644d736b01533a2ea9b32a20\", \"type\": \"VAULT\"}, \"amount\": \"1000.00000000\"}</td>\n  </tr>\n  <tr>\n    <td>Signing Key (Ed25519 Private Key Seed)</td>\n    <td>0101010101010101010101010101010101010101010101010101010101010101</td>\n  </tr>\n  <tr>\n    <td>Public Key</td>\n    <td>8a88e3dd7409f195fd52db2d3cba5d72ca6709bf1d94121bf3748801b40f6f5c</td>\n  </tr>\n  <tr>\n    <td>Signature</td>\n    <td>4bf42054bf7db1f8a2a2bc83d2a108502ee7a9d2ac7a2738adc2f932922446786fb9be1bd1eb475023296c6cba4ddbe28b04baca4b7521b1f1840a4ffd2b4d0d</td>\n  </tr>\n</table>\n\n## Reference clients\n\n### Python (with `requests` library)\n\n*Authorize and sign requests*\n\n```python\n\n# https://pypi.org/project/PyNaCl/\n\nfrom nacl import signing\n\nimport time\n\nimport requests\n\n\nclass AnchorageAuth(requests.auth.AuthBase):\n    ACCESS_KEY_HEADER = \"Api-Access-Key\"\n    SIGNATURE_HEADER = \"Api-Signature\"\n    TIMESTAMP_HEADER = \"Api-Timestamp\"\n\n    access_key: str\n    signing_key: signing.SigningKey\n\n    def __init__(self, access_key: str, signing_key_seed: bytes):\n        self.access_key = access_key\n        self.signing_key = signing.SigningKey(signing_key_seed)\n\n    def __call__(self, r: requests.PreparedRequest):\n        r.headers[self.ACCESS_KEY_HEADER] = self.access_key\n\n        timestamp = str(int(time.time()))\n        method = r.method.upper() if r.method else \"GET\"\n        body: bytes = bytes()\n        if r.body and isinstance(r.body, bytes):\n            body = r.body\n        elif r.body and isinstance(r.body, str):\n            body = bytearray(r.body, \"utf-8\")\n        message = b\"\".join(\n            [bytearray(timestamp, \"utf-8\"), bytearray(method, \"utf-8\"), bytearray(r.path_url, \"utf-8\"), body]\n        )\n        signature = self.signing_key.sign(message).signature.hex()\n        r.headers[self.SIGNATURE_HEADER] = signature\n        r.headers[self.TIMESTAMP_HEADER] = timestamp\n        return r\n\n\n# load secrets\n\n# Use the API key generated in the Anchorage Digital Web Dashboard\n\naccess_key = ...\n\n# Use the Ed25519 signing private key\n\nsigning_key_str = ... # load the raw string\n\nsigning_key = bytes(bytearray.fromhex(signing_key_str))\n\ndata = {}\n\nanchorage_auth = AnchorageAuth(access_key, signing_key)\n\nr = requests.post(\"https://api.anchorage.com/v2/transfers\", data=data, auth=anchorage_auth)\n\n```\n\n### Ruby - Reproduce reference signature\n```ruby\n  require \"ed25519\"\n  require \"net/http\"\n  require \"time\"\n\n  def hex_to_bin(s)\n      [s].pack('H*')\n  end\n\n  def bin_to_hex(s)\n      s.unpack('H*').first\n  end\n\n  private_key_seed_hex = '0101010101010101010101010101010101010101010101010101010101010101'\n  public_key_hex = '8a88e3dd7409f195fd52db2d3cba5d72ca6709bf1d94121bf3748801b40f6f5c'\n  key_pair_hex = private_key_seed_hex + public_key_hex\n\n  key_pair = hex_to_bin(key_pair_hex)\n\n  signing_key = Ed25519::SigningKey.from_keypair(key_pair)\n\n  timestamp = '1577880000' # Time.now.to_i.to_s\n\n  req = Net::HTTP::Post.new('/v2/transfers?foo=bar&baz=bang')\n  req.body = '{\"source\": {\"id\": \"1c920f4241b78a1d483a29f3c24b6c4c\", \"type\": \"VAULT\"}, \"assetType\": \"ETH\", \"destination\": {\"id\": \"55e89d4a644d736b01533a2ea9b32a20\", \"type\": VAULT\"}, \"amount\": \"1000.00000000\"}'\n\n  signature = signing_key.sign(timestamp + req.method + req.path + req.body)\n\n  req['Api-Access-Key'] = 'YOUR_ACCESS_KEY'\n  req['Api-Timestamp'] = timestamp\n  req['Api-Signature'] = bin_to_hex(signature)\n\n  puts bin_to_hex(signature)\n```\n\n# Errors\n\n\nThe Anchorage Digital API returns standard HTTP error codes for each API request.\n\n\n<table>\n  <tr>\n    <th style=\"width: 30%;\">Response Code</th>\n    <th>Description</th>\n  <tr>\n  <tr>\n    <td>200 OK</td>\n    <td>The request was successful.</td>\n  </tr>\n  <tr>\n    <td>400 Bad Request</td>\n    <td>The request was improperly formed and could not be understood by the server, often due to invalid syntax, insufficient funds, or a missing required parameter.</td>\n  </tr>\n  <tr>\n    <td>401 Unauthorized</td>\n    <td>The request was missing a valid API key.</td>\n  </tr>\n  <tr>\n    <td>403 Forbidden</td>\n    <td>The provided API key does not have permission to perform the requested action.</td>\n  </tr>\n  <tr>\n    <td>404 Not Found</td>\n    <td>The requested resource does not exist.</td>\n  </tr>\n  <tr>\n    <td>409 Conflict</td>\n    <td>The requested resource cannot proceed with the requested action because it is not in the required state.</td>\n  </tr>\n   <tr>\n    <td>429 Too Many Requests</td>\n    <td>Too many requests have been sent in a given amount of time.</td>\n  </tr>\n  <tr>\n    <td>\n      500 Internal Server Error\n      <br />\n      502 Bad Gateway\n      <br />\n      503 Service Unavailable\n      <br />\n      504 Gateway Timeout\n    </td>\n    <td>Something went wrong on Anchorage’s side. We have been alerted and are working on it.</td>\n  </tr>\n</table>\n\n\nIn addition to returning HTTP error codes for failed requests, the Anchorage Digital API includes a readable error message describing what went wrong in the response body.\n\n\n<SchemaDefinition schemaRef=\"#/components/schemas/ErrorDetails\" showReadOnly={true} showWriteOnly={true} />\n\n\n# Idempotency\n\n\nCertain endpoints support idempotent requests so that a given request can be safely retried without performing the same operation twice. For example, if a request to transfer funds does not respond due to network issues, you can retry the request using the same idempotent ID to ensure that only one transfer is created.\n\n\nEndpoints that support idempotent requests have an optional `idempotentId` field that can be included in the body of the `POST` request. Provide a unique string using your method of choice (such as a v4 UUID).\n\n\nIf a request is valid, Anchorage Digital will save the request indefinitely. If a subsequent request is received with the same `idempotentId` we will return the previously saved response for that `idempotentId`.\n\n\n# Rate Limits\n\n\nKeys provisioned by an Organization share one common rate limit. API requests are limited to 20 requests per second per Organization, allowing for bursts of up to 100 requests within a single second.\n\n\n# Pagination\n\n\nCursor pagination is used for REST endpoints which return multiple data points. Pagination allows for fetching data after the current page and specifying how many records to return. The `next` cursor is available in responses with the `page` attribute. Requests should use the `next` cursor URL to query subsequent data. Query parameter `afterId` specifies the last record previously retrieved. Some endpoints instead use the `endDate` parameter to specify the end date and older for records to retrieve. Query parameter `limit` specifies the maximum number of records in a response.\n\n## Parameters\n\n<table>\n  <tr>\n    <th style=\"width: 30%;\">Parameter</th>\n    <th>Description</th\n  </tr>\n  <tr>\n    <td>afterId</td>\n    <td>Request page after (older than) this pagination id.</td>\n  </tr>\n  <tr>\n    <td>endDate</td>\n    <td>Request records older than this date (YYYY-MM-DD format). Used for /trading/trades and /trading/settlements resources.</td>\n  </tr>\n  <tr>\n    <td>limit</td>\n    <td>Maximum number of results requested. Default usually 25, but varies depending on resource.</td>\n  </tr>\n</table>\n\n## Example\n\n`GET /v2/transfers?afterId=1968b94b09b8a1a8a381775d1f04978c424d891d50e517774bf984297985b471&limit=100`\n\n## Next cursor\n\nThe `next` cursor is a URL which references the last record in a set of records. When queried, the `next` cursor URL will return subsequent records, but otherwise using the same query parameters."
+servers:
+- url: https://api.anchorage-staging.com/v2
+security:
+- Api-Access-Key: []
+tags:
+- description: 'A vault has one or more wallets. Each wallet is a collection of one or more addresses depending on the asset type. A wallet is created for a particular blockchain network, e.g. Bitcoin, Ethereum, etc.
+
+
+    ### Balances
+
+    Depending on the blockchain network of the wallet, a wallet may hold one or more asset types. An asset in a wallet has an `availableBalance` and a `totalBalance`. The `availableBalance` is the balance that is available to be withdrawn, held, or transferred. The `totalBalance` may contain funds that are held, in-progress, or locked for activities like voting.
+
+
+    ### Addresses
+
+    A wallet is a collection of one or more addresses depending on the asset type. The `depositAddress` contains the last address to be provisioned to that wallet. For UTXO-based assets this address could change as new deposit addresses are provisioned. For account-based assets, this address will not change as only one address may be provisioned per wallet. To see all addresses for an asset, use the [Addresses endpoint](#tag/Addresses).
+
+
+    ### Default Wallets
+
+    Each asset type within a vault has a default wallet that is used for a particular asset when only the vault is specified. For example, a transfer between two vaults will take the asset from the default wallet for that asset in the sending vault and send it to the default wallet for that asset in the destination vault. Each wallet has a `isDefault` flag that indicates whether it is the default wallet.
+
+
+    ### Maximum Allowed Wallets and Creation Constraints
+
+    We have a constraint of 10,000 wallets per asset and defined a creation limit of 10 wallets per asset per 30 minutes interval. Theses contraints are imposed at the organization level.
+
+    '
+  name: Wallets
+paths:
+  /vaults/{vaultId}/wallets:
+    get:
+      operationId: getVaultWallets
+      summary: List all wallets for a vault
+      description: 'Permissions required: **Read vault activity**
+
+
+
+
+        Get all wallets for the specified `vaultId`.
+
+        '
+      parameters:
+      - name: vaultId
+        in: path
+        description: The ID of the vault containing the wallets
+        required: true
+        schema:
+          type: string
+      - name: afterId
+        in: query
+        description: When paginating this is used to provide the starting point for the page to fetch (retrieved from the previous response body)
+        schema:
+          type: string
+      - name: networkId
+        in: query
+        description: If set, only wallets for this Network ID will be returned
+        schema:
+          type: string
+      - name: assetType
+        in: query
+        description: If set, only wallets for this Asset Type ID will be returned
+        schema:
+          type: string
+      - name: limit
+        in: query
+        description: Maximum number of results to return per query
+        schema:
+          type: integer
+          format: int64
+          default: 25
+          maximum: 100
+          minimum: 1
+      - name: filterByIsArchived
+        in: query
+        description: Filter by the whether a wallet is archived. If true, then only archived wallets will be returned. If false, then only not-archived wallets are returned. If not specified, then all wallets are returned.
+        schema:
+          type: boolean
+      responses:
+        '200':
+          description: List of wallets for this vault
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VaultsWalletsResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '401':
+          description: Unauthenticated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+      tags:
+      - Wallets
+      x-security:
+        Read vault activity: checkSourceVault
+    post:
+      operationId: createVaultWallet
+      summary: Create a new wallet in a vault
+      description: 'Permissions required: **Create address**
+
+
+
+
+        Create a wallet in the specified `vaultId`.
+
+        '
+      parameters:
+      - name: vaultId
+        in: path
+        description: The ID of the vault holding the new wallet
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VaultsWalletsRequest'
+      responses:
+        '200':
+          description: The new wallet info in this vault
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VaultsWalletResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '401':
+          description: Unauthenticated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+      tags:
+      - Wallets
+      x-security:
+        Create address: checkSourceVault
+  /wallets:
+    get:
+      operationId: getWallets
+      summary: List all wallets for all vaults
+      description: 'Permissions required: **Read vault activity**
+
+
+
+
+        List wallet metadata for the current user.
+
+        '
+      parameters:
+      - name: afterId
+        in: query
+        description: When paginating this is used to provide the starting point for the page to fetch (retrieved from the previous response body)
+        schema:
+          type: string
+      - name: subaccountIds
+        in: query
+        description: If subaccountIds filter is present, only wallets linked to those subaccountIds will be returned.
+        schema:
+          type: array
+          items:
+            type: string
+          uniqueItems: true
+        explode: false
+        style: form
+      - name: networkId
+        in: query
+        description: If set, only wallets for this Network ID will be returned
+        schema:
+          type: string
+      - name: assetType
+        in: query
+        description: If set, only wallets for this Asset Type ID will be returned
+        schema:
+          type: string
+      - name: limit
+        in: query
+        description: Maximum number of results to return per query
+        schema:
+          type: integer
+          format: int64
+          default: 25
+          maximum: 100
+          minimum: 1
+      - name: filterByIsArchived
+        in: query
+        description: Filter by the whether a wallet is archived. If true, then only archived wallets will be returned. If false, then only not-archived wallets are returned. If not specified, then all wallets are returned.
+        schema:
+          type: boolean
+      - name: searchByAddress
+        in: query
+        description: Search wallets based on addresses in this wallet. The search length should be at least 3 characters.
+        schema:
+          type: string
+          minLength: 3
+      responses:
+        '200':
+          description: List of wallets for this vault
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WalletsResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '401':
+          description: Unauthenticated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+      tags:
+      - Wallets
+      x-security:
+        Read vault activity: present
+  /wallets/{walletId}:
+    get:
+      operationId: getWallet
+      summary: Wallet details for a wallet
+      description: 'Permissions required: **Read vault activity**
+
+
+
+
+        Get wallet details for the specified `walletId`.
+
+        '
+      parameters:
+      - name: walletId
+        in: path
+        description: An ID uniquely identifying an Anchorage Digital wallet
+        required: true
+        schema:
+          type: string
+      - name: filterByIsArchived
+        in: query
+        description: Filter by the whether a wallet is archived. If true, then only archived wallets will be returned. If false, then only not-archived wallets are returned. If  not specified, all wallets are returned.
+        schema:
+          type: boolean
+      responses:
+        '200':
+          description: Wallet info for the specified wallet
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VaultsWalletResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '401':
+          description: Unauthenticated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+      tags:
+      - Wallets
+      x-security:
+        Read vault activity: checkSourceVault
+  /wallets/{walletId}/staking/rewards:
+    get:
+      operationId: getWalletRewards
+      summary: Staking rewards for a wallet
+      description: 'Permissions required: **Read vault activity**
+
+
+
+        Get wallet rewards details for the specified `walletId`.
+
+        '
+      parameters:
+      - name: walletId
+        in: path
+        description: An ID uniquely identifying an Anchorage Digital wallet
+        required: true
+        schema:
+          type: string
+      - name: startDate
+        in: query
+        description: The start date (inclusive) in `YYYY-MM-DD` format. The earliest valid start date is '2017-01-01`. Dates are always in UTC [RFC 3339](https://datatracker.ietf.org/doc/html/rfc3339#section-5.6) 'full-date'.
+        schema:
+          type: string
+          format: date
+      - name: endDate
+        in: query
+        description: The end date (inclusive) in `YYYY-MM-DD` format. The latest valid end date is the current date. Dates are always in UTC [RFC 3339](https://datatracker.ietf.org/doc/html/rfc3339#section-5.6) 'full-date'.
+        schema:
+          type: string
+          format: date
+      - name: afterId
+        in: query
+        description: When paginating this is used to provide the starting point for the page to fetch (retrieved from the previous response body)
+        schema:
+          type: string
+      - name: limit
+        in: query
+        description: Maximum number of results to return per query
+        schema:
+          type: integer
+          format: int64
+          default: 25
+          maximum: 100
+          minimum: 1
+      responses:
+        '200':
+          description: Wallet rewards info for the specified wallet
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WalletRewardsResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '401':
+          description: Unauthenticated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+      tags:
+      - Wallets
+      x-security:
+        Read vault activity: checkSourceVault
+  /wallets/{walletId}/staking/positions:
+    get:
+      operationId: getWalletPositions
+      summary: Staking positions for a wallet
+      description: 'Permissions required: **Read vault activity**
+
+
+
+        Get wallet staking positions details for the specified `walletId`.
+
+        '
+      parameters:
+      - name: walletId
+        in: path
+        description: An ID uniquely identifying an Anchorage Digital wallet
+        required: true
+        schema:
+          type: string
+      - name: afterId
+        in: query
+        description: When paginating this is used to provide the starting point for the page to fetch (retrieved from the previous response body)
+        schema:
+          type: string
+      - name: limit
+        in: query
+        description: Maximum number of results to return per query
+        schema:
+          type: integer
+          format: int64
+          default: 25
+          maximum: 100
+          minimum: 1
+      - name: transactionId
+        in: query
+        description: The transaction Id to filter the wallet positions
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Wallet positions info for the specified wallet
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WalletPositionsResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '401':
+          description: Unauthenticated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+      tags:
+      - Wallets
+      x-security:
+        Read vault activity: checkSourceVault
+components:
+  schemas:
+    WalletRewardsDetails:
+      properties:
+        assetType:
+          description: 'A string representing a type of crypto-asset, which usually corresponds to the crypto asset''s ticker symbol.
+
+
+            Use `/asset-types` to list all of the supported asset types for your organization.
+
+            '
+          type: string
+          example: BTC
+        referenceDate:
+          description: The reference date of the reward
+          type: string
+          format: date
+          example: '2024-01-02'
+        rewardAmount:
+          description: The numeric value of this amount, excluding units
+          type: string
+          example: '0.23133'
+        rewardType:
+          description: The numeric value of this amount, excluding units
+          type: string
+          enum:
+          - UNCLAIMED
+          - CLAIMED
+      example:
+        assetType: ETH
+        rewardAmount: '0.021'
+        rewardType: UNCLAIMED
+        referenceDate: '2024-08-10'
+      required:
+      - assetType
+      - rewardAmount
+      - rewardType
+      - referenceDate
+      title: WalletRewardsDetails
+    ErrorDetails:
+      type: object
+      properties:
+        errorType:
+          $ref: '#/components/schemas/ErrorType'
+        message:
+          description: A human-readable message providing more details about the error.
+          type: string
+          example: Missing required field 'amount'.
+      required:
+      - errorType
+      - message
+      title: ErrorDetails
+    DepositInstruction:
+      description: The deposit instructions for fiat wallets. Crypto wallets use a deposit address instead.
+      type: object
+      properties:
+        bankAddress:
+          description: The address of the bank
+          type: string
+          example: 123 Main Street, Anytown, USA 12345
+        bankName:
+          description: The name of the bank
+          type: string
+          example: Example Bank
+        bankRoutingNumber:
+          description: The bank routing number of the beneficiary
+          type: string
+          example: '123456789'
+        bankSwiftCode:
+          description: The SWIFT code of the bank
+          type: string
+          example: '12345678'
+        beneficiaryAccountNumber:
+          description: The bank account number of the beneficiary
+          type: string
+          example: '12345678'
+        beneficiaryAddress:
+          description: The address of the beneficiary
+          type: string
+          example: 123 Main Street, Anytown, USA 12345
+        beneficiaryName:
+          description: The name of the beneficiary
+          type: string
+          example: John Doe
+        memoField:
+          description: A memo field for the bank info
+          type: string
+          example: '123456789'
+      required:
+      - bankName
+      - bankRoutingNumber
+      - bankAddress
+      - bankSwiftCode
+      - beneficiaryName
+      - beneficiaryAddress
+      - beneficiaryAccountNumber
+      title: DepositInstruction
+    WalletPositionsDetails:
+      properties:
+        assetType:
+          description: 'A string representing a type of crypto-asset, which usually corresponds to the crypto asset''s ticker symbol.
+
+
+            Use `/asset-types` to list all of the supported asset types for your organization.
+
+            '
+          type: string
+          example: BTC
+        inactiveStakedAmount:
+          description: The numeric value of this amount, excluding units
+          type: string
+          example: '0.23133'
+        providerName:
+          description: Provider name of the staking position
+          type: string
+          example: Figment
+        sourceAddress:
+          description: A crypto address for the intended asset that originated this position
+          type: string
+          example: 2N19AcihQ1a4MxQW658UFHTioUNnMkiHPkw
+        stakedAmount:
+          description: The numeric value of this amount, excluding units
+          type: string
+          example: '0.23133'
+        stakingPositionId:
+          description: Unique identifier of the staking position
+          type: string
+          example: 9bc4c2ccba8192b64d41b46d1770abe9ddbb430b85de3fe73e1b4f21336bc48a
+        status:
+          description: The status of the staking position
+          type: string
+          enum:
+          - PENDING
+          - ACTIVE
+          - EXITED
+        transactionId:
+          description: The transaction Id which created this staking position
+          type: string
+        withdrawalAddress:
+          description: A crypto address for the intended asset to where the funds will be withdrawn
+          type: string
+          example: 2N19AcihQ1a4MxQW658UFHTioUNnMkiHPkw
+      example:
+        stakingPositionId: 9bc4c2ccba8192b64d41b46d1770abe9ddbb430b85de3fe73e1b4f21336bc48a
+        assetType: ETH
+        stakedAmount: '32'
+        inactiveStakedAmount: '0'
+        status: ACTIVE
+        providerName: Figment
+        sourceAddress: 2N19AcihQ1a4MxQW658UFHTioUNnMkiHPkw
+        withdrawalAddress: 2N19AcihQ1a4MxQW658UFHTioUNnMkiHPkw
+        transactionId: 8696144cca28a634c05858d00e51191408498a7808a837fc4645b4b6997dde09
+      required:
+      - stakingPositionId
+      - assetType
+      - stakedAmount
+      - inactiveStakedAmount
+      - status
+      - sourceAddress
+      - withdrawalAddress
+      - providerName
+      - transactionId
+      title: WalletPositionsDetails
+    WalletsResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/WalletDetails'
+        page:
+          $ref: '#/components/schemas/Page'
+      required:
+      - data
+      - page
+      title: WalletsResponse
+    SignedAddressForWallet:
+      description: The deposit address for crypto wallets. Fiat wallets use deposit instructions instead.
+      type: object
+      properties:
+        address:
+          description: A crypto address for the intended asset
+          type: string
+          example: 2N19AcihQ1a4MxQW658UFHTioUNnMkiHPkw
+        addressId:
+          description: An id uniquely identifying an Anchorage Digital address.
+          type: string
+          example: a33f83d96ca95cac000a344aa478a8b8
+        addressSignaturePayload:
+          description: The hex-encoding of the bytes that were signed.
+          type: string
+          example: 7b225465787441646472657373223a22324e313941636968513161344d78515736353855464854696f554e6e4d6b6948506b77227d
+        certChain:
+          description: An x509 certificate chain in PEM format. When present, indicates that this address uses a V2 signature scheme where the signature is verified against the public key in the leaf certificate, and the certificate chain must verify up to a trusted Anchorage Digital Root CA. The Root CA is provided out-of-band. When absent, the signature is verified against the Organization Public Key (V1 signature scheme).
+          type: string
+          example: '-----BEGIN CERTIFICATE-----
+
+            MIIBkTCCATigAwIBAgIQExample...
+
+            -----END CERTIFICATE-----
+
+            -----BEGIN CERTIFICATE-----
+
+            MIIBkTCCATigAwIBAgIQExample...
+
+            -----END CERTIFICATE-----
+
+            '
+        signature:
+          description: A hex-encoded signature of the addressSignaturePayload
+          type: string
+          example: 1642000aa9cca8e8610981aefbdb204b361c9dca3fa067b88fdacfba7a0f620d721378a33f4bbadad3923e633a4d712646d1e8e314e9fcb4aa4102c0581f6503
+        signatureVersion:
+          description: The address signature scheme used for this address
+          type: string
+          example: V2
+          enum:
+          - V1
+          - V2
+      required:
+      - address
+      - addressId
+      - addressSignaturePayload
+      - signature
+      title: SignedAddressForWallet
+    WalletDetails:
+      type: object
+      properties:
+        assets:
+          description: A list of the assets in this wallet. May be empty if the wallet has no active assets.
+          type: array
+          items:
+            $ref: '#/components/schemas/AssetDetailsForWallet'
+        depositAddress:
+          $ref: '#/components/schemas/SignedAddressForWallet'
+        depositInstruction:
+          $ref: '#/components/schemas/DepositInstruction'
+        isArchived:
+          description: Indicates if the wallet has been archived. Archived wallets, by default, will appear in wallet listing APIs, though the caller can override the default filter to get just archived wallets if necessary.
+          type: boolean
+          example: false
+        isDefault:
+          description: If `true` this wallet is the default wallet that is used for a particular asset when only a vault is specified. For example, a transfer between two vaults will take the asset from the default wallet for that asset in the sending vault and send it to the default wallet for that asset in the destination vault. Alternatively, a deposit into a vault where the wallet is not specified will deposit the funds into the default wallet for that asset.
+          type: boolean
+        networkId:
+          description: The Id of the network for assets in this wallet.
+          type: string
+        subaccountId:
+          description: Subaccount Id for this order to book into.
+          type: string
+          example: 343b6c83-6d91-4f13-9982-2109abd2dbb0
+        type:
+          $ref: '#/components/schemas/ResourceType'
+        vaultId:
+          description: The ID of the vault containing the wallet
+          type: string
+        vaultName:
+          description: The name of the vault containing the wallet
+          type: string
+        walletId:
+          description: An ID uniquely identifying an Anchorage Digital wallet
+          type: string
+        walletName:
+          description: The name of the Wallet.
+          type: string
+      example:
+        walletId: 3d293c0d64c703023692216e9b4f5280
+        walletName: Bitcoin Mainnet - Wallet 1
+        depositAddress:
+          address: 2N19AcihQ1a4MxQW658UFHTioUNnMkiHPkw
+          addressId: a33f83d96ca95cac000a344aa478a8b8
+          addressSignaturePayload: 7b225465787441646472657373223a22324e313941636968513161344d78515736353855464854696f554e6e4d6b6948506b77227d
+          signature: 1642000aa9cca8e8610981aefbdb204b361c9dca3fa067b88fdacfba7a0f620d721378a33f4bbadad3923e633a4d712646d1e8e314e9fcb4aa4102c0581f6503
+        assets:
+        - assetType: BTC
+          availableBalance:
+            quantity: '10.00000000'
+            assetType: BTC
+            currentPrice: '9751.01'
+            currentUSDValue: '97510.1'
+          totalBalance:
+            quantity: '10.45234733'
+            assetType: BTC
+            currentPrice: '9751.01'
+            currentUSDValue: '101920.94'
+          stakedBalance:
+            quantity: '32.00000000'
+            assetType: BTC
+            currentPrice: '9751.01'
+            currentUSDValue: '312032.32'
+          unclaimedBalance:
+            quantity: '0'
+            assetType: BTC
+            currentPrice: '9751.01'
+            currentUSDValue: '0'
+          unvestedBalance:
+            quantity: '0'
+            assetType: BTC
+            currentPrice: '9751.01'
+            currentUSDValue: '0'
+          unvestedUnstakeableBalance:
+            quantity: '0'
+            assetType: BTC
+            currentPrice: '9751.01'
+            currentUSDValue: '0'
+        vaultId: 1c920f4241b78a1d483a29f3c24b6c4c
+        vaultName: Long Hold Vault
+        isDefault: true
+        isArchived: false
+        networkId: BTC
+        type: WALLET
+      required:
+      - walletId
+      - walletName
+      - assets
+      - vaultId
+      - vaultName
+      - isDefault
+      - isArchived
+      - networkId
+      - type
+      title: WalletDetails
+    WalletPositionsResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/WalletPositionsDetails'
+        page:
+          $ref: '#/components/schemas/Page'
+      required:
+      - data
+      - page
+      title: WalletPositionsResponse
+    ErrorType:
+      description: The type of error returned.
+      type: string
+      enum:
+      - InternalError
+      - InvalidRequest
+      - Unauthenticated
+      - Forbidden
+      - NotFound
+      - Conflict
+      - UnprocessableEntity
+      - TooManyRequests
+      - ServiceUnavailable
+      - QuoteExpired
+      - InsufficientFunds
+      - NotImplemented
+      title: ErrorType
+    AssetDetailsForWallet:
+      type: object
+      properties:
+        assetType:
+          description: 'A string representing a type of crypto-asset, which usually corresponds to the crypto asset''s ticker symbol.
+
+
+            Use `/asset-types` to list all of the supported asset types for your organization.
+
+            '
+          type: string
+          example: BTC
+        availableBalance:
+          $ref: '#/components/schemas/Amount'
+        stakedBalance:
+          $ref: '#/components/schemas/Amount'
+        totalBalance:
+          $ref: '#/components/schemas/Amount'
+        unclaimedBalance:
+          $ref: '#/components/schemas/Amount'
+        unvestedBalance:
+          $ref: '#/components/schemas/Amount'
+        unvestedUnstakeableBalance:
+          $ref: '#/components/schemas/Amount'
+      example:
+        assetType: BTC
+        availableBalance:
+          quantity: '10.00000000'
+          assetType: BTC
+          currentPrice: '9751.01'
+          currentUSDValue: '97510.1'
+        totalBalance:
+          quantity: '10.45234733'
+          assetType: BTC
+          currentPrice: '9751.01'
+          currentUSDValue: '101920.94'
+        stakedBalance:
+          quantity: '32.00000000'
+          assetType: BTC
+          currentPrice: '9751.01'
+          currentUSDValue: '312032.32'
+        unclaimedBalance:
+          quantity: '0'
+          assetType: BTC
+          currentPrice: '9751.01'
+          currentUSDValue: '0'
+      required:
+      - assetType
+      - availableBalance
+      - totalBalance
+      title: AssetDetailsForWallet
+    ResourceType:
+      description: The type of the resource being referenced. Note that the VAULT type has been deprecated and WALLET should be used instead.
+      type: string
+      enum:
+      - VAULT
+      - WALLET
+      - ADDRESS
+      - STANDING_INSTRUCTION
+      title: ResourceType
+    WalletRewardsResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/WalletRewardsDetails'
+        page:
+          $ref: '#/components/schemas/Page'
+      required:
+      - data
+      - page
+      title: WalletRewardsResponse
+    Page:
+      description: Pagination info
+      type: object
+      properties:
+        next:
+          description: URL to use to query for the next page or null if no additional results are available
+          type: string
+          example: <next page url>
+          nullable: true
+          x-omitempty: false
+      title: Page
+    Amount:
+      description: 'An amount of a crypto-asset represented by quantity, assetType, current unit price and current USD value.
+
+
+
+        Fee amounts will be estimates if a transaction is not final.
+
+
+
+        NOTE: price and USD value information is recent but does not reflect real-time data.
+
+        '
+      type: object
+      properties:
+        assetType:
+          description: 'A string representing a type of crypto-asset, which usually corresponds to the crypto asset''s ticker symbol.
+
+
+            Use `/asset-types` to list all of the supported asset types for your organization.
+
+            '
+          type: string
+          example: BTC
+        currentPrice:
+          description: A recent assessment of the intra-day USD value of 1 unit of this asset type. This value is provided for convenience for such use cases as estimating point-in-time portfolio balances. This value does not represent authoritative pricing information used by Anchorage Digital for any purpose. The price is fetched as of the present, and may be omitted in certain contexts where more structured pricing information is provided (e.g. quotes and trades).
+          type: string
+          example: '9751.01'
+        currentUSDValue:
+          description: The result of `quantity * currentPrice`, rounded to the nearest cent. A unitless number implicitly denominated in dollars. See `currentPrice` for methodology and disclaimers.
+          type: string
+          example: '101920.94'
+        quantity:
+          description: The numeric value of this amount, excluding units
+          type: string
+          example: '10.45234733'
+      example:
+        quantity: '10.45234733'
+        assetType: BTC
+        currentPrice: '9751.01'
+        currentUSDValue: '101920.94'
+      required:
+      - quantity
+      - assetType
+      title: Amount
+    VaultsWalletResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/WalletDetails'
+      required:
+      - data
+      title: VaultsWalletResponse
+    VaultsWalletsRequest:
+      type: object
+      properties:
+        networkId:
+          description: The ID of the network for assets in this wallet.
+          type: string
+          example: BTC
+        subaccountId:
+          description: The Subaccount Identifier to link this wallet.(in development / early access)
+          type: string
+        walletName:
+          description: The name of the Wallet.
+          type: string
+          example: Bitcoin Mainnet - Wallet 1
+          nullable: true
+      required:
+      - networkId
+      title: VaultsWalletsRequest
+    VaultsWalletsResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/WalletDetails'
+        page:
+          $ref: '#/components/schemas/Page'
+      required:
+      - data
+      - page
+      title: VaultsWalletsResponse
+  securitySchemes:
+    Api-Access-Key:
+      type: apiKey
+      name: Api-Access-Key
+      in: header
+      description: An API key associated with a security role
+x-tagGroups:
+- name: Under Development
+  tags:
+  - Collateral Management
+  - Holds
+  - Deposit Attribution
+  - Onboarding
+  - Trusted Destinations
+  - Atlas Settlement Network
+  - Tax
+- name: API Endpoints
+  tags:
+  - Addresses
+  - Asset Types
+  - Transactions
+  - Transfers
+  - Wallets
+  - Vaults
+  - Vesting
+  - Subaccounts
+  - Stablecoins
+  - Webhook Notifications
+  - API Key
+  - Statements
+  - Tax Reporting
+  - Trading
+- name: Models
+  tags:
+  - Transfer Model
+  - Transaction Model
+  - Vault Model
+  - Deposit Attribution Model

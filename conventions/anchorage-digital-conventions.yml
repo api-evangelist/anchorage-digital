@@ -1,0 +1,61 @@
+generated: '2026-07-17'
+method: searched
+source: https://docs.anchorage.com/knowledge-base/api-reference/errors-pagination
+api: openapi/anchorage-digital-openapi-original.json
+authentication:
+  style: api-key + signature
+  api_key_header: Api-Access-Key
+  signature:
+    algorithm: Ed25519
+    headers: [Api-Signature, Api-Timestamp]
+    scope: sensitive endpoints (e.g. withdrawals, transfers)
+  permission_model: >-
+    Permission groups define which vaults a key can access and which operations
+    it may perform (e.g. "Read vault activity", "Execute trades", "Onboarding").
+  ref: authentication/anchorage-digital-authentication.yml
+idempotency:
+  supported: true
+  mechanism: request-body field
+  field: idempotentId
+  location: POST request body
+  format: unique string (UUID recommended)
+  scope: supported endpoints (money movement such as transfers)
+  guidance: >-
+    Reuse the same idempotentId when retrying a POST so a request that succeeded but
+    did not return a response does not execute twice.
+  docs: https://docs.anchorage.com/knowledge-base/api-reference/errors-pagination#idempotency
+pagination:
+  style: cursor
+  params:
+    after_id: afterId
+    limit: limit
+    end_date: endDate
+  response_field: page.next
+  notes: >-
+    Responses include a `next` cursor in the `page` attribute when more results are
+    available. `limit` defaults vary by resource; `endDate` filters /trading/trades
+    and /trading/settlements.
+rate_limiting:
+  scope: per organization (all keys share one limit)
+  limit: 20 requests/second
+  burst: 100 requests within a single second
+  exceed_status: 429
+  ref: rate-limits/anchorage-digital-rate-limits.yml
+retries:
+  retry_on: [429, 500, 502, 503, 504]
+  strategy: exponential backoff (1s, 2s, 4s, 8s)
+  do_not_retry: other 4xx (correct the request instead)
+  post_safety: reuse the same idempotentId on POST retries
+versioning:
+  scheme: uri-path
+  current: v2
+  base_path: /v2
+error_envelope:
+  media_type: application/json
+  shape: '{ errorType, message }'
+  ref: errors/anchorage-digital-problem-types.yml
+async_execution:
+  note: >-
+    A 201 on a money-movement request can still fail later at quorum approval or at
+    broadcast (insufficient network fee, blockchain failure); track terminal status
+    rather than trusting the initial 2xx.

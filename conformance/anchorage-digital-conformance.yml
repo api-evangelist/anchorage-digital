@@ -1,0 +1,41 @@
+generated: '2026-07-17'
+method: derived
+source: openapi/anchorage-digital-openapi-original.json
+standards:
+- id: oauth2
+  conforms: true
+  evidence: Agentic Banking authorization server publishes RFC 8414 metadata (authorization_code + refresh_token, PKCE S256).
+- id: rfc8414-oauth-metadata
+  conforms: true
+  evidence: /.well-known/oauth-authorization-server present on agentic.anchorage.com.
+- id: oauth-dcr-rfc7591
+  conforms: true
+  evidence: registration_endpoint advertised for dynamic client registration.
+- id: pkce-rfc7636
+  conforms: true
+  evidence: code_challenge_methods_supported includes S256.
+- id: mcp
+  conforms: true
+  evidence: Hosted Model Context Protocol server for Agentic Banking (agentic.anchorage.com).
+- id: idempotency
+  conforms: true
+  evidence: idempotentId request-body field on money-movement POST operations.
+- id: cursor-pagination
+  conforms: true
+  evidence: afterId/limit cursor pagination with a `next` cursor in the page attribute.
+- id: rfc9457-problem-details
+  conforms: false
+  evidence: Errors use a custom application/json ErrorDetails envelope, not application/problem+json.
+- id: ed25519-request-signing
+  conforms: true
+  evidence: Sensitive endpoints require an Ed25519 Api-Signature over Api-Timestamp.
+- id: webhooks
+  conforms: true
+  evidence: Signed webhook notifications with a published validation key and subscription management.
+compliance_posture:
+  note: >-
+    Anchorage Digital Bank, N.A. is an OCC-chartered national trust bank (first federally
+    chartered US crypto bank) and operates regulated entities in Singapore (MAS) and New York
+    (NYDFS). These are regulatory charters, not published security certifications (SOC 2/ISO)
+    surfaced on a trust center — no public trust-center certification page was found, so no
+    Compliance pointer is asserted from a certification program.

@@ -1,0 +1,26 @@
+generated: '2026-07-17'
+method: searched
+source: https://docs.anchorage.com/knowledge-base/api-reference/changelog
+versioning:
+  scheme: uri-path
+  current: v2
+  base_path: /v2
+  docs: https://docs.anchorage.com/knowledge-base/api-reference/introduction
+changelog:
+  url: https://docs.anchorage.com/knowledge-base/api-reference/changelog
+  cadence: dated, ongoing (annual archives 2024/2025/2026)
+  breaking_changes_labeled: true
+deprecation:
+  policy: >-
+    Breaking changes and structural response changes are announced in the dated API
+    Changelog with an explicit impact note (e.g. the Jun 29 2026 GET /tags response was
+    re-nested under a `data` object). No separate Sunset/Deprecation-header policy (RFC 8594)
+    is documented.
+  docs: https://docs.anchorage.com/knowledge-base/api-reference/changelog
+status_page: null
+sla: null
+deprecated_operations: []
+notes: >-
+  No public status page was found (anchorage.statuspage.io resolves to Atlassian marketing,
+  not a live Anchorage status site) and no published uptime SLA. Change communication is via
+  the dated API Changelog, which flags breaking vs additive changes.

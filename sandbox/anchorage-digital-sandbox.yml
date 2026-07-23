@@ -1,0 +1,20 @@
+generated: '2026-07-17'
+method: searched
+source: https://docs.anchorage.com/knowledge-base/api-reference/introduction
+environments:
+- name: sandbox
+  base_url: https://api.anchorage-staging.com/v2
+  purpose: Test/staging environment for building and validating integrations before production.
+- name: production
+  base_url: https://api.anchorage.com/v2
+  purpose: Live environment.
+separation:
+  model: separate host + separate API keys per environment
+  test_vs_live: >-
+    Sandbox and production are distinct hosts (api.anchorage-staging.com vs api.anchorage.com);
+    API keys are environment-specific. There is no key-prefix mode flag.
+test_values: []
+notes: >-
+  Anchorage publishes a dedicated staging host rather than magic test values or test-card
+  numbers. No specific verbatim test credentials/fixtures are published in the public docs;
+  none are invented here.

@@ -1,0 +1,27 @@
+generated: '2026-07-17'
+method: searched
+source: https://docs.anchorage.com/knowledge-base/api-reference/changelog
+scheme: dated
+current_version: v2.0.0
+archives:
+- https://docs.anchorage.com/knowledge-base/api-reference/changelog
+- https://docs.anchorage.com/knowledge-base/api-reference/changelog-2025
+- https://docs.anchorage.com/knowledge-base/api-reference/changelog-2024
+entries:
+- date: '2026-07-02'
+  tags: [Added]
+  category: Stablecoins
+  breaking: false
+  highlights:
+  - Added GET /stablecoins/reserves (history of stablecoin reserves).
+  - Added GET /stablecoins/reserves/entitled-stablecoins (stablecoins the org may view reserves for).
+- date: '2026-06-29'
+  tags: [Improved]
+  category: Tagging
+  breaking: true
+  highlights:
+  - GET /tags response now nests the `tags` array under a `data` object; consumers must read response.data.tags.
+notes: >-
+  The Agentic Banking product keeps a separate changelog at
+  https://docs.anchorage.com/agentic-banking/changelog. Recent-window capture only;
+  the live changelog is the source of truth.

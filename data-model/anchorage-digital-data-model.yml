@@ -1,0 +1,87 @@
+generated: '2026-07-17'
+method: derived
+source: openapi/anchorage-digital-openapi-original.json
+description: >-
+  Entity-relationship graph derived from the Anchorage Digital REST API v2.0 path nesting
+  and schema references. Vaults are the top-level container; wallets, addresses, and balances
+  hang off them, with transfers, trades/orders, settlements, subaccounts, tax, and webhooks
+  as sibling domains.
+entities:
+- name: Vault
+  id_field: vaultId
+  description: Top-level container that a permission group grants access to.
+- name: Wallet
+  id_field: walletId
+  description: Per-asset wallet within a vault; source of transfers and staking positions.
+- name: Address
+  description: Deposit address provisioned for a wallet/asset.
+- name: Transfer
+  id_field: transferId
+  description: Movement of assets; supports idempotentId and Ed25519 signing.
+- name: Transaction
+  description: On-chain/ledger transaction record.
+- name: TradingAccount
+  id_field: accountId
+  description: Account under which orders, trades, and settlements occur.
+- name: Order
+  id_field: orderId
+  description: Trading order (sync or async), created from a quote.
+- name: Trade
+  id_field: tradeId
+  description: Executed trade belonging to a settlement.
+- name: Settlement
+  id_field: settlementId
+  description: Trading or Atlas settlement between participants.
+- name: Subaccount
+  description: Program-customer subaccount with its own transactions and withdrawals.
+- name: TrustedDestination
+  description: Endorsed external destination a permission group may transfer to.
+- name: WebhookEndpoint
+  id_field: endpointId
+  description: Registered webhook endpoint with event-type subscriptions.
+relationships:
+- from: Vault
+  to: Wallet
+  type: has_many
+  via: /vaults/{vaultId}/wallets
+- from: Vault
+  to: Address
+  type: has_many
+  via: /vaults/{vaultId}/addresses
+- from: Wallet
+  to: Address
+  type: has_many
+  via: /wallets/{walletId}/addresses
+- from: Wallet
+  to: StakingPosition
+  type: has_many
+  via: /wallets/{walletId}/staking/positions
+- from: Transfer
+  to: Wallet
+  type: belongs_to
+  via: source wallet
+- from: TradingAccount
+  to: Order
+  type: has_many
+  via: /trading/orders
+- from: TradingAccount
+  to: Trade
+  type: has_many
+  via: /trading/trades
+- from: Settlement
+  to: Trade
+  type: has_many
+  via: /trading/settlements/{settlementId}/trades
+- from: Order
+  to: Quote
+  type: belongs_to
+  via: acceptQuote -> newOrderSingle
+- from: WebhookEndpoint
+  to: WebhookSubscription
+  type: has_many
+  via: /webhook/endpoints/{endpointId}/subscriptions
+- from: Subaccount
+  to: SubaccountTransaction
+  type: has_many
+  via: subaccount transactions
+schema_count: 348

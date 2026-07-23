@@ -1,0 +1,16 @@
+generated: '2026-07-17'
+method: searched
+source: https://docs.anchorage.com/knowledge-base/api-reference/errors-pagination#rate-limits
+scope: organization
+rate_limits:
+- name: Organization API rate limit
+  limit_count: 20
+  interval: second
+  unit: requests
+  burst: 100
+  applies_to: all API keys provisioned by an organization (shared)
+  exceed_status: 429
+  retry: exponential backoff (1s, 2s, 4s, 8s)
+notes: >-
+  Keys provisioned by an organization share one common rate limit of 20 requests/second,
+  allowing bursts of up to 100 requests within a single second. Exceeding it returns 429.

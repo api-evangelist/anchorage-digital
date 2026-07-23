@@ -1,0 +1,3826 @@
+openapi: 3.0.0
+info:
+  version: 2.0.0
+  title: Anchorage Digital API Reference Addresses Trading API
+  contact:
+    email: api@anchorage.com
+  description: "# Introduction\n*CONFIDENTIAL: Please do not distribute this documentation externally without prior Anchorage Digital approval.*\n\n\nThe Anchorage Digital REST API v2.0 provides a set of operations and resources that allow Anchorage Digital clients and partners to:\n  - Programmatically transfer funds from an Anchorage Digital vault or wallet without human intervention\n  - Create and list deposit addresses in a vault\n  - Read and monitor vault balances\n  - Query transaction history including deposits\n  - Request quotes from and execute trades with the Anchorage Digital trading desk\n\n\nWant help or to share your opinion on how this API works for you? Please contact api@anchorage.com.\n\n\n# Authentication and Security\n\nThe Anchorage Digital API performs authentication and authorization via a combination of:\n\n\n* An API key, which is a bearer token\n\n* A permission group signed by the user's organization, which is linked to the API key\n\n* An Ed25519 Signature, which comes from a user-generated key and is required for certain requests\n\n\n## Permission Groups\n\n\nA permission group acts as a set of rules for how an organization and its resources can be accessed. Permission groups are created independently of API keys, and new permission groups must be created prior to making an API key.\n\n\nEach permission group has a name, a description and a set of permissions which can be applied to your organization's vaults. Updating, creating and deleting permissions groups require a quorum of approvals. After creation, a permission group can be freely assigned to an unlimited number of API keys.\n\n\nEach API key inherits its permissions from the associated permission group. When the permission group is updated, all API keys associated with it will inherit the updated permission set. If a permission group is deleted, all associated API keys will no longer work.\n\n\nEach organization is created with a default permission group that allows read-only access. This permission group may be modified or deleted at any time, and no API keys are created by default with this permission group.\n\n\n### Permissions\n\n\nPossible vault permissions include the following:\n\n\n<table>\n  <tr>\n    <td><b>Read vault activity (READ)</b></td>\n    <td>See an overview of your vault(s) and wallets. Read vault details, balances, asset types, transaction history and deposit addresses.</td>\n  </tr>\n  <tr>\n    <td><b>Create address (CREATE_DEPOSIT_ADDRESS)</b></td>\n    <td>Receive deposits in the vault from external sources. Create and read deposit addresses.</td>\n  </tr>\n  <tr>\n    <td><b>Transfer funds (TRANSFER)</b></td>\n    <td>This permission is configurable to enable an API key endowed with this permission to either 1) Transfer funds to any Anchorage Digital institutional account, including those outside of your organization or 2) Transfer funds to any blockchain address not custodied by Anchorage Digital that has gone through quorum approval.</td>\n  </tr>\n  <tr>\n    <td><b>Propose and accept settlements (PROPOSE_ACCEPT_SETTLEMENTS)</b></td>\n    <td>This is an Atlas specific permission for initiating settlements.</td>\n  </tr>\n  <tr>\n    <td><b>Authorize settlements (AUTHORIZE_SETTLEMENTS)</b></td>\n    <td>This is an Atlas specific permission for authorizing settlements after they've been proposed or accepted.</td>\n  </tr>\n</table>\n\n\nThere are also special vault permissions for enabled by Anchorage Digital on a per-organization basis:\n\nAdditionally, there are global permissions which apply to the entire organization:\n\n\n<table>\n  <tr>\n    <td><b>Initiate withdrawals (INITIATE_WITHDRAWAL)</b></td>\n    <td>Initiate withdrawals to external destinations. All withdrawals require quorum approval through the Anchorage Digital mobile app.</td>\n  </tr>\n  <tr>\n    <td><b>Execute trades (TRADE)</b></td>\n    <td>Request for quotes (RFQ) from the Anchorage Digital trading desk. Create and accept quotes. Read data of trades and settlements created by this key.</td>\n  </tr>\n  <tr>\n    <td><b>Read trade activity (READ_TRADE)</b></td>\n    <td>Read trade activity and trade settlements data of your organization.</td>\n  </tr>\n  <tr>\n    <td><b>Read lending activity (LENDER_READ)</b></td>\n    <td>Read lending activity of your organization.</td>\n  </tr>\n  <tr>\n    <td><b>Read facility data (FACILITY_ONLY)</b></td>\n    <td>Read lending facility data.</td>\n  </tr>\n  <tr>\n    <td><b>Read deposit attribution activity (READ_DEPOSIT_ATTRIBUTION)</b></td>\n    <td>Read deposit attribution activity of your organization.</td>\n  </tr>\n  <tr>\n    <td><b>Manage deposit attributions (DEPOSIT_ATTRIBUTION)</b></td>\n    <td>Read deposit attribution activity of your organization. Perform deposit attributions.</td>\n  </tr>\n  <tr>\n    <td><b>Initiate Staking and Unstaking (STAKE)</b></td>\n    <td>Initiate staking or unstaking operation. All operations require quorum approval through the Anchorage Digital mobile app.</td>\n  </tr>\n</table>\n\n\n### Example Workflow - Allow transfers from specific vaults\n\nTo create an API key with the ability to transfer funds from an Anchorage Digital vaults or wallet, a permission group must first be created with the **Transfer funds** permission for the desired source vaults. Creating this permission group requires a quorum of approvals on the Anchorage Digital iOS app. Once the creation is confirmed, any number of API keys may be created with this permission group in the Anchorage Digital Web Dashboard under the API 2.0 section.\n\nTo add additional permissions to the API key, update the associated permission group through the Anchorage Digital Web Dashboard. To revoke any permissions, the individual API key may be revoked, or the permission group may be updated or deleted to remove Transfer access.\n\n## API Keys\n\nAll API requests must be made over HTTPS and must include authentication using the following scheme.\n\n<!-- ReDoc-Inject: <security-definitions> -->\n\n### Generating an API Key\n\nIn order to make a valid API request, you must first create an API key. API keys can be created and managed in the Anchorage Digital Web Dashboard under the [API 2.0 tab](https://anchoragelogin.com/api). When you create an API key, there are 3 pieces of information you will need to remember:\n  - API access key\n  - Ed25519 public key (optional for read-only requests)\n  - Ed25519 private/signing key (optional for read-only requests)\n\nYou must generate an Ed25519 signing key pair and save the public portion in the Anchorage Digital Web Dashboard when creating the API access key. The signing key pair is used for added security with sensitive requests.\n\nPlease note, Anchorage Digital cannot recover your API access key or private signing key if you forget them. You may generate a new access key and signing key at any time if you lose access.\n\n### API Key Permissions\n\nEach API key is associated with a permission group. This permission group specifies the permitted actions for all associated API keys. Read more about permission groups [here](#section/Authentication-and-Security/Permission-Groups).\n\n### Creating a request\n\nAll requests must include the `Api-Access-Key` header, which contains your API access key as a string.\n\nEndpoints that require a signature must include the `Api-Signature` and `Api-Timestamp` headers. Read more about signatures [here](#section/Authentication-and-Security/Signatures).\n\nAll request bodies must be valid JSON and have the content type `application/json`.\n\n## Request Signatures\n\nCertain endpoints require an Ed25519 signature to be provided alongside the API key. These endpoints will specify the `Api-Signature` and `Api-Timestamp` headers as additional parameters.\n\nSignatures are optional unless explicitly required, but are encouraged for all requests. If a signature is provided, it will be verified.\n\n### Signing Keys\n\nA signing key pair is generated by the user and the corresponding public key must be provided when creating an API key.\n\nWhen creating an API key, you will be prompted to provide an Ed25519 public key. You must use the associated Ed25519 signing key (private key) when creating signatures for requests from this API key.\n\nPlease note that signing keys (Ed25519 private keys) should be stored securely by the user. The signing key should only be used to derive request signatures and should never be sent in a request. Anchorage Digital will never request you share your private key.\n\n### Generating a Signing Key\n\nThe user must securely generate an Ed25519 key pair on their own hardware and retain both the public and private portions. The Anchorage Digital API accepts a 64-character (32 bytes) hex-encoded Ed25519 public key when creating an API access key.\n\n\n#### Code sample (Python)\n\n*Generate a new signing key pair*\n\n```python\n# https://pypi.org/project/PyNaCl/\n\nimport nacl\nimport nacl.signing\nimport secrets\n\nseed = secrets.token_bytes(32)\n\n# Generate a new random signing key\nsigning_key = nacl.signing.SigningKey(seed)\n\n# Obtain the hex-encoded signing key\nprint('Signing key:')\nprint(signing_key.encode().hex())\n\n# Obtain the hex-encoded verify key for the given signing key\n# Use this in the Anchorage Digital Web Dashboard when creating an API key\nprint('Public key:')\nprint(signing_key.verify_key.encode().hex())\n```\n\n\n### Signing a Request\n\nTo sign a request, generate a request signature using the Ed25519 private (signing) key and provide it alongside the request in the `Api-Signature` header.\n\nTo create a request signature, first concatenate the `timestamp`, `method`, `request path`, and `body` into a string. Then, create a signature of this message using the Ed25519 private key and hex-encode the output. Use this value as the `Api-Signature` header and use the `timestamp` value as the `Api-Timestamp` header.\n\n- The `method` is an uppercase HTTP method (ex. `GET`, `POST`, `DELETE`)\n- The `request path` should contain all query parameters (ex. `/v2/transfers?foo=bar&baz=bang`)\n- The `body` is a stringified HTTP request body\n- The `body` should be omitted if the request does not contain a body (ex. a `GET` or `DELETE` request)\n- The `timestamp` is the same as the `Api-Timestamp` header\n- The `timestamp` is a number of seconds since the Unix Epoch in UTC, and must be within one minute of the API service's time when the request is received\n\n### Reference signature\n\nTo verify your signature generation code is correct, generate a signature for the following request and timestamp using the provided signing key. If the generated signature matches the signature below, your signature generation code is correct.\n\n\n<table>\n  <tr>\n    <td>Timestamp</td>\n    <td>1577880000</td>\n  </tr>\n  <tr>\n    <td>HTTP Method (Uppercase)</td>\n    <td>POST</td>\n  </tr>\n  <tr>\n    <td>HTTP Path + query</td>\n    <td>/v2/transfers?foo=bar&baz=bang</td>\n  </tr>\n  <tr>\n    <td>HTTP Body</td>\n    <td>{\"source\": {\"id\": \"1c920f4241b78a1d483a29f3c24b6c4c\", \"type\": \"VAULT\"}, \"assetType\": \"ETH\", \"destination\": {\"id\": \"55e89d4a644d736b01533a2ea9b32a20\", \"type\": \"VAULT\"}, \"amount\": \"1000.00000000\"}</td>\n  </tr>\n  <tr>\n    <td>Signing Key (Ed25519 Private Key Seed)</td>\n    <td>0101010101010101010101010101010101010101010101010101010101010101</td>\n  </tr>\n  <tr>\n    <td>Public Key</td>\n    <td>8a88e3dd7409f195fd52db2d3cba5d72ca6709bf1d94121bf3748801b40f6f5c</td>\n  </tr>\n  <tr>\n    <td>Signature</td>\n    <td>4bf42054bf7db1f8a2a2bc83d2a108502ee7a9d2ac7a2738adc2f932922446786fb9be1bd1eb475023296c6cba4ddbe28b04baca4b7521b1f1840a4ffd2b4d0d</td>\n  </tr>\n</table>\n\n## Reference clients\n\n### Python (with `requests` library)\n\n*Authorize and sign requests*\n\n```python\n\n# https://pypi.org/project/PyNaCl/\n\nfrom nacl import signing\n\nimport time\n\nimport requests\n\n\nclass AnchorageAuth(requests.auth.AuthBase):\n    ACCESS_KEY_HEADER = \"Api-Access-Key\"\n    SIGNATURE_HEADER = \"Api-Signature\"\n    TIMESTAMP_HEADER = \"Api-Timestamp\"\n\n    access_key: str\n    signing_key: signing.SigningKey\n\n    def __init__(self, access_key: str, signing_key_seed: bytes):\n        self.access_key = access_key\n        self.signing_key = signing.SigningKey(signing_key_seed)\n\n    def __call__(self, r: requests.PreparedRequest):\n        r.headers[self.ACCESS_KEY_HEADER] = self.access_key\n\n        timestamp = str(int(time.time()))\n        method = r.method.upper() if r.method else \"GET\"\n        body: bytes = bytes()\n        if r.body and isinstance(r.body, bytes):\n            body = r.body\n        elif r.body and isinstance(r.body, str):\n            body = bytearray(r.body, \"utf-8\")\n        message = b\"\".join(\n            [bytearray(timestamp, \"utf-8\"), bytearray(method, \"utf-8\"), bytearray(r.path_url, \"utf-8\"), body]\n        )\n        signature = self.signing_key.sign(message).signature.hex()\n        r.headers[self.SIGNATURE_HEADER] = signature\n        r.headers[self.TIMESTAMP_HEADER] = timestamp\n        return r\n\n\n# load secrets\n\n# Use the API key generated in the Anchorage Digital Web Dashboard\n\naccess_key = ...\n\n# Use the Ed25519 signing private key\n\nsigning_key_str = ... # load the raw string\n\nsigning_key = bytes(bytearray.fromhex(signing_key_str))\n\ndata = {}\n\nanchorage_auth = AnchorageAuth(access_key, signing_key)\n\nr = requests.post(\"https://api.anchorage.com/v2/transfers\", data=data, auth=anchorage_auth)\n\n```\n\n### Ruby - Reproduce reference signature\n```ruby\n  require \"ed25519\"\n  require \"net/http\"\n  require \"time\"\n\n  def hex_to_bin(s)\n      [s].pack('H*')\n  end\n\n  def bin_to_hex(s)\n      s.unpack('H*').first\n  end\n\n  private_key_seed_hex = '0101010101010101010101010101010101010101010101010101010101010101'\n  public_key_hex = '8a88e3dd7409f195fd52db2d3cba5d72ca6709bf1d94121bf3748801b40f6f5c'\n  key_pair_hex = private_key_seed_hex + public_key_hex\n\n  key_pair = hex_to_bin(key_pair_hex)\n\n  signing_key = Ed25519::SigningKey.from_keypair(key_pair)\n\n  timestamp = '1577880000' # Time.now.to_i.to_s\n\n  req = Net::HTTP::Post.new('/v2/transfers?foo=bar&baz=bang')\n  req.body = '{\"source\": {\"id\": \"1c920f4241b78a1d483a29f3c24b6c4c\", \"type\": \"VAULT\"}, \"assetType\": \"ETH\", \"destination\": {\"id\": \"55e89d4a644d736b01533a2ea9b32a20\", \"type\": VAULT\"}, \"amount\": \"1000.00000000\"}'\n\n  signature = signing_key.sign(timestamp + req.method + req.path + req.body)\n\n  req['Api-Access-Key'] = 'YOUR_ACCESS_KEY'\n  req['Api-Timestamp'] = timestamp\n  req['Api-Signature'] = bin_to_hex(signature)\n\n  puts bin_to_hex(signature)\n```\n\n# Errors\n\n\nThe Anchorage Digital API returns standard HTTP error codes for each API request.\n\n\n<table>\n  <tr>\n    <th style=\"width: 30%;\">Response Code</th>\n    <th>Description</th>\n  <tr>\n  <tr>\n    <td>200 OK</td>\n    <td>The request was successful.</td>\n  </tr>\n  <tr>\n    <td>400 Bad Request</td>\n    <td>The request was improperly formed and could not be understood by the server, often due to invalid syntax, insufficient funds, or a missing required parameter.</td>\n  </tr>\n  <tr>\n    <td>401 Unauthorized</td>\n    <td>The request was missing a valid API key.</td>\n  </tr>\n  <tr>\n    <td>403 Forbidden</td>\n    <td>The provided API key does not have permission to perform the requested action.</td>\n  </tr>\n  <tr>\n    <td>404 Not Found</td>\n    <td>The requested resource does not exist.</td>\n  </tr>\n  <tr>\n    <td>409 Conflict</td>\n    <td>The requested resource cannot proceed with the requested action because it is not in the required state.</td>\n  </tr>\n   <tr>\n    <td>429 Too Many Requests</td>\n    <td>Too many requests have been sent in a given amount of time.</td>\n  </tr>\n  <tr>\n    <td>\n      500 Internal Server Error\n      <br />\n      502 Bad Gateway\n      <br />\n      503 Service Unavailable\n      <br />\n      504 Gateway Timeout\n    </td>\n    <td>Something went wrong on Anchorage’s side. We have been alerted and are working on it.</td>\n  </tr>\n</table>\n\n\nIn addition to returning HTTP error codes for failed requests, the Anchorage Digital API includes a readable error message describing what went wrong in the response body.\n\n\n<SchemaDefinition schemaRef=\"#/components/schemas/ErrorDetails\" showReadOnly={true} showWriteOnly={true} />\n\n\n# Idempotency\n\n\nCertain endpoints support idempotent requests so that a given request can be safely retried without performing the same operation twice. For example, if a request to transfer funds does not respond due to network issues, you can retry the request using the same idempotent ID to ensure that only one transfer is created.\n\n\nEndpoints that support idempotent requests have an optional `idempotentId` field that can be included in the body of the `POST` request. Provide a unique string using your method of choice (such as a v4 UUID).\n\n\nIf a request is valid, Anchorage Digital will save the request indefinitely. If a subsequent request is received with the same `idempotentId` we will return the previously saved response for that `idempotentId`.\n\n\n# Rate Limits\n\n\nKeys provisioned by an Organization share one common rate limit. API requests are limited to 20 requests per second per Organization, allowing for bursts of up to 100 requests within a single second.\n\n\n# Pagination\n\n\nCursor pagination is used for REST endpoints which return multiple data points. Pagination allows for fetching data after the current page and specifying how many records to return. The `next` cursor is available in responses with the `page` attribute. Requests should use the `next` cursor URL to query subsequent data. Query parameter `afterId` specifies the last record previously retrieved. Some endpoints instead use the `endDate` parameter to specify the end date and older for records to retrieve. Query parameter `limit` specifies the maximum number of records in a response.\n\n## Parameters\n\n<table>\n  <tr>\n    <th style=\"width: 30%;\">Parameter</th>\n    <th>Description</th\n  </tr>\n  <tr>\n    <td>afterId</td>\n    <td>Request page after (older than) this pagination id.</td>\n  </tr>\n  <tr>\n    <td>endDate</td>\n    <td>Request records older than this date (YYYY-MM-DD format). Used for /trading/trades and /trading/settlements resources.</td>\n  </tr>\n  <tr>\n    <td>limit</td>\n    <td>Maximum number of results requested. Default usually 25, but varies depending on resource.</td>\n  </tr>\n</table>\n\n## Example\n\n`GET /v2/transfers?afterId=1968b94b09b8a1a8a381775d1f04978c424d891d50e517774bf984297985b471&limit=100`\n\n## Next cursor\n\nThe `next` cursor is a URL which references the last record in a set of records. When queried, the `next` cursor URL will return subsequent records, but otherwise using the same query parameters."
+servers:
+- url: https://api.anchorage-staging.com/v2
+security:
+- Api-Access-Key: []
+tags:
+- description: 'API endpoints for managing RFQ, Market or Limit orders
+
+
+    [Anchorage Digital websocket API documentation.](https://anchorage-wsapi.netlify.app/)
+
+    '
+  name: Trading
+paths:
+  /trading/quote:
+    post:
+      operationId: requestQuote
+      summary: Request a quote
+      description: 'Permissions required: **Execute trades**
+
+
+
+        Request a quote
+
+
+        #### Idempotent Requests
+
+
+        This endpoint supports [idempotent requests](#section/Idempotency) so that quote is not requested twice if an API call was interrupted and must be retried. To send an idempotent request, include the `idempotentId` field in the body of the POST request.
+
+        '
+      parameters: []
+      requestBody:
+        description: "*Request for quote examples*\n\n**`BUY` quote requests:**\n- I want to buy the amount of BTC equivalent to 100 USD (I buy BTC and sell USD)\n  ```\n  {\n    \"tradingPair\": \"BTC-USD\",\n    \"side\": \"BUY\",\n    \"quantity\": \"100\",\n    \"currency\": \"USD\"\n  }\n  ```\n\n- I want to buy 1 BTC (I buy BTC and sell USD)\n  ```\n  {\n    \"tradingPair\": \"BTC-USD\",\n    \"side\": \"BUY\",\n    \"quantity\": \"1\",\n    \"currency\": \"BTC\"\n  }\n  ```\n\n- I want to buy the amount of ETH equivalent to 1 BTC (I buy ETH and sell BTC)\n  ```\n  {\n    \"tradingPair\": \"ETH-BTC\",\n    \"side\": \"BUY\",\n    \"quantity\": \"1\",\n    \"currency\": \"BTC\"\n  }\n  ```\n\n**`SELL` quote requests:**\n- I want to sell the amount of BTC equivalent to 100 USD (I sell BTC and buy USD)\n  ```\n  {\n    \"tradingPair\": \"BTC-USD\",\n    \"side\": \"SELL\",\n    \"quantity\": \"100\",\n    \"currency\": \"USD\"\n  }\n  ```\n\n- I want to sell 1 BTC (I sell BTC and buy USD)\n  ```\n  {\n    \"tradingPair\": \"BTC-USD\",\n    \"side\": \"SELL\",\n    \"quantity\": \"1\",\n    \"currency\": \"BTC\"\n  }\n  ```\n\n- I want to sell 1 ETH (I sell ETH and buy BTC)\n  ```\n  {\n    \"tradingPair\": \"ETH-BTC\",\n    \"side\": \"SELL\",\n    \"quantity\": \"1\",\n    \"currency\": \"ETH\"\n  }\n  ```\n\n**`TWOWAY` quote requests:**\n- I want two-way quotes to buy 1 ETH and sell BTC or to sell 1 ETH and buy BTC\n  ```\n  {\n    \"tradingPair\": \"ETH-BTC\",\n    \"side\": \"TWOWAY\",\n    \"quantity\": \"1\",\n    \"currency\": \"ETH\"\n  }\n  ```\n"
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GetQuoteRequest'
+      responses:
+        '201':
+          description: Successfully created request for quote
+          content:
+            application/json:
+              examples:
+                response:
+                  value:
+                    data:
+                      offerAmount:
+                        assetType: USD
+                        quantity: '11733.73'
+                      offerPrice: '11733.73'
+                      quoteID: 06f71d1e-e7e8-11ea-adc1-0242ac120002
+                      quoteRequest:
+                        currency: BTC
+                        quantity: '1'
+                        side: BUY
+                        tradingPair: BTC-USD
+                      quoteStatus: OPEN
+                      timestamp: '2020-08-31T16:57:07.265Z'
+                      validUntilTime: '2020-08-31T16:57:10.265Z'
+              schema:
+                $ref: '#/components/schemas/GetQuoteResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '401':
+          description: Unauthenticated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '503':
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+      tags:
+      - Trading
+      x-security:
+        Execute trades: present
+  /trading/quote/accept:
+    post:
+      operationId: acceptQuote
+      summary: Accept a quote
+      description: 'Permissions required: **Execute trades**
+
+
+
+        Accept a quote by its quoteID and side.
+
+
+        #### Idempotent Requests
+
+
+        This endpoint supports [idempotent requests](#section/Idempotency) so that a quote cannot be accepted twice if an API call was interrupted and is retried. To send an idempotent request, include the `idempotentId` field in the body of the POST request.
+
+        '
+      parameters:
+      - name: Api-Signature
+        in: header
+        description: "A hex-encoded Ed25519 signature of `timestamp_epoch_seconds + uppercase(http_method) + request_path + request_body`.\n\nConstruction example:\n```\n  toHex(\n    ed25519Sign(\n      signing_key,\n      '{}{}{}{}'.format(timestamp_epoch_seconds, toUpper(httpMethod), httpRequestPath, httpBody)\n    )\n  )\n```"
+        required: true
+        schema:
+          type: string
+          pattern: ^[0-9A-Fa-f]{128,160}$
+      - name: Api-Timestamp
+        in: header
+        description: Current timestamp, represented as unix epoch seconds
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        description: "Request body to accept a quote\nexample:\n```\n  {\n    \"quoteID\": \"06f71d1e-e7e8-11ea-adc1-0242ac120002\",\n    \"side\": \"BUY\",\n  }\n```"
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AcceptQuoteRequest'
+      responses:
+        '200':
+          description: Successfully accepted the quote
+          content:
+            application/json:
+              examples:
+                response:
+                  value:
+                    data:
+                      quoteID: 06f71d1e-e7e8-11ea-adc1-0242ac120002
+                      side: BUY
+                      tradeStatus: EXECUTED
+                      tradeID: d1ae1416-ebd7-11ea-adc1-0242ac120002
+              schema:
+                $ref: '#/components/schemas/AcceptQuoteResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '401':
+          description: Unauthenticated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '404':
+          description: Not Found. The specified quoteID is either invalid or expired.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '409':
+          description: Trade already exists
+          content:
+            application/json:
+              examples:
+                response:
+                  value:
+                    errorType: Conflict
+                    message: tradeID=07ceab88-944f-4ea7-9ebf-9d1f5672b59a,tradeStatus=EXECUTED
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '422':
+          description: Request exceeds credit limit
+          content:
+            application/json:
+              examples:
+                response:
+                  value:
+                    errorType: UnprocessableEntity
+                    message: The amount requested exceeds credit limit
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+      tags:
+      - Trading
+      x-security:
+        Execute trades: present
+  /trading/order:
+    post:
+      operationId: newOrderSingle
+      summary: Place an order
+      description: 'Permissions required: **Execute trades**
+
+
+        Place an order, either Market or Limit, currently only FillOrKill is supported.
+
+
+        One of `accountId` or `subaccountId` must be specified but not both.'
+      parameters: []
+      requestBody:
+        description: Parameters to place an order.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewOrderSingle'
+      responses:
+        '201':
+          description: Successfully executed an order
+          content:
+            application/json:
+              examples:
+                response:
+                  value:
+                    data:
+                      clOrderId: 6fb5fc79-0bb4-446d-82dd-d4687fb56a02
+                      orderId: a94c8d75-6c9d-4903-95f3-5b0893e76cb7
+                      execId: 3fb532c79-0bb4-446d-82dd-d4687fb56a02
+                      accountId: 0e2b2f9d-8d10-4f1e-960b-28567255045f
+                      symbol: BTC-USD
+                      side: BUY
+                      currency: USD
+                      counterCurrency: BTC
+                      orderType: MARKET
+                      orderStatus: FILLED
+                      avgPx: '21005.4'
+                      avgPxAllIn: '21006.00'
+                      orderQty: '10000.00'
+                      cumQty: '10000.00'
+                      counterQty: '0.4760680586896702'
+                      fee: '0.00001359805'
+                      feeCurrency: BTC
+                      counterQtyAllIn: '0.4760544606302961'
+                      transactTime: '2022-11-20T20:32:16.423Z'
+              schema:
+                $ref: '#/components/schemas/TradingOrderResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '401':
+          description: Unauthenticated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '503':
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+      tags:
+      - Trading
+      x-security:
+        Execute trades: present
+  /trading/orders:
+    get:
+      operationId: getOrdersStatus
+      summary: List orders
+      description: 'Permissions required: **Execute trades** or **Read trade activity**
+
+
+        List all orders. With the permission **Read trade activity** all orders of the organization may be read. With the permission **Execute trades** only the orders created by this API key may be read.
+
+
+        Orders are sorted in a descending order by their timestamp, i.e. the most recent order or the order with a timestamp closest to `endDate` is listed first.
+
+
+        When filtering by `subaccountId`, the allocation information is included but filtered to show only the allocation for the requested subaccount.
+
+        For multi-order requests without a subaccount filter, allocation information is not included.
+
+        To get complete allocation information, use [GET `/v2/trading/orders/{orderId}`](#tag/Trading/operation/getOrderStatus)
+
+
+        #### Filters
+
+
+        You may optionally supply filters for the list of orders using query parameters below'
+      parameters:
+      - name: accountId
+        in: query
+        description: The ID of the account to filter orders by. If provided, only orders for this account will be returned.
+        schema:
+          type: string
+      - name: subaccountId
+        in: query
+        description: The ID of the subaccount to filter orders by. If provided, only orders for this subaccount will be returned.
+        schema:
+          type: string
+      - name: startDateTime
+        in: query
+        description: The start date-time of the trades (exclusive) in `YYYY-MM-DDTHH:MM:SS.nnnnnnnnn` format. The earliest valid start date-time is '2017-01-01T00:00:00.000000000'. The last valid start date-time is the current date-time. Date-times are always in UTC [RFC 3339](https://datatracker.ietf.org/doc/html/rfc3339#section-5.6) 'date-time'.
+        schema:
+          type: string
+          format: date-time
+      - name: endDateTime
+        in: query
+        description: The end date-time of the trades (exclusive) in `YYYY-MM-DDTHH:MM:SS.nnnnnnnnn` format. The latest valid end date-time is the current date-time. The earliest valid end date-time is '2017-01-01T00:00:00.000000000'. Date-times are always in UTC [RFC 3339](https://datatracker.ietf.org/doc/html/rfc3339#section-5.6) 'date-time'.
+        schema:
+          type: string
+          format: date-time
+      - name: status
+        in: query
+        description: One or more statuses to filter orders. If provided, only orders matching these statuses will be returned. If `OPEN` status is specified, the call returns all orders in [PENDING,NEW,PENDING_CANCEL,PARTIALLY_FILLED] states.
+        schema:
+          type: array
+          items:
+            type: string
+            enum:
+            - OPEN
+            - REJECTED
+            - CANCELED
+            - FILLED
+          uniqueItems: true
+        explode: false
+        style: form
+      - name: orderIds
+        in: query
+        description: A list of `orderIds` to return. Invalid `orderIds` will be ignored. A maximum number of unique 500 order ids are enforced per call.
+        schema:
+          type: array
+          items:
+            type: string
+          maxItems: 500
+          minItems: 1
+          uniqueItems: true
+        explode: false
+        style: form
+      - name: clientOrderIds
+        in: query
+        description: A list of `clientOrderIds` to return. Invalid `clientOrderIds` will be ignored. A maximum number of unique 500 order ids are enforced per call.
+        schema:
+          type: array
+          items:
+            type: string
+          maxItems: 500
+          minItems: 1
+          uniqueItems: true
+        explode: false
+        style: form
+      - name: limit
+        in: query
+        description: Maximum number of results to return per query
+        schema:
+          type: integer
+          format: int64
+          default: 100
+          maximum: 2000
+          minimum: 1
+      - name: orderTypes
+        in: query
+        description: One or more types to filter orders. If provided, only orders matching these types will be returned.
+        schema:
+          type: array
+          items:
+            type: string
+            enum:
+            - LIMIT
+            - MARKET
+            - STOP_LOSS
+            - STOP_LIMIT
+            - TAKE_PROFIT_LIMIT
+            - TWAP
+            - VWAP
+            - PEGGED
+            - POV
+            - LIMIT_ALL_IN
+            - MANUAL
+            - OTHER
+          uniqueItems: true
+        explode: false
+        style: form
+      responses:
+        '200':
+          description: A list of Orders and their last status
+          content:
+            application/json:
+              examples:
+                response:
+                  value:
+                    data:
+                    - orderId: c6d8c4a8-e883-4ae3-9f35-4a35d06c383d
+                      clOrderId: 40d846b7-6efb-48fa-acc9-dcace827c927
+                      accountId: a05a846f-4ef0-11ed-a291-dafe71b41c83
+                      symbol: BTC-USD
+                      side: BUY
+                      orderQty: '1.0'
+                      currency: BTC
+                      orderType: MARKET
+                      timeInForce: GTC
+                      orderStatus: FILLED
+                      avgPx: '22840.9299'
+                      avgPxAllIn: '22863.7708299'
+                      leavesQty: '0.0'
+                      cancelQty: '0.0'
+                      cumQty: '1.0'
+                      totalFee: '25.35'
+                      feeCurrency: USD
+                      rejectReason: ''
+                      rejectReasonText: ''
+                      submitTime': '2023-03-07T19:49:06.286737Z'
+                      transactTime: '2023-03-07T19:49:06.314322Z'
+                    page:
+                      next: /v2/trading/orders?endDate=2020-08-31T22:14:07Z&limit=2
+              schema:
+                $ref: '#/components/schemas/OrdersStatusResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '401':
+          description: Unauthenticated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+      tags:
+      - Trading
+      x-security:
+        Execute trades: present
+        Read trade activity: present
+  /trading/orders/{orderId}:
+    get:
+      operationId: getOrderStatus
+      summary: Get order by ID
+      description: 'Permissions required: **Read trade activity** or **Execute trades** (if order created by this API key)
+
+
+        Get order by ID, where the ID can be anchorage generated orderId or clientOrderId'
+      parameters:
+      - name: orderId
+        in: path
+        description: The orderId or clientOrderId for the order to get details for
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Metadata about a specific trade
+          content:
+            application/json:
+              examples:
+                response:
+                  value:
+                    data:
+                      orderId: c6d8c4a8-e883-4ae3-9f35-4a35d06c383d
+                      clOrderId: 40d846b7-6efb-48fa-acc9-dcace827c927
+                      accountId: a05a846f-4ef0-11ed-a291-dafe71b41c83
+                      symbol: BTC-USD
+                      side: BUY
+                      orderQty: '1.0'
+                      currency: BTC
+                      orderType: LIMIT
+                      limitPrice: '22840.9299'
+                      timeInForce: GTC
+                      orderStatus: FILLED
+                      avgPx: '22840.9299'
+                      avgPxAllIn: '22863.7708299'
+                      leavesQty: '0.0'
+                      cancelQty: '0.0'
+                      cumQty: '1.0'
+                      totalFee: '25.35'
+                      feeCurrency: USD
+                      rejectReason: ''
+                      rejectReasonText: ''
+                      submitTime': '2023-03-07T19:49:06.286737Z'
+                      transactTime: '2023-03-07T19:49:06.314322Z'
+              schema:
+                $ref: '#/components/schemas/OrderStatusResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '401':
+          description: Unauthenticated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+      tags:
+      - Trading
+      x-security:
+        Execute trades: present
+        Read trade activity: present
+  /trading/trades:
+    get:
+      operationId: getTrades
+      summary: List trades
+      description: 'Permissions required: **Execute trades** or **Read trade activity**
+
+
+        List all trades. With the permission **Read trade activity** all trades of the organization may be read. With the permission **Execute trades** only the trades created by this API key may be read.
+
+
+        Trades are sorted in a descending order by their timestamp, i.e. the most recent trade or the trade with a timestamp closest to `endDate` is listed first.
+
+
+        #### Filters
+
+
+        You may optionally supply the following filters:
+
+
+        - Specify a `tradingPair` to filter by the trading pair of the trade, for example `BTC-USD`.
+
+        - Specify one or multiple `status` to filter trades. Multiple statuses should be separated by commas.
+
+        - Specify a `side` to filter by the side of the trade.'
+      parameters:
+      - name: startDate
+        in: query
+        description: The start date of the trades (inclusive) in `YYYY-MM-DD` format. The earliest valid start date is `2017-01-01`. The last valid start date is the current date. A `startDate` of '2021-01-10' is equivalent to a `startDateTime` of '2021-01-10.00:00:00.000000000'. Dates are always in UTC [RFC 3339](https://datatracker.ietf.org/doc/html/rfc3339#section-5.6) 'full-date'.
+        schema:
+          type: string
+          format: date
+      - name: endDate
+        in: query
+        description: The end date of the trades (exclusive) in `YYYY-MM-DD` format. The latest valid end date is the current date. If not provided, defaults to the most recently closed day. An `endDate` of '2021-01-10' is equivalent to an `endDateTime` of '2021-01-10.00:00:00.000000000'. Dates are always in UTC [RFC 3339](https://datatracker.ietf.org/doc/html/rfc3339#section-5.6) 'full-date'.
+        schema:
+          type: string
+          format: date
+      - name: startDateTime
+        in: query
+        description: The start date-time of the trades (exclusive) in `YYYY-MM-DDTHH:MM:SS.nnnnnnnnn` format. The earliest valid start date-time is '2017-01-01T00:00:00.000000000'. The last valid start date-time is the current date-time. `startDateTime` will be used if both `startDate` and `startDateTime` are specified. Date-times are always in UTC [RFC 3339](https://datatracker.ietf.org/doc/html/rfc3339#section-5.6) 'date-time'.
+        schema:
+          type: string
+          format: date-time
+      - name: endDateTime
+        in: query
+        description: The end date-time of the trades (exclusive) in `YYYY-MM-DDTHH:MM:SS.nnnnnnnnn` format. The latest valid end date-time is the current date-time. The earliest valid end date-time is '2017-01-01T00:00:00.000000000'. `endDateTime` will be used if both `endDate` and `endDateTime` are specified. Date-times are always in UTC [RFC 3339](https://datatracker.ietf.org/doc/html/rfc3339#section-5.6) 'date-time'.
+        schema:
+          type: string
+          format: date-time
+      - name: status
+        in: query
+        description: One or more statuses to filter trades. If provided, only trades matching these statuses will be returned.
+        schema:
+          type: array
+          items:
+            type: string
+            enum:
+            - PENDING
+            - REJECTED
+            - CANCELED
+            - EXECUTED
+            - SETTLING
+            - SETTLED
+          uniqueItems: true
+        explode: false
+        style: form
+      - name: side
+        in: query
+        description: Filter by the side of a trade. If provided, only trades matching this side will be returned.
+        schema:
+          type: string
+          enum:
+          - BUY
+          - SELL
+      - name: tradingPair
+        in: query
+        description: Filter by the trading pair of a trade. If provided, only trades matching this pair of assets will be returned.
+        schema:
+          type: string
+      - name: accountId
+        in: query
+        description: Filter by the trading account ID of a trade. If provided, only trades linked to this account ID will be returned.
+        schema:
+          type: string
+      - name: subaccountId
+        in: query
+        description: Filter by the trading account ID of a trade. If provided, only trades linked to this account ID will be returned.
+        schema:
+          type: string
+      - name: orderId
+        in: query
+        description: Filter by the order ID of a trade. The orderId is the anchorage orderId on execution report. If provided, only trades of the specified order will be returned.
+        schema:
+          type: string
+      - name: vaultId
+        in: query
+        description: Filter by the vault ID of a trade. If provided, only trades linked to this vault ID will be returned.
+        schema:
+          type: string
+      - name: tradeIds
+        in: query
+        description: A list of `tradeIds` to return. Invalid `tradeIds` will be ignored. A maximum number of unique 500 trade ids are enforced per call.
+        schema:
+          type: array
+          items:
+            type: string
+          maxItems: 500
+          minItems: 1
+          uniqueItems: true
+        explode: false
+        style: form
+      - name: limit
+        in: query
+        description: Maximum number of results to return per query
+        schema:
+          type: integer
+          format: int64
+          default: 100
+          maximum: 2000
+          minimum: 1
+      responses:
+        '200':
+          description: A list of Trades and their metadata
+          content:
+            application/json:
+              examples:
+                response:
+                  value:
+                    data:
+                    - quantitySold: '1'
+                      currencySold: USD
+                      currencyBought: BTC
+                      price: '11681.67'
+                      quantityBought: '0.00008561'
+                      side: BUY
+                      timestamp: '2020-08-31T22:15:31.99999Z'
+                      tradeID: e0538774-ebd9-11ea-adc1-0242ac120002
+                      quoteID: 06f71d1e-e7e8-11ea-adc1-0242ac120011
+                      vault:
+                        vaultID: 1c920f4241b78a1d483a29f3c24b6c4c
+                      tradeStatus: EXECUTED
+                      tradingPair: BTC-USD
+                      fee: '0.01'
+                      feeCurrency: USD
+                    - quantitySold: '1'
+                      currencySold: USD
+                      currencyBought: ETH
+                      price: '435.16'
+                      quantityBought: '0.00230049'
+                      side: BUY
+                      timestamp: '2020-08-31T22:14:07.99999Z'
+                      tradeID: d1ae1416-ebd7-11ea-adc1-0242ac120002
+                      quoteID: 06f71d1e-e7e8-11ea-adc1-0242ac120002
+                      vault:
+                        vaultID: 1c920f4241b78a1d483a29f3c24b6c4c
+                      tradeStatus: EXECUTED
+                      tradingPair: ETH-USD
+                      fee: '0.01'
+                      feeCurrency: USD
+                    page:
+                      next: /v2/trading/trades?endDate=2020-08-31T22:14:07Z&limit=2
+              schema:
+                $ref: '#/components/schemas/TradesResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '401':
+          description: Unauthenticated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+      tags:
+      - Trading
+      x-security:
+        Execute trades: present
+        Read trade activity: present
+  /trading/trades/{tradeId}:
+    get:
+      operationId: getTrade
+      summary: Get trade by ID
+      description: 'Permissions required: **Read trade activity** or **Execute trades** (if trade created by this API key)
+
+
+        Get trade by ID.'
+      parameters:
+      - name: tradeId
+        in: path
+        description: The ID of the trade to get details for
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Metadata about a specific trade
+          content:
+            application/json:
+              examples:
+                response:
+                  value:
+                    data:
+                      quantitySold: '1'
+                      currencySold: USD
+                      currencyBought: BTC
+                      price: '11681.67'
+                      quantityBought: '0.00008561'
+                      side: BUY
+                      timestamp: '2020-08-31T22:15:31.99999Z'
+                      tradeID: e0538774-ebd9-11ea-adc1-0242ac120002
+                      quoteID: 06f71d1e-e7e8-11ea-adc1-0242ac120011
+                      vault:
+                        vaultID: 1c920f4241b78a1d483a29f3c24b6c4c
+                      tradeStatus: EXECUTED
+                      tradingPair: BTC-USD
+                      fee: '0.01'
+                      feeCurrency: USD
+              schema:
+                $ref: '#/components/schemas/TradeResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '401':
+          description: Unauthenticated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+      tags:
+      - Trading
+      x-security:
+        Execute trades: present
+        Read trade activity: present
+  /trading/creditLimit:
+    get:
+      operationId: getCreditLimit
+      summary: Get credit limit details
+      description: 'Permissions required: **Execute trades** or **Read trade activity**
+
+
+        Get your current credit limit details.
+
+
+        The credit limit represents the maximum USD value you are allowed to trade. The credit spent represents the USD value you have spent and it is automatically updated when your trades (buy or sell trades) are executed. If the credit limit is exhausted or will be exhausted with a trade, Anchorage Digital will then reject your request to trade (i.e. request to accept a quote).'
+      parameters: []
+      responses:
+        '200':
+          description: Successfully returned credit limit details
+          content:
+            application/json:
+              examples:
+                response:
+                  value:
+                    data:
+                      creditLimitAmount:
+                        assetType: USD
+                        quantity: '1000000'
+                      creditSpentAmount:
+                        assetType: USD
+                        quantity: '20000'
+              schema:
+                $ref: '#/components/schemas/CreditLimitResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '401':
+          description: Unauthenticated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+      tags:
+      - Trading
+      x-security:
+        Execute trades: present
+        Read trade activity: present
+  /trading/positions:
+    get:
+      operationId: getTradingPositions
+      summary: List outstanding trading positions
+      description: 'Permissions required: **Execute trades** or **Read trade activity**
+
+
+        Get the list of outstanding trading positions.'
+      parameters: []
+      responses:
+        '200':
+          description: Successfully returned the list of outstanding trading positions
+          content:
+            application/json:
+              examples:
+                response:
+                  value:
+                    data:
+                    - positionAmount:
+                        assetType: BTC
+                        quantity: '30.54447726'
+                    - positionAmount:
+                        assetType: ETH
+                        quantity: '8391'
+                    - positionAmount:
+                        assetType: USD
+                        quantity: '-100276.38'
+              schema:
+                $ref: '#/components/schemas/TradingPositionsResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '401':
+          description: Unauthenticated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+      tags:
+      - Trading
+      x-security:
+        Execute trades: present
+        Read trade activity: present
+  /trading/settlements:
+    get:
+      operationId: getSettlements
+      summary: List settlements
+      description: 'Permissions required: **Execute trades** or **Read trade activity**
+
+
+        List of all settlements. With permission **Read trade activity** all settlements of the organization may be read. With permission **Execute trades** only settlements this api key has created may be read.
+
+
+        Settlements are sorted in a descending order by their timestamp, i.e. the most recent settlement or the settlement with a timestamp closest to `endDate` is listed first.
+
+
+        #### Filters
+
+
+        You may optionally supply the following filters:
+
+
+        - Specify a one or multiple `status` to filter settlements. Multiple statuses should be separated by commas.'
+      parameters:
+      - name: startDate
+        in: query
+        description: The start date (inclusive) in `YYYY-MM-DD` format. The earliest valid start date is `2017-01-01`. The last valid start date is the current date. Dates are always in UTC [RFC 3339](https://datatracker.ietf.org/doc/html/rfc3339#section-5.6) 'full-date'.
+        schema:
+          type: string
+          format: date
+      - name: endDate
+        in: query
+        description: The end date (inclusive) in `YYYY-MM-DD` format. The latest valid end date is the current date. Dates are always in UTC [RFC 3339](https://datatracker.ietf.org/doc/html/rfc3339#section-5.6) 'full-date'.
+        schema:
+          type: string
+          format: date
+      - name: status
+        in: query
+        description: One or more statuses to filter settlements. If provided, only settlements matching these statuses will be returned.
+        schema:
+          type: array
+          items:
+            type: string
+            enum:
+            - REJECTED
+            - CANCELED
+            - EXECUTED
+            - SETTLING
+            - SETTLED
+          uniqueItems: true
+        explode: false
+        style: form
+      - name: vaultID
+        in: query
+        description: Filter by the vault ID of a settlement. If provided, only settlements linked to this vault ID will be returned.
+        schema:
+          type: string
+      - name: limit
+        in: query
+        description: Maximum number of results to return per query
+        schema:
+          type: integer
+          format: int64
+          default: 100
+          maximum: 100
+          minimum: 1
+      - name: excludePositions
+        in: query
+        description: If `true`, `positions` property will be excluded from the response. If `false`, `positions` will be included in the response as demonstrated in the example.
+        schema:
+          type: boolean
+          default: false
+      - name: excludeSettlementInstructions
+        in: query
+        description: If `true`, `instructionsCrypto` property will be excluded from the response. If `false`, it will be included in the response as demonstrated in the example.
+        schema:
+          type: boolean
+          default: false
+      - name: accountId
+        in: query
+        description: Filter by the trading account ID of a trade. If provided, only trades linked to this account ID will be returned.
+        schema:
+          type: string
+      responses:
+        '200':
+          description: A list of Settlements and their metadata
+          content:
+            application/json:
+              examples:
+                response:
+                  value:
+                    data:
+                    - createdAt: '2020-11-10T20:24:20Z'
+                      settlementID: c8e2fcb6-78fa-4b8a-8f6d-e3ff23093dd0
+                      settlementStatus: SETTLED
+                      vault:
+                        vaultID: 1c920f4241b78a1d483a29f3c24b6c4c
+                      trades:
+                      - quantitySold: '1'
+                        currencySold: USD
+                        currencyBought: BTC
+                        price: '11681.67'
+                        quantityBought: '0.00008561'
+                        side: BUY
+                        timestamp: '2020-08-31T22:15:31.99999Z'
+                        tradeID: e0538774-ebd9-11ea-adc1-0242ac120002
+                        quoteID: 06f71d1e-e7e8-11ea-adc1-0242ac120011
+                        vault:
+                          vaultID: 1c920f4241b78a1d483a29f3c24b6c4c
+                        tradeStatus: SETTLED
+                        tradingPair: BTC-USD
+                        fee: '0.01'
+                        feeCurrency: USD
+                      - quantitySold: '1'
+                        currencySold: USD
+                        currencyBought: ETH
+                        price: '435.16'
+                        quantityBought: '0.00230049'
+                        side: BUY
+                        timestamp: '2020-08-31T22:14:07.99999Z'
+                        tradeID: d1ae1416-ebd7-11ea-adc1-0242ac120002
+                        quoteID: 06f71d1e-e7e8-11ea-adc1-0242ac120002
+                        vault:
+                          vaultID: 1c920f4241b78a1d483a29f3c24b6c4c
+                        tradeStatus: SETTLED
+                        tradingPair: ETH-USD
+                        fee: '0.01'
+                        feeCurrency: USD
+                      positions:
+                      - positionAmount:
+                          assetType: BTC
+                          quantity: '30.54447726'
+                      - positionAmount:
+                          assetType: ETH
+                          quantity: '8391'
+                      instructionsCrypto:
+                      - address: cosmos10tucpr3m3rgaexzy0yf0j903mp3f6xsm02al50
+                        assetTypeID: ATOM
+                      - address: bitcoincash:qq5z3pjyf2r3h9dyze644adywsr3vcncry2lmkvjlw
+                        assetTypeID: BCH
+                      - address: 3HZdacGTDVcWwjwKCb7sEoD3kVTxJ7d25P
+                        assetTypeID: BTC
+                      - address: '0xd52055A39a3d2f7505C739f981f296Ea31B50191'
+                        assetTypeID: ETH
+                    - createdAt: '2020-11-10T15:39:05Z'
+                      settlementID: w9e8hjq3-66rz-0j2n-1k6t-a2cg9834tt7
+                      settlementStatus: SETTLING
+                      vault:
+                        vaultID: 1c920f4241b78a1d483a29f3c24b6c4c
+                      trades:
+                      - quantitySold: '590000'
+                        currencySold: USD
+                        currencyBought: BTC
+                        price: '43574.59'
+                        quantityBought: '13.54'
+                        side: BUY
+                        timestamp: '2020-08-31T22:15:31.99999Z'
+                        tradeID: df4d3b1a-f70f-42c3-87e3-18a98c98c959
+                        quoteID: f3857ede-9eeb-468e-8124-75458cff0229
+                        vault:
+                          vaultID: 1c920f4241b78a1d483a29f3c24b6c4c
+                        tradeStatus: SETTLING
+                        tradingPair: BTC-USD
+                        fee: '457.16'
+                        feeCurrency: USD
+                      positions:
+                      - positionAmount:
+                          assetType: BTC
+                          quantity: '30.54447726'
+                      instructionsCrypto:
+                      - address: cosmos10tucpr3m3rgaexzy0yf0j903mp3f6xsm02al50
+                        assetTypeID: ATOM
+                      - address: bitcoincash:qq5z3pjyf2r3h9dyze644adywsr3vcncry2lmkvjlw
+                        assetTypeID: BCH
+                      - address: 3HZdacGTDVcWwjwKCb7sEoD3kVTxJ7d25P
+                        assetTypeID: BTC
+                      - address: '0xd52055A39a3d2f7505C739f981f296Ea31B50191'
+                        assetTypeID: ETH
+                    page:
+                      next: /v2/trading/settlements?endDate=2020-11-10&limit=2
+              schema:
+                $ref: '#/components/schemas/SettlementsResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '401':
+          description: Unauthenticated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+      tags:
+      - Trading
+      x-security:
+        Execute trades: present
+        Read trade activity: present
+  /trading/settlements/{settlementId}:
+    get:
+      operationId: getSettlement
+      summary: Get settlement by ID
+      description: 'Permissions required: **Execute trades** or **Read trade activity**
+
+
+        Get settlement details by ID.'
+      parameters:
+      - name: settlementId
+        in: path
+        description: The ID of the settlement to get details for
+        required: true
+        schema:
+          type: string
+      - name: excludeTrades
+        in: query
+        description: If `true`, `trades` property will be excluded from the response. If `false`, `trades` will be included in the response as demonstrated in the example. In order to get the full list of trades for a settlement, favor the usage of the [list trades by settlement](#operation/getTradesBySettlement) API endpoint.
+        schema:
+          type: boolean
+          default: false
+      - name: excludePositions
+        in: query
+        description: If `true`, `positions` property will be excluded from the response. If `false`, `positions` will be included in the response as demonstrated in the example.
+        schema:
+          type: boolean
+          default: false
+      - name: excludeSettlementInstructions
+        in: query
+        description: If `true`, `instructionsCrypto` property will be excluded from the response. If `false`, it will be included in the response as demonstrated in the example.
+        schema:
+          type: boolean
+          default: false
+      responses:
+        '200':
+          description: Metadata about a specific settlement
+          content:
+            application/json:
+              examples:
+                response:
+                  value:
+                    data:
+                      createdAt: '2020-11-10T20:24:20Z'
+                      settlementID: c8e2fcb6-78fa-4b8a-8f6d-e3ff23093dd0
+                      settlementStatus: EXECUTED
+                      vault:
+                        vaultID: 1c920f4241b78a1d483a29f3c24b6c4c
+                      trades:
+                      - quantitySold: '1'
+                        currencySold: USD
+                        currencyBought: BTC
+                        price: '11681.67'
+                        quantityBought: '0.00008561'
+                        side: BUY
+                        timestamp: '2020-08-31T22:15:31.99999Z'
+                        tradeID: e0538774-ebd9-11ea-adc1-0242ac120002
+                        quoteID: 06f71d1e-e7e8-11ea-adc1-0242ac120011
+                        vault:
+                          vaultID: 1c920f4241b78a1d483a29f3c24b6c4c
+                        tradeStatus: EXECUTED
+                        tradingPair: BTC-USD
+                        fee: '0.01'
+                        feeCurrency: USD
+                      - quantitySold: '1'
+                        currencySold: USD
+                        currencyBought: ETH
+                        price: '435.16'
+                        quantityBought: '0.00230049'
+                        side: BUY
+                        timestamp: '2020-08-31T22:14:07.99999Z'
+                        tradeID: d1ae1416-ebd7-11ea-adc1-0242ac120002
+                        quoteID: 06f71d1e-e7e8-11ea-adc1-0242ac120002
+                        vault:
+                          vaultID: 1c920f4241b78a1d483a29f3c24b6c4c
+                        tradeStatus: EXECUTED
+                        tradingPair: ETH-USD
+                        fee: '0.01'
+                        feeCurrency: USD
+                      positions:
+                      - positionAmount:
+                          assetType: BTC
+                          quantity: '30.54447726'
+                      - positionAmount:
+                          assetType: ETH
+                          quantity: '8391'
+                      instructionsCrypto:
+                      - address: cosmos10tucpr3m3rgaexzy0yf0j903mp3f6xsm02al50
+                        assetTypeID: ATOM
+                      - address: bitcoincash:qq5z3pjyf2r3h9dyze644adywsr3vcncry2lmkvjlw
+                        assetTypeID: BCH
+                      - address: 3HZdacGTDVcWwjwKCb7sEoD3kVTxJ7d25P
+                        assetTypeID: BTC
+                      - address: '0xd52055A39a3d2f7505C739f981f296Ea31B50191'
+                        assetTypeID: ETH
+              schema:
+                $ref: '#/components/schemas/SettlementResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '401':
+          description: Unauthenticated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+      tags:
+      - Trading
+      x-security:
+        Execute trades: present
+        Read trade activity: present
+  /trading/settlements/{settlementId}/trades:
+    get:
+      operationId: getTradesBySettlement
+      summary: List trades by settlement
+      description: 'Permissions required: **Execute trades** or **Read trade activity**
+
+
+        List trades for the provided settlement. With the permission **Read trade activity** all trades of the organization may be read. With the permission **Execute trades** only the trades created by this API key may be read.
+
+
+        Trades are sorted in a descending order by their timestamp (i.e. the most recent trade or the trade with a timestamp closest to `endDateTime` is listed first).'
+      parameters:
+      - name: settlementId
+        in: path
+        description: The ID of the settlement to retrieve
+        required: true
+        schema:
+          type: string
+      - name: startDateTime
+        in: query
+        description: The start date-time of the trades in `YYYY-MM-DDTHH:MM:SS.nnnnnnnnn` format. The earliest valid start date-time is '2017-01-01T00:00:00.000000000'. Date-times are always in UTC [RFC 3339](https://datatracker.ietf.org/doc/html/rfc3339#section-5.6) 'date-time'.
+        schema:
+          type: string
+          format: date-time
+      - name: endDateTime
+        in: query
+        description: The end date-time of the trades (exclusive) in `YYYY-MM-DDTHH:MM:SS.nnnnnnnnn` format. Defaults to the current date-time if not specified. `endDateTime` must be after `startDateTime`. Date-times are always in UTC [RFC 3339](https://datatracker.ietf.org/doc/html/rfc3339#section-5.6) 'date-time'.
+        schema:
+          type: string
+          format: date-time
+      - name: side
+        in: query
+        description: Filter by the side of a trade. If provided, only trades matching this side will be returned.
+        schema:
+          type: string
+          enum:
+          - BUY
+          - SELL
+      - name: tradingPair
+        in: query
+        description: Filter by the trading pair of a trade. If provided, only trades matching this pair of assets will be returned.
+        schema:
+          type: string
+      - name: afterId
+        in: query
+        description: When paginating this is used to provide the starting point for the page to fetch (retrieved from the previous response body)
+        schema:
+          type: string
+      - name: limit
+        in: query
+        description: Maximum number of results to return per query
+        schema:
+          type: integer
+          format: int64
+          default: 100
+          maximum: 2000
+          minimum: 1
+      responses:
+        '200':
+          description: A list of Trades and their metadata
+          content:
+            application/json:
+              examples:
+                response:
+                  value:
+                    data:
+                    - quantitySold: '1'
+                      currencySold: USD
+                      currencyBought: BTC
+                      price: '11681.67'
+                      quantityBought: '0.00008561'
+                      side: BUY
+                      timestamp: '2020-08-31T22:15:31.99999Z'
+                      tradeID: e0538774-ebd9-11ea-adc1-0242ac120002
+                      quoteID: 06f71d1e-e7e8-11ea-adc1-0242ac120011
+                      vault:
+                        vaultID: 419f3483a26c4c0f42c24bb78a1d1c92
+                      tradeStatus: EXECUTED
+                      tradingPair: BTC-USD
+                      fee: '0.01'
+                      feeCurrency: USD
+                    - quantitySold: '1'
+                      currencySold: USD
+                      currencyBought: ETH
+                      price: '435.16'
+                      quantityBought: '0.00230049'
+                      side: BUY
+                      timestamp: '2020-08-31T22:14:07.99999Z'
+                      tradeID: d1ae1416-ebd7-11ea-adc1-0242ac120002
+                      quoteID: 06f71d1e-e7e8-11ea-adc1-0242ac120002
+                      vault:
+                        vaultID: 419f3483a26c4c0f42c24bb78a1d1c92
+                      tradeStatus: EXECUTED
+                      tradingPair: ETH-USD
+                      fee: '0.01'
+                      feeCurrency: USD
+                    page:
+                      next: /v2/trading/settlements/c8e2fcb6-78fa-4b8a-8f6d-e3ff23093dd0/trades?endDate=2020-08-31T22:14:07Z&limit=2
+              schema:
+                $ref: '#/components/schemas/TradesBySettlementResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '401':
+          description: Unauthenticated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+      tags:
+      - Trading
+      x-security:
+        Execute trades: present
+        Read trade activity: present
+  /trading/accounts:
+    get:
+      operationId: getTradingAccounts
+      summary: List trading accounts
+      description: 'Permissions required: **Read trade activity**
+
+
+        Get the list of trading accounts'
+      parameters: []
+      responses:
+        '200':
+          description: Successfully returned the list of trading accounts
+          content:
+            application/json:
+              examples:
+                response:
+                  value:
+                    data:
+                    - id: 6290d9bd-494f-11ed-975e-2e567b4c0e09
+                      name: Crypto Fund I LLC
+                      enabled: true
+                    - id: 12ff3d3a-342d-47b6-8559-c7d689fd1ea0
+                      name: Crypto Fund II LLC
+                      enabled: true
+              schema:
+                $ref: '#/components/schemas/TradingAccountsResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '401':
+          description: Unauthenticated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+      tags:
+      - Trading
+      x-security:
+        Read trade activity: present
+  /trading/accounts/{accountId}:
+    get:
+      operationId: getTradingAccount
+      summary: Get a trading account by id
+      description: 'Permissions required: **Read trade activity**
+
+
+        Get trading account details by ID.'
+      parameters:
+      - name: accountId
+        in: path
+        description: The ID of the trading account to get details for
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Successfully returned the trading account.
+          content:
+            application/json:
+              examples:
+                response:
+                  value:
+                    data:
+                      id: 6290d9bd-494f-11ed-975e-2e567b4c0e09
+                      name: Crypto Fund LLC
+                      enabled: true
+              schema:
+                $ref: '#/components/schemas/TradingAccountResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '401':
+          description: Unauthenticated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+      tags:
+      - Trading
+      x-security:
+        Read trade activity: present
+  /trading/accounts/{accountId}/balances:
+    get:
+      operationId: getTradingAccountBalance
+      summary: List trading account balances
+      description: 'Permissions required: **Read trade activity**
+
+
+        Get the trading account balances of fiat and digital assets'
+      parameters:
+      - name: accountId
+        in: path
+        description: The ID of the trading account to get the balances for
+        required: true
+        schema:
+          type: string
+      - name: assetType
+        in: query
+        description: The asset type to display balance for
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Successfully returned the balances of the trading account
+          content:
+            application/json:
+              examples:
+                response:
+                  value:
+                    data:
+                    - balance:
+                        quantity: '250000.00'
+                        assetType: USD
+                        currentPrice: '1.00'
+                        currentUSDValue: '250000.00'
+                    - balance:
+                        quantity: '10000.00000000'
+                        assetType: USDC
+                        currentPrice: '1.00'
+                        currentUSDValue: '10000.00'
+                    - balance:
+                        quantity: '9.00000000'
+                        assetType: BTC
+                        currentPrice: '10000.00'
+                        currentUSDValue: '90000.00'
+              schema:
+                $ref: '#/components/schemas/TradingAccountBalanceResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '401':
+          description: Unauthenticated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+      tags:
+      - Trading
+      x-security:
+        Read trade activity: present
+  /trading/accounts/{accountId}/credit:
+    get:
+      operationId: getTradingAccountCredit
+      summary: Get trading account credit limit and usage
+      description: 'Permissions required: **Read trade activity**
+
+
+        Get the credit limit and usage of a trading account per asset.
+
+        Current USD prices are not returned, only assets and their quantity.
+
+
+        Still under development, return empty replies.'
+      parameters:
+      - name: accountId
+        in: path
+        description: The ID of the trading account to get the credit for
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Successfully returned the credit of the trading account
+          content:
+            application/json:
+              examples:
+                response:
+                  value:
+                    data:
+                      limits:
+                      - quantity: '250000.00'
+                        assetType: USD
+                      - quantity: '1'
+                        assetType: BTC
+                      usage:
+                      - quantity: '5000.00'
+                        assetType: USD
+                      - quantity: '0.2'
+                        assetType: BTC
+              schema:
+                $ref: '#/components/schemas/TradingAccountCreditResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '401':
+          description: Unauthenticated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+      tags:
+      - Trading
+      x-security:
+        Read trade activity: present
+  /trading/marketdata:
+    get:
+      operationId: getMarketData
+      summary: Get market data snapshot
+      description: 'Permissions required: **Execute trades** or **Read trade activity**
+
+
+        Get real-time market data snapshot for a trading symbol from the liquidity provider.'
+      parameters:
+      - name: symbol
+        in: query
+        description: The trading pair symbol (e.g., BTC-USD, ETH-USD)
+        required: true
+        schema:
+          type: string
+      - name: accountId
+        in: query
+        description: The account ID (either accountId or subaccountId must be provided)
+        schema:
+          type: string
+      - name: subaccountId
+        in: query
+        description: The subaccount ID (either accountId or subaccountId must be provided)
+        schema:
+          type: string
+      - name: sizeBuckets
+        in: query
+        description: Comma-separated list of size buckets for market depth (e.g., 0.1,0.5,1.0)
+        schema:
+          type: array
+          items:
+            type: string
+        explode: false
+        style: form
+      - name: amountBuckets
+        in: query
+        description: 'Comma-separated list of amount buckets for market depth (e.g., 1000,5000,10000). Amount buckets represent USD values. Note: When using amount buckets, the price levels in the response may show size as aggregated notional value rather than asset quantity.'
+        schema:
+          type: array
+          items:
+            type: string
+        explode: false
+        style: form
+      - name: depth
+        in: query
+        description: Number of price levels to return for bids and offers. Must be greater than zero. The API will return up to the requested depth, limited by available liquidity in the order book. Defaults to 5 if none of depth, sizeBuckets, or amountBuckets are specified.
+        schema:
+          type: integer
+          format: int64
+      - name: priceIncrement
+        in: query
+        description: Price increment for market data aggregation (decimal string for precision)
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Successfully retrieved market data snapshot
+          content:
+            application/json:
+              examples:
+                response:
+                  value:
+                    data:
+                    - timestamp: '2025-05-08T16:17:01.863332Z'
+                      symbol: BTC-USD
+                      spread: '0.001'
+                      sizeBuckets:
+                      - '1'
+                      - '5'
+                      - '10'
+                      bids:
+                      - price: '101022.85'
+                        size: '1.00000000'
+                      - price: '101003.14'
+                        size: '5.00000000'
+                      - price: '100998.21'
+                        size: '10.00000000'
+                      offers:
+                      - price: '101253.98'
+                        size: '1.00000000'
+                      - price: '101253.98'
+                        size: '5.00000000'
+                      - price: '101253.98'
+                        size: '10.00000000'
+                      amountBuckets: []
+              schema:
+                $ref: '#/components/schemas/MarketDataResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '401':
+          description: Unauthenticated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+      tags:
+      - Trading
+      x-security:
+        Execute trades: present
+        Read trade activity: present
+  /trading/pairs:
+    get:
+      operationId: getTradePairs
+      summary: List supported trading pairs
+      description: 'Permissions required: **Execute trades** or **Read trade activity**
+
+
+        List all of the supported trading pairs for your organization.
+
+        Each trading pair object includes a description and trading
+
+        symbol (ex. BTC-USD), which usually corresponds to two asset ticker symbols.
+
+        Optionally, a trading pair object includes a reference data object that details the trading precision context: minimum size increment and price increment.'
+      parameters: []
+      responses:
+        '200':
+          description: Successfully returned trading pairs
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TradePairsResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '401':
+          description: Unauthenticated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+      tags:
+      - Trading
+      x-security:
+        Execute trades: present
+        Read trade activity: present
+  /trading/async-order:
+    post:
+      operationId: postAsyncOrder
+      summary: Place an async order
+      description: 'Permissions required: **Execute trades**
+
+
+        Place an order, either Limit, StopLoss, StopLimit or TakeProfitLimit currently FillOrKill, ImediateOrCancel or GoodTillCancel are supported.
+
+
+        One of `accountId` or `subaccountId` must be specified but not both.'
+      parameters: []
+      requestBody:
+        description: Parameters to place an order.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewAsyncOrder'
+      responses:
+        '201':
+          description: Successfully placed an ansyc order
+          content:
+            application/json:
+              examples:
+                response:
+                  value:
+                    data:
+                      clOrderId: 6fb5fc79-0bb4-446d-82dd-d4687fb56a02
+                      orderId: a94c8d75-6c9d-4903-95f3-5b0893e76cb7
+                      subaccountId: 9236041d-f69d-4cb9-a747-684a288cec81
+                      symbol: BTC-USD
+                      side: BUY
+                      currency: USD
+                      counterCurrency: BTC
+                      orderQty: '10000.00'
+                      orderType: STOP_LIMIT
+                      timeInForce: GTC
+                      orderStatus: PENDING_NEW
+                      execId: 58fd5afc-b85e-45d1-951e-d6429ea9cd54
+                      execType: PENDING_NEW
+                      avgPx: '21990.01'
+                      avgPxAllIn: '21968.02'
+                      cumQty: '10000'
+                      counterQty: '0.45475'
+                      counterQtyAllIn: '0.45430'
+                      fillPx: '21990.01'
+                      fillQty: '10000'
+                      leavesQty: '0'
+                      cancelQty: '0'
+                      fee: '0.00045521'
+                      feeCurrency: BTC
+                      transactTime: '2023-03-12T22:22:09.925050Z'
+                      submitTime: '2023-03-12T22:22:09.909251Z'
+              schema:
+                $ref: '#/components/schemas/AsyncOrderResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '401':
+          description: Unauthenticated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '503':
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+      tags:
+      - Trading
+      x-security:
+        Execute trades: present
+  /trading/async-order/cancel:
+    post:
+      operationId: cancelAsyncOrder
+      summary: Cancel an async order
+      description: 'Permissions required: **Execute trades**
+
+
+        Cancels an async order.'
+      parameters:
+      - name: orderId
+        in: query
+        description: The orderId for the async order to cancel
+        required: false
+        schema:
+          type: string
+      - name: clOrderId
+        in: query
+        description: The clOrderId for the async order to cancel
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Successfully cancel an ansyc order
+          content:
+            application/json:
+              examples:
+                response:
+                  value:
+                    data:
+                      orderId: c6d8c4a8-e883-4ae3-9f35-4a35d06c383d
+                      clOrderId: 40d846b7-6efb-48fa-acc9-dcace827c927
+                      subaccountId: a05a846f-4ef0-11ed-a291-dafe71b41c83
+                      symbol: BTC-USD
+                      side: BUY
+                      orderQty: '1.0'
+                      currency: BTC
+                      counterCurrency: USD
+                      orderType: STOP_LIMIT
+                      limitPrice: '22840.9299'
+                      timeInForce: GTC
+                      orderStatus: PENDING_CANCEL
+                      avgPx: '22840.9299'
+                      avgPxAllIn: '22863.7708299'
+                      leavesQty: '0.0'
+                      cancelQty: '0.0'
+                      cumQty: '1.0'
+                      counterQty: '22840.9299'
+                      counterQtyAllIn: '22866.2799'
+                      totalFee: '25.35'
+                      feeCurrency: USD
+                      submitTime: '2023-03-07T19:49:06.286737Z'
+                      transactTime: '2023-03-07T19:49:06.314322Z'
+              schema:
+                $ref: '#/components/schemas/AsyncOrderResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '401':
+          description: Unauthenticated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '503':
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+      tags:
+      - Trading
+      x-security:
+        Execute trades: present
+components:
+  schemas:
+    AcceptQuoteResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/AcceptQuoteResponseData'
+      required:
+      - data
+      title: AcceptQuoteResponse
+    TradeDetails:
+      type: object
+      properties:
+        account:
+          $ref: '#/components/schemas/TradeAccount'
+        currencyBought:
+          description: The bought currency.
+          type: string
+        currencySold:
+          description: The sold currency.
+          type: string
+        fee:
+          description: Amount of the trade fee. It is filled asynchronously and might take up to 2 minutes to become available.
+          type: string
+        feeCurrency:
+          description: Currency of the trade fee.
+          type: string
+        orderId:
+          description: Unique order ID for this trade.
+          type: string
+        price:
+          description: 'Price in counter currency for **one unit** of the base currency. For example, in the trading pair BTC-USD, this is the price in USD for one unit of BTC. It includes Anchorage Digital trade fees and represents the exchange rate at which the trade was executed.
+
+
+            It is filled asynchronously and might take up to 2 minutes to become available. Once filled, the value will remain unchanged through all the other tradeStatus (`EXECUTED`, `SETTLING`, `SETTLED`, and `CANCELED`)
+
+            '
+          type: string
+        quantityBought:
+          description: Quantity bought in units of currencyBought. It represents the quantity Anchorage Digital owes you. See "price" for details when this field is filled.
+          type: string
+        quantityBoughtToSettle:
+          description: Rounded bought quantity that will considered at settlement. Filled out only in the context of a settlement.
+          type: string
+          x-omitempty: true
+        quantitySold:
+          description: Quantity sold in units of currencySold. It represents the quantity you owe Anchorage Digital. See "price" for details when this field is filled.
+          type: string
+        quantitySoldToSettle:
+          description: Rounded sold quantity that will considered at settlement. Filled out only in the context of a settlement.
+          type: string
+          x-omitempty: true
+        quoteID:
+          description: Unique quote ID for this trade.
+          type: string
+        side:
+          description: Side for the trade, either "BUY" or "SELL".
+          type: string
+          example: BUY
+          enum:
+          - BUY
+          - SELL
+        timestamp:
+          description: The system timestamp when this trade was received, i.e. when the quote was accepted, as an ISO-8601 UTC string of the form 2019-02-13T05:17:32.000000Z.
+          type: string
+        tradeID:
+          description: Unique ID for this trade.
+          type: string
+        tradeStatus:
+          $ref: '#/components/schemas/TradeStatus'
+        tradingPair:
+          description: Pair of assets this trade is for.
+          type: string
+        vault:
+          description: The vault into which this trade will be settled
+          type: object
+          properties:
+            vaultID:
+              description: An ID uniquely identifying the vault
+              type: string
+              example: 1c920f4241b78a1d483a29f3c24b6c4c
+          title: Vault
+      required:
+      - timestamp
+      - tradingPair
+      - side
+      - currencyBought
+      - quantityBought
+      - currencySold
+      - quantitySold
+      - tradeStatus
+      - tradeID
+      - quoteID
+      title: TradeDetails
+    SettlementsResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/SettlementDetails'
+        page:
+          $ref: '#/components/schemas/Page'
+      required:
+      - data
+      - page
+      title: SettlementsResponse
+    NewAsyncOrder:
+      type: object
+      properties:
+        accountId:
+          description: Account ID for this order to book into.
+          type: string
+          example: 0e2b2f9d-8d10-4f1e-960b-28567255045f
+        allocation:
+          description: Order subaccount allocation
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderAllocation'
+        clOrderId:
+          description: Unique client order ID.
+          type: string
+          example: 6fb5fc79-0bb4-446d-82dd-d4687fb56a02
+        currency:
+          description: The currency in which order quantity is specified in.
+          type: string
+          example: BTC
+        limitPrice:
+          description: Limit price for the order, required for limit order
+          type: string
+          example: '21005.5'
+        orderType:
+          description: 'Order type should be for BUY and SELL: LIMIT, STOP_LIMIT, TAKE_PROFIT_LIMIT. Only for SELL: STOP_LOSS'
+          type: string
+          enum:
+          - LIMIT
+          - STOP_LOSS
+          - STOP_LIMIT
+          - TAKE_PROFIT_LIMIT
+        parameters:
+          description: Optional order type parameters for STOP_LOSS, STOP_LIMIT and TAKE_PROFIT_LIMIT orders.
+          properties:
+            endTime:
+              description: Optional expire time for the order. Date-times are always in UTC [RFC 3339](https://datatracker.ietf.org/doc/html/rfc3339#section-5.6) 'date-time'.
+              type: string
+              format: date-time
+            triggerPrice:
+              description: The price that must be met to trigger execution of the order. Required for STOP_LIMIT, TAKE_PROFIT_LIMIT and STOP_LOSS.
+              type: string
+              example: '21005.5'
+          type: object
+        quantity:
+          description: Order quantity in units of currency.
+          type: string
+          example: '100.00'
+        side:
+          description: Order side, either "BUY" or "SELL".
+          type: string
+          enum:
+          - BUY
+          - SELL
+        subaccountId:
+          description: Subaccount ID for this order to book into.
+          type: string
+          example: 343b6c83-6d91-4f13-9982-2109abd2dbb0
+        symbol:
+          description: Symbol for the order, e.g. BTC-USD.
+          type: string
+          example: BTC-USD
+        timeInForce:
+          description: Time in Force specifies how long the order remains in effect
+          type: string
+          enum:
+          - FOK
+          - IOC
+          - GTC
+        timestamp:
+          description: Timestamp when submitting this order. Date-times are always in UTC [RFC 3339](https://datatracker.ietf.org/doc/html/rfc3339#section-5.6) 'date-time'.
+          type: string
+          format: date-time
+      required:
+      - clOrderId
+      - symbol
+      - side
+      - currency
+      - quantity
+      - orderType
+      - timeInForce
+      - timestamp
+      title: NewAsyncOrder
+    TradingAccount:
+      type: object
+      properties:
+        enabled:
+          description: Enabled state of the trading account
+          type: boolean
+        id:
+          description: An ID uniquely identifying the trading account
+          type: string
+          example: 6290d9bd-494f-11ed-975e-2e567b4c0e09
+        name:
+          description: Name of the trading account
+          type: string
+          example: Crypto Fund LLC
+      required:
+      - id
+      - name
+      - enabled
+      title: TradingAccount
+    Amount:
+      description: 'An amount of a crypto-asset represented by quantity, assetType, current unit price and current USD value.
+
+
+
+        Fee amounts will be estimates if a transaction is not final.
+
+
+
+        NOTE: price and USD value information is recent but does not reflect real-time data.
+
+        '
+      type: object
+      properties:
+        assetType:
+          description: 'A string representing a type of crypto-asset, which usually corresponds to the crypto asset''s ticker symbol.
+
+
+            Use `/asset-types` to list all of the supported asset types for your organization.
+
+            '
+          type: string
+          example: BTC
+        currentPrice:
+          description: A recent assessment of the intra-day USD value of 1 unit of this asset type. This value is provided for convenience for such use cases as estimating point-in-time portfolio balances. This value does not represent authoritative pricing information used by Anchorage Digital for any purpose. The price is fetched as of the present, and may be omitted in certain contexts where more structured pricing information is provided (e.g. quotes and trades).
+          type: string
+          example: '9751.01'
+        currentUSDValue:
+          description: The result of `quantity * currentPrice`, rounded to the nearest cent. A unitless number implicitly denominated in dollars. See `currentPrice` for methodology and disclaimers.
+          type: string
+          example: '101920.94'
+        quantity:
+          description: The numeric value of this amount, excluding units
+          type: string
+          example: '10.45234733'
+      example:
+        quantity: '10.45234733'
+        assetType: BTC
+        currentPrice: '9751.01'
+        currentUSDValue: '101920.94'
+      required:
+      - quantity
+      - assetType
+      title: Amount
+    TradePair:
+      description: A representation of a trade pair
+      type: object
+      properties:
+        description:
+          description: A string representing the human-readable name of the trade pair.
+          type: string
+          example: Buy Ethereum with Bitcoin, or Sell Ethereum for Bitcoin
+        pair:
+          description: A string representing a trade between one type of currency and another.
+          type: string
+          example: BTC-ETH
+        referenceData:
+          $ref: '#/components/schemas/TradePairReferenceData'
+      required:
+      - pair
+      - description
+      title: TradePair
+    TradeAccount:
+      description: The account into which this trade will be settled
+      type: object
+      properties:
+        accountId:
+          description: An ID uniquely identifying the trading account
+          type: string
+          example: 6290d9bd-494f-11ed-975e-2e567b4c0e09
+        subaccountId:
+          description: An ID uniquely identifying the subaccount where applicable
+          type: string
+          example: 5490d9bd-494f-11ed-975e-2e567b4c0e09
+      title: Account
+    Allocation:
+      type: object
+      properties:
+        counterQtyAllIn:
+          description: Counter quantity all in
+          type: string
+          example: '10000'
+        counterQtyAllInToSettle:
+          description: Counter quantity all in to be settled
+          type: string
+          example: '10000'
+        cumQty:
+          description: Filled quantity
+          type: string
+          example: '10000'
+        executionId:
+          description: Execution identifier
+          type: string
+          example: 6290d9bd-494f-11ed-975e-2e567b4c0e09
+        fee:
+          description: Fee
+          type: string
+          example: '10000'
+        quantity:
+          description: Allocated quantity
+          type: string
+          example: '10000'
+        subaccountId:
+          description: The Subaccount Identifier
+          type: string
+          example: 905272f0-52f9-404e-b6cd-ad879e671790
+      required:
+      - subaccountId
+      - quantity
+      - counterQtyAllIn
+      - counterQtyAllInToSettle
+      - fee
+      - cumQty
+      title: Allocation
+    TradingAccountBalanceResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/TradingAccountBalance'
+      required:
+      - data
+      title: TradingAccountBalanceResponse
+    TradingAccountResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/TradingAccount'
+      required:
+      - data
+      title: TradingAccountResponse
+    GetQuoteResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/Quote'
+      required:
+      - data
+      title: GetQuoteResponse
+    QuoteStatus:
+      description: 'A string describing the status of the given quote
+
+
+        * `OPEN` - The quote request was accepted and the quote can be used to trade.
+
+
+        * `REJECTED` - The quote was rejected and cannot be used to trade.
+
+
+        * `EXECUTED` - The quote was traded successfully and can no longer be used to trade.
+
+        '
+      type: string
+      enum:
+      - OPEN
+      - REJECTED
+      - EXECUTED
+      title: QuoteStatus
+    AcceptQuoteResponseData:
+      type: object
+      properties:
+        quoteID:
+          description: ID of the quote to trade.
+          type: string
+        side:
+          description: Trade side, either "BUY" or "SELL".
+          type: string
+          example: BUY
+          enum:
+          - BUY
+          - SELL
+        tradeID:
+          description: ID of the trade.
+          type: string
+        tradeStatus:
+          $ref: '#/components/schemas/TradeStatus'
+      required:
+      - quoteID
+      - side
+      - tradeStatus
+      title: AcceptQuoteResponseData
+    PriceLevel:
+      type: object
+      properties:
+        amount:
+          description: Amount (in counter currency) available at this price level as a decimal string. Returned when amountBuckets parameter is used.
+          type: string
+          example: '100.00000000'
+        price:
+          description: Price level as a decimal string
+          type: string
+          example: '101022.85'
+        size:
+          description: Size available at this price level as a decimal string. Returned when sizeBuckets parameter is used.
+          type: string
+          example: '1.00000000'
+      required:
+      - price
+      title: PriceLevel
+    Quote:
+      type: object
+      properties:
+        bidAmount:
+          $ref: '#/components/schemas/Amount'
+        bidPrice:
+          description: Bid quote price
+          type: string
+          example: '29284.47'
+        offerAmount:
+          $ref: '#/components/schemas/Amount'
+        offerPrice:
+          description: Offer quote price
+          type: string
+          example: '29284.47'
+        quoteID:
+          description: ID of this quote.
+          type: string
+        quoteRequest:
+          $ref: '#/components/schemas/GetQuoteRequest'
+        quoteStatus:
+          $ref: '#/components/schemas/QuoteStatus'
+        timestamp:
+          description: The time this quote was procured. An ISO-8601 UTC string of the form 2019-02-13T05:17:32.000000Z.
+          type: string
+          format: date-time
+          example: '2019-02-13T05:17:32.000000Z'
+        validUntilTime:
+          description: The expire time of the quote (optional). An ISO-8601 UTC string of the form 2019-02-13T05:17:32.000000Z.
+          type: string
+          format: date-time
+          example: '2019-01-02T12:34:56.000Z'
+          nullable: true
+      required:
+      - quoteID
+      - quoteRequest
+      - quoteStatus
+      - timestamp
+      title: Quote
+    SettlementStatus:
+      description: 'A string describing the status of the given settlement
+
+
+        * `PENDING` - This settlement has been created.
+
+
+        * `SETTLING` - This settlement is in progress.
+
+
+        * `SETTLED` - This settlement has been fully settled, this is a terminal state.
+
+
+        * `CANCELED` - This settlement has been canceled, this is a terminal state.
+
+
+        * `EXECUTED` - This settlement has been created. This is a deprecated status which will be moved to `PENDING` in the future. Please expect either `EXECUTED` or `PENDING` to have a smooth transition.
+
+        '
+      type: string
+      enum:
+      - PENDING
+      - SETTLING
+      - SETTLED
+      - CANCELED
+      - EXECUTED
+      title: SettlementStatus
+    AsyncOrderExecutionReport:
+      type: object
+      properties:
+        accountId:
+          description: Account ID for this order to book into.
+          type: string
+          example: 0e2b2f9d-8d10-4f1e-960b-28567255045f
+        allocation:
+          description: Subaccount allocation
+          type: array
+          items:
+            $ref: '#/components/schemas/Allocation'
+          x-omitempty: true
+        avgPx:
+          description: Average filled price for this order.
+          type: string
+          example: '21005.4'
+        avgPxAllIn:
+          description: Average filled price + anchorage commission.
+          type: string
+          example: '21006.00'
+        cancelQty:
+          description: quantity canceled for this order.
+          type: string
+          example: '10000.00'
+        clOrderId:
+          description: Original client order ID as submitted.
+          type: string
+          example: 6fb5fc79-0bb4-446d-82dd-d4687fb56a02
+        counterCurrency:
+          description: The counter currency of the order.
+          type: string
+          example: BTC
+        counterQty:
+          description: Filled quantity of the counter currency.
+          type: string
+          example: '0.001'
+        counterQtyAllIn:
+          description: Filled quantity of the counter currency including all fees.
+          type: string
+          example: '0.0012'
+        cumQty:
+          description: Cumulative filled quantity for this order.
+          type: string
+          example: '10000.00'
+        currency:
+          description: The currency in which order quantity is specified in.
+          type: string
+          example: USD
+        execId:
+          description: Execution ID of this report. This ID can be used to retrieve the trade.
+          type: string
+          example: 3fb532c79-0bb4-446d-82dd-d4687fb56a02
+        execType:
+          description: Describes the specific execution (e.g. PENDING_NEW) while OrdStatus will always identify the current order status (e.g. PARTIALLY_FILLED).
+          type: string
+          example: PENDING_NEW
+          enum:
+          - PENDING_NEW
+          - REJECTED
+        fee:
+          description: Commission charged for this order.
+          type: string
+          example: '10.0'
+        feeCurrency:
+          description: Currency commission was charged in, which is always the opposite currency from what the order quantity is specified in.
+          type: string
+          example: BTC
+        leavesQty:
+          description: quantity that is still open for this order.
+          type: string
+          example: '10000.00'
+        limitPrice:
+          description: Original limit price for this order if present. Required for LIMIT, STOP_LIMIT and TAKE_PROFIT_LIMIT
+          type: string
+          example: '21005.5'
+        orderId:
+          description: Order ID generated by anchorage.
+          type: string
+          example: a94c8d75-6c9d-4903-95f3-5b0893e76cb7
+        orderQty:
+          description: Original order quantity.
+          type: string
+          example: '10000.00'
+        orderStatus:
+          description: Order status
+          type: string
+          enum:
+          - FILLED
+          - REJECTED
+          - CANCELED
+          - PENDING_NEW
+          - PARTIALLY_FILLED
+          - PENDING_CANCEL
+        orderType:
+          description: Order type will be LIMIT, STOP_LIMIT, TAKE_PROFIT_LIMIT or STOP_LOSS
+          type: string
+          enum:
+          - LIMIT
+          - STOP_LIMIT
+          - TAKE_PROFIT_LIMIT
+          - STOP_LOSS
+        reasonText:
+          description: Additional description for reason of reject or cancel.
+          type: string
+        rejectReason:
+          description: Reason for rejection, this is a set of standardized reason code.
+          type: string
+          enum:
+          - InvalidTimeInForce
+          - InvalidSymbol
+          - InvalidCurrency
+          - InvalidSide
+          - InvalidQuantity
+          - InvalidOrderType
+          - InvalidAccount
+          - AccountDisabledForTrading
+          - UnauthorizedForTrading
+          - InsufficientLiquidity
+          - DuplicateOrder
+          - ExecutionLimitExceeded
+          - InternalError
+          - InvalidPrice
+          - InvalidLimitPrice
+          - InvalidTriggerPrice
+          - OrderNotCancelable
+          - InvalidAccountsInAllocation
+          - InvalidCurrencyForFOK
+        side:
+          description: Order side, either "BUY" or "SELL".
+          type: string
+          enum:
+          - BUY
+          - SELL
+        subaccountId:
+          description: Subaccount ID for this order to book into.
+          type: string
+          example: 0e2b2f9d-8d10-4f1e-960b-28567255045f
+        submitTime:
+          description: UTC timestamp when order is submitted. [RFC 3339](https://datatracker.ietf.org/doc/html/rfc3339#section-5.6) 'date-time'.
+          type: string
+          format: date-time
+        symbol:
+          description: Symbol for the order, e.g. BTC-USD.
+          type: string
+          example: BTC-USD
+        timeInForce:
+          description: Order Time in Force
+          type: string
+          enum:
+          - FOK
+          - IOC
+          - GTC
+        transactTime:
+          description: UTC timestamp when order is executed. [RFC 3339](https://datatracker.ietf.org/doc/html/rfc3339#section-5.6) 'date-time'.
+          type: string
+          format: date-time
+      required:
+      - clOrderId
+      - orderId
+      - symbol
+      - side
+      - currency
+      - counterCurrency
+      - orderType
+      - orderStatus
+      - avgPx
+      - orderQty
+      - cumQty
+      - counterQty
+      - counterQtyAllIn
+      - transactTime
+      - submitTime
+      title: OrderExecutionReport
+    TradesBySettlementResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/TradeDetails'
+        page:
+          $ref: '#/components/schemas/Page'
+      required:
+      - data
+      - page
+      title: TradesResponse
+    Page:
+      description: Pagination info
+      type: object
+      properties:
+        next:
+          description: URL to use to query for the next page or null if no additional results are available
+          type: string
+          example: <next page url>
+          nullable: true
+          x-omitempty: false
+      title: Page
+    NewOrderSingle:
+      type: object
+      properties:
+        accountId:
+          description: Account ID for this order to book into.
+          type: string
+          example: 0e2b2f9d-8d10-4f1e-960b-28567255045f
+        allocation:
+          description: Order subaccount allocation
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderAllocation'
+        clOrderId:
+          description: Unique client order ID.
+          type: string
+          example: 6fb5fc79-0bb4-446d-82dd-d4687fb56a02
+        currency:
+          description: The currency in which order quantity is specified in.
+          type: string
+          example: BTC
+        limitPrice:
+          description: Limit price for the order, required for limit order
+          type: string
+          example: '21005.5'
+        orderType:
+          description: Order type either MARKET or LIMIT
+          type: string
+          enum:
+          - MARKET
+          - LIMIT
+          - RFQ
+          - LIMIT_ALL_IN
+        quantity:
+          description: Order quantity in units of currency.
+          type: string
+          example: '100.00'
+        side:
+          description: Order side, either "BUY" or "SELL".
+          type: string
+          enum:
+          - BUY
+          - SELL
+        subaccountId:
+          description: Subaccount ID for this order to book into.
+          type: string
+          example: 343b6c83-6d91-4f13-9982-2109abd2dbb0
+        symbol:
+          description: Symbol for the order, e.g. BTC-USD.
+          type: string
+          example: BTC-USD
+        timestamp:
+          description: Timestamp when submitting this order. Date-times are always in UTC [RFC 3339](https://datatracker.ietf.org/doc/html/rfc3339#section-5.6) 'date-time'.
+          type: string
+          format: date-time
+      required:
+      - clOrderId
+      - symbol
+      - side
+      - currency
+      - quantity
+      - orderType
+      - timestamp
+      title: NewOrderSingle
+    TradeResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/TradeDetails'
+      required:
+      - data
+      title: TradeResponse
+    OrdersStatusResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/TradingOrderDetails'
+        page:
+          $ref: '#/components/schemas/Page'
+      required:
+      - data
+      - page
+      title: OrdersStatusResponse
+    TradesResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/TradeDetails'
+        page:
+          $ref: '#/components/schemas/Page'
+      required:
+      - data
+      - page
+      title: TradesResponse
+    ErrorDetails:
+      type: object
+      properties:
+        errorType:
+          $ref: '#/components/schemas/ErrorType'
+        message:
+          description: A human-readable message providing more details about the error.
+          type: string
+          example: Missing required field 'amount'.
+      required:
+      - errorType
+      - message
+      title: ErrorDetails
+    TradingOrderResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/OrderExecutionReport'
+      required:
+      - data
+      title: TradingOrderResponse
+    SettlementDetails:
+      type: object
+      properties:
+        account:
+          description: The account into which this trade will be settled
+          type: object
+          properties:
+            accountId:
+              description: An ID uniquely identifying the trading account
+              type: string
+              example: 6290d9bd-494f-11ed-975e-2e567b4c0e09
+          title: Account
+        createdAt:
+          description: The system timestamp when this settlement was created, as an ISO-8601 UTC string of the form 2019-02-13T05:17:32.000000Z.
+          type: string
+        instructionsCrypto:
+          description: Set of settlement instructions in crypto currencies.
+          type: array
+          items:
+            $ref: '#/components/schemas/SettlementInstructionsCrypto'
+          nullable: true
+        positions:
+          description: A list of positions for that Settlement
+          type: array
+          items:
+            $ref: '#/components/schemas/TradingPosition'
+          nullable: true
+        settlementID:
+          description: Unique ID for this settlement.
+          type: string
+        settlementStatus:
+          $ref: '#/components/schemas/SettlementStatus'
+        settlementType:
+          $ref: '#/components/schemas/SettlementType'
+        vault:
+          description: The vault into which this trade will be settled
+          type: object
+          properties:
+            vaultID:
+              description: An ID uniquely identifying the vault
+              type: string
+              example: 1c920f4241b78a1d483a29f3c24b6c4c
+          title: Vault
+      required:
+      - createdAt
+      - settlementStatus
+      - settlementID
+      title: SettlementDetails
+    SettlementType:
+      description: 'A string describing the type of a given settlement
+
+
+        * `TRADE` - This settlement is associated with trades.
+
+
+        * `ADVISORY_FEE` - This settlement is associated with advisory fees.
+
+
+        * `CUSTODY_FEE` - This settlement is associated with custody fees.
+
+
+        * `MANAGEMENT_FEE` - This settlement is associated with management fees.
+
+
+        * `MODEL_FEE` - This settlement is associated with model fees.
+
+        '
+      type: string
+      enum:
+      - TRADE
+      - ADVISORY_FEE
+      - CUSTODY_FEE
+      - MANAGEMENT_FEE
+      - MODEL_FEE
+      title: SettlementType
+    TradingPositionsResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/TradingPosition'
+          minItems: 0
+          uniqueItems: true
+      required:
+      - data
+      title: TradingPositionsResponse
+    CreditLimitDetails:
+      type: object
+      properties:
+        creditLimitAmount:
+          $ref: '#/components/schemas/Amount'
+        creditSpentAmount:
+          $ref: '#/components/schemas/Amount'
+      required:
+      - creditLimitAmount
+      - creditSpentAmount
+      title: CreditLimitDetails
+    GetQuoteRequest:
+      type: object
+      properties:
+        accountId:
+          description: Account ID for quote, must match the accountId on [accept quote](#operation/acceptQuote).
+          type: string
+          example: aaa44c42-5ad3-4108-b376-f78cd32f0543
+          nullable: true
+        currency:
+          description: Currency of quantity.
+          type: string
+          example: USD
+        idempotentId:
+          description: A client-provided unique ID for idempotent requests (optional). If provided a value, the same idempotentId must be also provided to [accept quote](#operation/acceptQuote).
+          type: string
+          example: 01944c42-5ad3-4108-b376-f78cd6ff0393
+          maxLength: 128
+          nullable: true
+        quantity:
+          description: Quantity to quote for in units of currency.
+          type: string
+          example: '100'
+        quantityRounding:
+          description: Optional boolean to specify if quantity should round to Anchorage Digital supported increments. If false or not specified, the request can be rejected if quantity has more precision than our published size increments. The rounding is done as a truncation of the extra fractional digits.
+          type: boolean
+        side:
+          description: Side of the quote request. "BUY", "SELL", or "TWOWAY".
+          type: string
+          example: BUY
+          enum:
+          - BUY
+          - SELL
+          - TWOWAY
+        tradingPair:
+          description: Trading pair being quoted.
+          type: string
+          example: BTC-USD
+      required:
+      - tradingPair
+      - quantity
+      - currency
+      - side
+      title: GetQuoteRequest
+    StrategyParams:
+      type: object
+      properties:
+        endTime:
+          description: The expire time for the order. An ISO-8601 UTC string of the form 2019-02-13T05:17:32.000000Z.
+          type: string
+          format: date-time
+          example: '2019-01-02T12:34:56.000Z'
+          x-omitempty: true
+        triggerPrice:
+          description: The price that must be met to trigger execution of the order with the configured limit price.
+          type: string
+          example: '10000.00'
+          x-omitempty: true
+      title: Strategy Params
+    OrderStatusResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/TradingOrderDetails'
+      required:
+      - data
+      title: OrderStatusResponse
+    TradingPosition:
+      description: Negative position values denote amounts that you owe Anchorage Digital and positive position values denote amounts owed to you by Anchorage Digital.
+      type: object
+      properties:
+        positionAmount:
+          $ref: '#/components/schemas/Amount'
+      required:
+      - positionAmount
+      title: TradingPosition
+    AcceptQuoteRequest:
+      type: object
+      properties:
+        accountId:
+          description: 'The ID of a trading account. This field is used to specify the trading account into which assets should be settled.
+
+            '
+          type: string
+          example: 6290d9bd-494f-11ed-975e-2e567b4c0e09
+        allowedSlippage:
+          description: "The maximum slippage Anchorage Digital will consider when accepting this order, communicated in terms of actual value (i.e. \"0.001\" => 10bps). Must be greater than or equal to 0 and less than or equal to 0.002 (20bps).\n\nIn order to illustrate how this setting works, as an example, we shall consider a commission of 10bps for a quote priced at 10000, and that we are about to accept this quote with an allowedSlippage of \"0.0008\" (8bps). Then, considering the market has moved away from the quoted price, one of the following two scenarios will be applicable:\n\n1) Best market price within allowedSlippage - fill the order at the spread off the market\n  Best Market Price: 10007\n  Trade Status: Executed\n  Customer Execution Price: 10017.007\n\n2) Best market price outside of allowedSlippage - reject the order\n  Best Market Price: 10009\n  Trade Status: Rejected\n"
+          type: string
+          example: '0.0005'
+        idempotentId:
+          description: A client-provided unique ID for idempotent requests (optional). This value must match the one provided to [request quote](#operation/requestQuote).
+          type: string
+          example: 01944c42-5ad3-4108-b376-f78cd6ff0393
+          maxLength: 128
+          nullable: true
+        quoteID:
+          description: ID of the quote to trade.
+          type: string
+        side:
+          description: Trade side, either "BUY" or "SELL".
+          type: string
+          example: BUY
+          enum:
+          - BUY
+          - SELL
+        vaultID:
+          description: 'Currently in BETA.
+
+
+            The ID of a vault. This optional field is used to specify the vault into which assets should be settled.
+
+            If provided, the API key must have the following permissions: **Read vault activity**
+
+            '
+          type: string
+          example: 1c920f4241b78a1d483a29f3c24b6c4c
+      required:
+      - quoteID
+      - side
+      - accountId
+      title: AcceptQuoteRequest
+    SettlementInstructionsCrypto:
+      type: object
+      properties:
+        address:
+          description: Settlement address.
+          type: string
+        assetTypeID:
+          description: Asset type identifier.
+          type: string
+      required:
+      - assetTypeID
+      - address
+      title: SettlementInstructionsCrypto
+    CreditLimitResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/CreditLimitDetails'
+      required:
+      - data
+      title: CreditLimitResponse
+    ErrorType:
+      description: The type of error returned.
+      type: string
+      enum:
+      - InternalError
+      - InvalidRequest
+      - Unauthenticated
+      - Forbidden
+      - NotFound
+      - Conflict
+      - UnprocessableEntity
+      - TooManyRequests
+      - ServiceUnavailable
+      - QuoteExpired
+      - InsufficientFunds
+      - NotImplemented
+      title: ErrorType
+    TradingAccountBalance:
+      type: object
+      properties:
+        balance:
+          $ref: '#/components/schemas/Amount'
+      title: TradingAccountBalance
+    AsyncOrderResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/AsyncOrderExecutionReport'
+      required:
+      - data
+      title: AsyncOrderResponse
+    TradeStatus:
+      description: 'A string describing the status of the given trade
+
+
+        * `PENDING` - The trade request has been placed and the trade is pending.
+
+
+        * `EXECUTED` - This trade was executed and is waiting customer deposit.
+
+
+        * `REJECTED` - This trade was rejected.
+
+
+        * `CANCELED` - This trade was canceled by Anchorage Digital''s trading team due to client legal/financial problems.
+
+
+        * `SETTLING` - Anchorage Digital received the customer''s deposit and the trade is in the process of settling.
+
+
+        * `SETTLED` - Trade is settled and assets were sent to the customer.
+
+
+        * `PENDINGALLOCATION` - Trade is executed and is awaiting client allocation.
+
+
+        * `ALLOCATED` - Trade is fully allocated by the client.
+
+        '
+      type: string
+      enum:
+      - PENDING
+      - REJECTED
+      - CANCELED
+      - EXECUTED
+      - SETTLING
+      - SETTLED
+      - PENDINGALLOCATION
+      - ALLOCATED
+      title: TradeStatus
+    SettlementResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/SettlementDetails'
+      required:
+      - data
+      title: SettlementResponse
+    MarketDataResponse:
+      type: object
+      properties:
+        data:
+          description: Array of market data snapshots
+          type: array
+          items:
+            $ref: '#/components/schemas/MarketDataSnapshot'
+      required:
+      - data
+      title: MarketDataResponse
+    TradingAccountCredit:
+      type: object
+      properties:
+        limits:
+          type: array
+          items:
+            $ref: '#/components/schemas/Amount'
+          minItems: 0
+          uniqueItems: true
+        usage:
+          type: array
+          items:
+            $ref: '#/components/schemas/Amount'
+          minItems: 0
+          uniqueItems: true
+      title: TradingAccountCredit
+    TradingOrderDetails:
+      type: object
+      properties:
+        accountId:
+          description: Account ID for this order to book into.
+          type: string
+          example: 0e2b2f9d-8d10-4f1e-960b-28567255045f
+        allocation:
+          description: Subaccount allocation
+          type: array
+          items:
+            $ref: '#/components/schemas/Allocation'
+          x-omitempty: true
+        avgPx:
+          description: Average filled price for this order.
+          type: string
+          example: '21005.4'
+        avgPxAllIn:
+          description: Average filled price + anchorage commission.
+          type: string
+          example: '21006.00'
+        cancelQty:
+          description: quantity canceled for this order.
+          type: string
+          example: '10000.00'
+        clOrderId:
+          description: Original client order ID as submitted.
+          type: string
+          example: 6fb5fc79-0bb4-446d-82dd-d4687fb56a02
+        counterQty:
+          description: Filled quantity of the counter currency.
+          type: string
+          example: '0.001'
+        counterQtyAllIn:
+          description: Filled quantity of the counter currency including all fees.
+          type: string
+          example: '0.0012'
+        cumQty:
+          description: Cumulative filled quantity for this order. For open orders, orderQty = leavesQty + cumQty. For canceled order, leavesQty = 0, orderQty = cancelQty + cumQty.
+          type: string
+          example: '10000.00'
+        currency:
+          description: The currency in which order quantity is specified in.
+          type: string
+          example: USD
+        feeCurrency:
+          description: Currency commission was charged in, which is always the opposite currency from what the order quantity is specified in.
+          type: string
+          example: BTC
+        leavesQty:
+          description: quantity that is still open for this order.
+          type: string
+          example: '10000.00'
+        limitPrice:
+          description: Original limit price for this order if present.
+          type: string
+          example: '21005.5'
+        orderId:
+          description: Order ID generated by anchorage.
+          type: string
+          example: a94c8d75-6c9d-4903-95f3-5b0893e76cb7
+        orderQty:
+          description: Original order quantity.
+          type: string
+          example: '10000.00'
+        orderStatus:
+          description: Order status
+          type: string
+          enum:
+          - PENDING
+          - NEW
+          - PARTIALLY_FILLED
+          - FILLED
+          - REJECTED
+          - PENDING_CANCEL
+          - CANCELED
+        orderType:
+          description: General order type.
+          type: string
+          enum:
+          - MARKET
+          - LIMIT
+          - STOP_LIMIT
+          - TAKE_PROFIT_LIMIT
+          - STOP_LOSS
+          - TWAP
+          - VWAP
+          - PEGGED
+          - POV
+          - RFQ
+          - LIMIT_ALL_IN
+          - MANUAL
+          - OTHER
+        reasonText:
+          description: Additional description for reason of reject or cancel.
+          type: string
+        rejectReason:
+          description: Reason for rejection.
+          type: string
+        side:
+          description: Order side, either "BUY" or "SELL".
+          type: string
+          enum:
+          - BUY
+          - SELL
+        strategyParams:
+          description: Strategy Parameters
+          type: object
+          properties:
+            data:
+              $ref: '#/components/schemas/StrategyParams'
+          x-omitempty: true
+        subaccountId:
+          description: Subaccount ID for this order to book into.
+          type: string
+          example: 0e2b2f9d-8d10-4f1e-960b-28567255045f
+        subaccountTransactionId:
+          description: Subaccount transaction ID linked with this order.
+          type: string
+          example: af2b2f9d-9d1a-4e2e-76ab-2756725dffdf
+        submitTime:
+          description: UTC timestamp when order is submitted. [RFC 3339](https://datatracker.ietf.org/doc/html/rfc3339#section-5.6) 'date-time'.
+          type: string
+          format: date-time
+        symbol:
+          description: Symbol for the order, e.g. BTC-USD.
+          type: string
+          example: BTC-USD
+        timeInForce:
+          description: Time in force defines the order expiry
+          type: string
+          enum:
+          - GTC
+          - FOK
+          - IOC
+        totalFee:
+          description: Commission charged for this order.
+          type: string
+          example: '10.0'
+        transactTime:
+          description: UTC timestamp when order is executed. [RFC 3339](https://datatracker.ietf.org/doc/html/rfc3339#section-5.6) 'date-time'.
+          type: string
+          format: date-time
+      required:
+      - clOrderId
+      - orderId
+      - accountId
+      - symbol
+      - side
+      - currency
+      - orderQty
+      - orderType
+      - orderStatus
+      - avgPx
+      - avgPxAllIn
+      - leavesQty
+      - cumQty
+      - totalFee
+      - feeCurrency
+      - transactTime
+      title: TradingOrderDetails
+    OrderExecutionReport:
+      type: object
+      properties:
+        accountId:
+          description: Account ID for this order to book into.
+          type: string
+          example: 0e2b2f9d-8d10-4f1e-960b-28567255045f
+        allocation:
+          description: Subaccount allocation
+          type: array
+          items:
+            $ref: '#/components/schemas/Allocation'
+          x-omitempty: true
+        avgPx:
+          description: Average filled price for this order.
+          type: string
+          example: '21005.4'
+        avgPxAllIn:
+          description: Average filled price + anchorage commission.
+          type: string
+          example: '21006.00'
+        clOrderId:
+          description: Original client order ID as submitted.
+          type: string
+          example: 6fb5fc79-0bb4-446d-82dd-d4687fb56a02
+        counterCurrency:
+          description: The counter currency of the order.
+          type: string
+          example: BTC
+        counterQty:
+          description: Filled quantity of the counter currency.
+          type: string
+          example: '0.001'
+        counterQtyAllIn:
+          description: Filled quantity of the counter currency including all fees.
+          type: string
+          example: '0.0012'
+        cumQty:
+          description: Cumulative filled quantity for this order.
+          type: string
+          example: '10000.00'
+        currency:
+          description: The currency in which order quantity is specified in.
+          type: string
+          example: USD
+        execId:
+          description: Execution ID of this report. This ID can be used to retrieve the trade.
+          type: string
+          example: 3fb532c79-0bb4-446d-82dd-d4687fb56a02
+        fee:
+          description: Commission charged for this order.
+          type: string
+          example: '10.0'
+        feeCurrency:
+          description: Currency commission was charged in, which is always the opposite currency from what the order quantity is specified in.
+          type: string
+          example: BTC
+        limitPrice:
+          description: Original limit price for this order if present.
+          type: string
+          example: '21005.5'
+        orderId:
+          description: Order ID generated by anchorage.
+          type: string
+          example: a94c8d75-6c9d-4903-95f3-5b0893e76cb7
+        orderQty:
+          description: Original order quantity.
+          type: string
+          example: '10000.00'
+        orderStatus:
+          description: Order status
+          type: string
+          enum:
+          - FILLED
+          - REJECTED
+          - CANCELED
+        orderType:
+          description: Order type either Market or Limit
+          type: string
+          enum:
+          - MARKET
+          - LIMIT
+        reasonText:
+          description: Additional description for reason of reject or cancel.
+          type: string
+        rejectReason:
+          description: Reason for rejection, this is a set of standardized reason code.
+          type: string
+          enum:
+          - InvalidSymbol
+          - InvalidCurrency
+          - InvalidSide
+          - InvalidQuantity
+          - InvalidOrderType
+          - InvalidAccount
+          - AccountDisabledForTrading
+          - UnauthorizedForTrading
+          - InsufficientLiquidity
+          - DuplicateOrder
+          - ExecutionLimitExceeded
+          - InternalError
+          - InvalidPrice
+          - InvalidAccountsInAllocation
+          - InvalidCurrencyForFOK
+        side:
+          description: Order side, either "BUY" or "SELL".
+          type: string
+          enum:
+          - BUY
+          - SELL
+        subaccountId:
+          description: Subaccount ID for this order to book into.
+          type: string
+          example: 0e2b2f9d-8d10-4f1e-960b-28567255045f
+        subaccountTransactionId:
+          description: Subaccount transaction ID linked with this order.
+          type: string
+          example: af2b2f9d-9d1a-4e2e-76ab-2756725dffdf
+        symbol:
+          description: Symbol for the order, e.g. BTC-USD.
+          type: string
+          example: BTC-USD
+        transactTime:
+          description: UTC timestamp when order is executed. [RFC 3339](https://datatracker.ietf.org/doc/html/rfc3339#section-5.6) 'date-time'.
+          type: string
+          format: date-time
+      required:
+      - clOrderId
+      - orderId
+      - execId
+      - symbol
+      - side
+      - currency
+      - counterCurrency
+      - orderType
+      - orderStatus
+      - avgPx
+      - orderQty
+      - cumQty
+      - counterQty
+      - counterQtyAllIn
+      - transactTime
+      title: OrderExecutionReport
+    MarketDataSnapshot:
+      type: object
+      properties:
+        amountBuckets:
+          description: Amount buckets used for market depth aggregation. Returns the USD amount values that were requested in the query. Empty array if amount buckets were not requested.
+          type: array
+          items:
+            type: string
+          example:
+          - '1000'
+          - '5000'
+          - '10000'
+        bids:
+          description: Array of bid price levels
+          type: array
+          items:
+            $ref: '#/components/schemas/PriceLevel'
+        offers:
+          description: Array of offer price levels
+          type: array
+          items:
+            $ref: '#/components/schemas/PriceLevel'
+        sizeBuckets:
+          description: Size buckets used for market depth aggregation. Returns the BTC size values that were requested in the query. Empty array if size buckets were not requested.
+          type: array
+          items:
+            type: string
+          example:
+          - '1'
+          - '5'
+          - '10'
+        spread:
+          description: Current spread as a decimal string
+          type: string
+          example: '0.001'
+        status:
+          description: Market status
+          type: string
+          example: Online
+        symbol:
+          description: Trading pair symbol
+          type: string
+          example: BTC-USD
+        timestamp:
+          description: UTC timestamp of the market data snapshot. [RFC 3339](https://datatracker.ietf.org/doc/html/rfc3339#section-5.6) 'date-time'.
+          type: string
+          format: date-time
+          example: '2025-05-08T16:17:01.863332Z'
+      required:
+      - timestamp
+      - symbol
+      - bids
+      - offers
+      title: MarketDataSnapshot
+    TradePairReferenceData:
+      description: 'Trading reference data for a pair including the minimum size and price increment.
+
+
+        Size increment is the minimum size supported when specifying order quantity.
+
+
+        Price increment specifies the minimum price precision when specifying order price.
+
+        '
+      type: object
+      properties:
+        baseAssetType:
+          description: A string representing the base asset of the trading pair.
+          type: string
+          example: BTC
+        baseSizeIncrement:
+          description: Minimum size increment when specifying order quantity in base asset.
+          type: string
+          example: '0.000001'
+        lastUpdateTime:
+          description: ISO format date time when the reference data was last updated.
+          type: string
+          format: date-time
+          example: '2022-07-30T22:15:31.99999Z'
+        minimumOrderSize:
+          description: Minimum required size for base asset to successfully place an order
+          type: string
+          example: '0.005'
+        priceIncrement:
+          description: Minimum price increment when specifying order price.
+          type: string
+          example: '0.00000001'
+        quoteAssetType:
+          description: A string representing the quote asset of the trading pair.
+          type: string
+          example: USD
+        quoteSizeIncrement:
+          description: Minimum size increment when specifying order quantity in quote asset.
+          type: string
+          example: '0.01'
+      example:
+        baseAssetType: BTC
+        quoteAssetType: USD
+        baseSizeIncrement: '0.0000001'
+        quoteSizeIncrement: '0.01'
+        priceIncrement: '0.00000001'
+        minimumOrderSize: '0.005'
+        lastUpdateTime: '2022-07-30T22:15:31.99999Z'
+      required:
+      - baseAssetType
+      - quoteAssetType
+      - baseSizeIncrement
+      - quoteSizeIncrement
+      - priceIncrement
+      - minimumOrderSize
+      - lastUpdateTime
+      title: TradePairReferenceData
+    TradingAccountsResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/TradingAccount'
+          minItems: 0
+          uniqueItems: true
+      required:
+      - data
+      title: TradingAccountsResponse
+    TradePairsResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/TradePair'
+          example:
+          - pair: BTC-USD
+            description: Buy BTC using USD, or Sell BTC for USD
+            referenceData:
+              baseAssetType: BTC
+              baseSizeIncrement: '0.001'
+              quoteAssetType: USD
+              quoteSizeIncrement: '0.01'
+              priceIncrement: '0.00000001'
+              minimumOrderSize: '0.005'
+              lastUpdateTime: '2022-08-24T18:00:53.471Z'
+          - pair: ETH-USD
+            description: Buy ETH using USD, or Sell ETH for USD
+            referenceData:
+              baseAssetType: ETH
+              baseSizeIncrement: '0.001'
+              quoteAssetType: USD
+              quoteSizeIncrement: '0.01'
+              priceIncrement: '0.00000001'
+              minimumOrderSize: '0.05'
+              lastUpdateTime: '2022-08-24T18:00:53.471Z'
+          - pair: BTC-ETH
+            description: Buy BTC using ETH, or Sell BTC for ETH
+          minItems: 1
+          uniqueItems: true
+      required:
+      - data
+      title: TradePairsResponse
+    OrderAllocation:
+      type: object
+      properties:
+        quantity:
+          description: Quantity to allocate to the subaccount
+          type: string
+          example: '10000'
+        subaccountId:
+          description: The Subaccount Identifier
+          type: string
+      required:
+      - subaccountId
+      - quantity
+      title: OrderAllocation
+    TradingAccountCreditResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/TradingAccountCredit'
+      required:
+      - data
+      title: TradingAccountCreditResponse
+  securitySchemes:
+    Api-Access-Key:
+      type: apiKey
+      name: Api-Access-Key
+      in: header
+      description: An API key associated with a security role
+x-tagGroups:
+- name: Under Development
+  tags:
+  - Collateral Management
+  - Holds
+  - Deposit Attribution
+  - Onboarding
+  - Trusted Destinations
+  - Atlas Settlement Network
+  - Tax
+- name: API Endpoints
+  tags:
+  - Addresses
+  - Asset Types
+  - Transactions
+  - Transfers
+  - Wallets
+  - Vaults
+  - Vesting
+  - Subaccounts
+  - Stablecoins
+  - Webhook Notifications
+  - API Key
+  - Statements
+  - Tax Reporting
+  - Trading
+- name: Models
+  tags:
+  - Transfer Model
+  - Transaction Model
+  - Vault Model
+  - Deposit Attribution Model

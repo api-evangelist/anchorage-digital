@@ -1,0 +1,363 @@
+# Anchorage Digital
+
+## Docs
+
+- [Changelog](https://docs.anchorage.com/agentic-banking/changelog.md): User-visible changes to Anchorage Agentic Banking and these docs.
+- [Accounts](https://docs.anchorage.com/agentic-banking/concepts/accounts.md): Your org's USD balance per network, and how to fund it.
+- [Agents](https://docs.anchorage.com/agentic-banking/concepts/agents.md): What an agent is in Anchorage Agentic Banking, and how it gets authorized to spend.
+- [Budgets](https://docs.anchorage.com/agentic-banking/concepts/budgets.md): How agents are pre-authorized to spend on the crypto rail.
+- [Linked cards](https://docs.anchorage.com/agentic-banking/concepts/cards.md): Link your own card; the agent gets a one-shot scoped credential per purchase.
+- [Crypto payments](https://docs.anchorage.com/agentic-banking/concepts/payments.md): How Anchorage Agentic Banking settles a paid URL on the crypto rail.
+- [Buy with a linked card](https://docs.anchorage.com/agentic-banking/guides/buy-with-a-linked-card.md): What the agent supplies on a card purchase. For mechanics, see Linked cards.
+- [Check your budget](https://docs.anchorage.com/agentic-banking/guides/check-your-budget.md): What the agent can see, and what the user sees in the UI.
+- [Connect an agent](https://docs.anchorage.com/agentic-banking/guides/connect-an-agent.md): How an MCP client links to one of your agents.
+- [Make a crypto payment](https://docs.anchorage.com/agentic-banking/guides/make-a-crypto-payment.md): What the agent supplies on a paid URL. For mechanics, see Crypto payments.
+- [Quickstart](https://docs.anchorage.com/agentic-banking/quickstart.md): From zero to first agent payment.
+- [Verifying addresses](https://docs.anchorage.com/knowledge-base/api-reference/address-verification.md): Verify deposit address authenticity and integrity using Anchorage Digital's V1 and V2 signature schemes.
+- [Authentication](https://docs.anchorage.com/knowledge-base/api-reference/authentication.md): Authenticate Anchorage Digital API requests with API keys and signatures.
+- [API Changelog](https://docs.anchorage.com/knowledge-base/api-reference/changelog.md): Subscribe to Anchorage API updates, additions, and breaking changes.
+- [Errors, rate limits, and pagination](https://docs.anchorage.com/knowledge-base/api-reference/errors-pagination.md): Understand Anchorage API status codes, rate limits, idempotent retries, and cursor pagination.
+- [Introduction](https://docs.anchorage.com/knowledge-base/api-reference/introduction.md): Introduction for the Anchorage Digital REST API v2.0
+- [List all addresses for an asset](https://docs.anchorage.com/knowledge-base/api-reference/v2/addresses/list-all-addresses-for-an-asset.md): Permissions required: **Read vault activity** or **Create address**
+- [Provision a deposit address for a wallet](https://docs.anchorage.com/knowledge-base/api-reference/v2/addresses/provision-a-deposit-address-for-a-wallet.md): Permissions required: **Create address**
+- [List information for current API key](https://docs.anchorage.com/knowledge-base/api-reference/v2/api-key/list-information-for-current-api-key.md): Permissions required: none
+- [List supported asset types](https://docs.anchorage.com/knowledge-base/api-reference/v2/asset-types/list-supported-asset-types.md): Permissions required: none
+- [Accept a settlement](https://docs.anchorage.com/knowledge-base/api-reference/v2/atlas-settlement-network/accept-a-settlement.md): Permissions required: **Propose and Accept settlements** and **Read vault activity**
+- [Authorize a settlement](https://docs.anchorage.com/knowledge-base/api-reference/v2/atlas-settlement-network/authorize-a-settlement.md): Permissions required: **Authorize Settlements**
+- [Get a counterparty by ID](https://docs.anchorage.com/knowledge-base/api-reference/v2/atlas-settlement-network/get-a-counterparty-by-id.md): Permissions required: **Read vault activity**
+- [Get a participant by ID](https://docs.anchorage.com/knowledge-base/api-reference/v2/atlas-settlement-network/get-a-participant-by-id.md): Permissions required: **Read vault activity**
+- [Get a settlement by ID](https://docs.anchorage.com/knowledge-base/api-reference/v2/atlas-settlement-network/get-a-settlement-by-id.md): Permissions required: **Read vault activity**
+- [List participants](https://docs.anchorage.com/knowledge-base/api-reference/v2/atlas-settlement-network/list-participants.md): Permissions required: **Read vault activity**
+- [List settlements](https://docs.anchorage.com/knowledge-base/api-reference/v2/atlas-settlement-network/list-settlements.md): Permissions required: **Read vault activity**
+- [List trusted counterparties](https://docs.anchorage.com/knowledge-base/api-reference/v2/atlas-settlement-network/list-trusted-counterparties.md): Permissions required: **Read vault activity**
+- [Propose a settlement](https://docs.anchorage.com/knowledge-base/api-reference/v2/atlas-settlement-network/propose-a-settlement.md): Permissions required: **Propose and Accept settlements**
+- [Propose a trusted counterparty](https://docs.anchorage.com/knowledge-base/api-reference/v2/atlas-settlement-network/propose-a-trusted-counterparty.md): Permissions required: **Propose Trusted Counterparty**
+- [Reject a settlement proposal](https://docs.anchorage.com/knowledge-base/api-reference/v2/atlas-settlement-network/reject-a-settlement-proposal.md): Permissions required: **Propose and Accept settlements** or **Authorize Settlements**
+- [Request a collateral decrease](https://docs.anchorage.com/knowledge-base/api-reference/v2/collateral-decrease.md): Request a collateral decrease for a package.
+- [Create a new collateral package](https://docs.anchorage.com/knowledge-base/api-reference/v2/collateral-management/create-a-new-collateral-package.md): Permissions required: **Manage Collateral Packages** and **Read vault activity**
+- [Create a new exposure](https://docs.anchorage.com/knowledge-base/api-reference/v2/collateral-management/create-a-new-exposure.md): Permissions required: **Manage Collateral Exposures** and **Read vault activity**
+- [Create a new operation](https://docs.anchorage.com/knowledge-base/api-reference/v2/collateral-management/create-a-new-operation.md): Permissions required: **Manage Collateral Packages** and **Read vault activity**
+- [List collateral and exposure operations](https://docs.anchorage.com/knowledge-base/api-reference/v2/collateral-management/list-collateral-and-exposure-operations.md): Permissions required: **Read vault activity**
+- [List exposures](https://docs.anchorage.com/knowledge-base/api-reference/v2/collateral-management/list-exposures.md): Permissions required: **Read vault activity**
+- [List packages](https://docs.anchorage.com/knowledge-base/api-reference/v2/collateral-management/list-packages.md): Permissions required: **Read vault activity**
+- [Update a collateral package](https://docs.anchorage.com/knowledge-base/api-reference/v2/collateral-management/update-a-collateral-package.md): Permissions required: **Manage Collateral Packages** and **Read vault activity**
+- [Update an operation](https://docs.anchorage.com/knowledge-base/api-reference/v2/collateral-management/update-an-operation.md): Permissions required: **Manage Collateral Packages** and **Read vault activity**
+- [Get collateral price sources](https://docs.anchorage.com/knowledge-base/api-reference/v2/collateral-price-sources.md): Get available assets for specific price sources.
+- [Attribute a deposit](https://docs.anchorage.com/knowledge-base/api-reference/v2/deposit-attribution/attribute-a-deposit.md): Permissions required: **Deposit Attribution**.
+- [Attribute a deposit as spam](https://docs.anchorage.com/knowledge-base/api-reference/v2/deposit-attribution/attribute-a-deposit-as-spam.md): Permissions required: **Deposit Attribution**.
+- [List deposit attributions](https://docs.anchorage.com/knowledge-base/api-reference/v2/deposit-attribution/list-deposit-attributions.md): Permissions required: **Read Deposit Attribution** or **Deposit Attribution**.
+- [Off-chain vesting schedules](https://docs.anchorage.com/knowledge-base/api-reference/v2/offchainvesting-schedules.md): Retrieve off-chain vesting schedules.
+- [Begin new customer onboarding application](https://docs.anchorage.com/knowledge-base/api-reference/v2/onboarding/begin-new-customer-onboarding-application.md): Permissions required: **Onboarding** Initiate onboarding application for a new customer of Anchorage Digital
+- [Begin new customer subaccount onboarding application](https://docs.anchorage.com/knowledge-base/api-reference/v2/onboarding/begin-new-customer-subaccount-onboarding-application.md): Permissions required: **Onboarding**
+- [Creates a new agreement questionnaire of the given agreementType](https://docs.anchorage.com/knowledge-base/api-reference/v2/onboarding/creates-a-new-agreement-questionnaire-of-the-given-agreementtype.md): Permissions required: **Onboarding** Creates a new agreement questionnaire
+- [Request a signed URL for document image upload](https://docs.anchorage.com/knowledge-base/api-reference/v2/onboarding/request-a-signed-url-for-document-image-upload.md): Permissions required: **Onboarding**
+- [Retrieve uploaded data and status of all customers onboarding](https://docs.anchorage.com/knowledge-base/api-reference/v2/onboarding/retrieve-uploaded-data-and-status-of-all-customers-onboarding.md): Permissions required: **Onboarding**
+- [Retrieve uploaded data and status of all onboarding customer subaccounts](https://docs.anchorage.com/knowledge-base/api-reference/v2/onboarding/retrieve-uploaded-data-and-status-of-all-onboarding-customer-subaccounts.md): Permissions required: **Onboarding**
+- [Retrieve uploaded data and status of customer onboarding](https://docs.anchorage.com/knowledge-base/api-reference/v2/onboarding/retrieve-uploaded-data-and-status-of-customer-onboarding.md): Permissions required: **Onboarding**
+- [Retrieve uploaded data and status of customer subaccount onboarding](https://docs.anchorage.com/knowledge-base/api-reference/v2/onboarding/retrieve-uploaded-data-and-status-of-customer-subaccount-onboarding.md): Permissions required: **Onboarding**
+- [Retrieves all the agreements questionnaires for the specified agreement type](https://docs.anchorage.com/knowledge-base/api-reference/v2/onboarding/retrieves-all-the-agreements-questionnaires-for-the-specified-agreement-type.md): Permissions required: **Onboarding**
+- [Retrieves the agreement questionnaire of the given agreement type and agreement ID](https://docs.anchorage.com/knowledge-base/api-reference/v2/onboarding/retrieves-the-agreement-questionnaire-of-the-given-agreement-type-and-agreement-id.md): Permissions required: **Onboarding**
+- [Submit a completed customer onboarding application](https://docs.anchorage.com/knowledge-base/api-reference/v2/onboarding/submit-a-completed-customer-onboarding-application.md): Permissions required: **Onboarding**
+- [Submit a completed customer subaccount onboarding application](https://docs.anchorage.com/knowledge-base/api-reference/v2/onboarding/submit-a-completed-customer-subaccount-onboarding-application.md): Permissions required: **Onboarding**
+- [Update customer onboarding application](https://docs.anchorage.com/knowledge-base/api-reference/v2/onboarding/update-customer-onboarding-application.md): Permissions required: **Onboarding** Update an existing customer onboarding application. The application data will be updated to match the entries of the update payload. If any field is invalid, the entire update will fail and no data will be updated.
+- [Update customer subaccount onboarding application](https://docs.anchorage.com/knowledge-base/api-reference/v2/onboarding/update-customer-subaccount-onboarding-application.md): Permissions required: **Onboarding** Update data of an existing customer subaccount onboarding application
+- [Create a Stablecoin Conversion](https://docs.anchorage.com/knowledge-base/api-reference/v2/stablecoins/create-a-stablecoin-conversion.md): Permissions required: **Convert Stablecoins**
+- [Get Issue/Redeem History](https://docs.anchorage.com/knowledge-base/api-reference/v2/stablecoins/get-issueredeem-history.md): Permissions required: **Convert Stablecoins**
+- [Get Stablecoin Reserves Entitled Stablecoins](https://docs.anchorage.com/knowledge-base/api-reference/v2/stablecoins/get-stablecoin-reserves-entitled-stablecoins.md): Permissions required: **Read vault activity**
+- [Get Stablecoin Reserves History](https://docs.anchorage.com/knowledge-base/api-reference/v2/stablecoins/get-stablecoin-reserves-history.md): Permissions required: **Read vault activity**
+- [Download a statement](https://docs.anchorage.com/knowledge-base/api-reference/v2/statement-download.md): Download a statement.
+- [Get statement](https://docs.anchorage.com/knowledge-base/api-reference/v2/statement-get.md): Get a statement.
+- [List statement types](https://docs.anchorage.com/knowledge-base/api-reference/v2/statement-types.md): List statement types.
+- [List statements](https://docs.anchorage.com/knowledge-base/api-reference/v2/statements-list.md): List statements.
+- [Cancel Manual Billing Charge](https://docs.anchorage.com/knowledge-base/api-reference/v2/subaccounts/cancel-manual-billing-charge.md): Permissions required: **Subaccount**
+- [Cancels a Withdrawal Request for a subaccount](https://docs.anchorage.com/knowledge-base/api-reference/v2/subaccounts/cancels-a-withdrawal-request-for-a-subaccount.md): Permissions required: **Subaccount** Cancels a Withdrawal Request
+- [Create a new subaccount for a given program customer](https://docs.anchorage.com/knowledge-base/api-reference/v2/subaccounts/create-a-new-subaccount-for-a-given-program-customer.md): Permissions required: **Subaccount**
+- [Create a USD Withdrawal Request for a subaccount](https://docs.anchorage.com/knowledge-base/api-reference/v2/subaccounts/create-a-usd-withdrawal-request-for-a-subaccount.md): Permissions required: **Subaccount**
+- [Create Manual Billing Charge](https://docs.anchorage.com/knowledge-base/api-reference/v2/subaccounts/create-manual-billing-charge.md): Permissions required: **Subaccount**
+- [Create new allocations](https://docs.anchorage.com/knowledge-base/api-reference/v2/subaccounts/create-new-allocations.md): Permissions required: **Subaccount**
+- [Create new transactions](https://docs.anchorage.com/knowledge-base/api-reference/v2/subaccounts/create-new-transactions.md): Permissions required: **Subaccount**
+- [Fetches a set of filtered transactions allocations](https://docs.anchorage.com/knowledge-base/api-reference/v2/subaccounts/fetches-a-set-of-filtered-transactions-allocations.md): Permissions required: **Subaccount** or **Read Subaccount**
+- [Fetches a set of Withdrawals Requests for a subaccount](https://docs.anchorage.com/knowledge-base/api-reference/v2/subaccounts/fetches-a-set-of-withdrawals-requests-for-a-subaccount.md): Permissions required: **Subaccount** or **Read Subaccount**
+- [Get list of transactions filter by ID](https://docs.anchorage.com/knowledge-base/api-reference/v2/subaccounts/get-list-of-transactions-filter-by-id.md): Permissions required: **Subaccount** or **Read Subaccount**
+- [Get USD Withdrawal Request for a subaccount](https://docs.anchorage.com/knowledge-base/api-reference/v2/subaccounts/get-usd-withdrawal-request-for-a-subaccount.md): Permissions required: **Subaccount** Get a USD Withdrawal Request
+- [List all subaccounts](https://docs.anchorage.com/knowledge-base/api-reference/v2/subaccounts/list-all-subaccounts.md): Permissions required: **Subaccount** or **Read Subaccount**
+- [List all transactions](https://docs.anchorage.com/knowledge-base/api-reference/v2/subaccounts/list-all-transactions.md): Permissions required: **Subaccount** or **Read Subaccount**
+- [List subaccounts](https://docs.anchorage.com/knowledge-base/api-reference/v2/subaccounts/list-subaccounts.md): Permissions required: **Subaccount** or **Read Subaccount**
+- [Return bank information for a subaccount](https://docs.anchorage.com/knowledge-base/api-reference/v2/subaccounts/return-bank-information-for-a-subaccount.md): Permissions required: **Subaccount** or **Read Subaccount**
+- [Return wallets linked to a subaccount](https://docs.anchorage.com/knowledge-base/api-reference/v2/subaccounts/return-wallets-linked-to-a-subaccount.md): Permissions required: **Subaccount** or **Read Subaccount**
+- [Update an existing subaccount](https://docs.anchorage.com/knowledge-base/api-reference/v2/subaccounts/update-an-existing-subaccount.md): Permissions required: **Subaccount**
+- [List deposit transactions for account](https://docs.anchorage.com/knowledge-base/api-reference/v2/tax-account-transactions.md): List deposit transactions for a tax account.
+- [List tax accounts](https://docs.anchorage.com/knowledge-base/api-reference/v2/tax-accounts.md): List tax accounts.
+- [Update deposit transaction cost basis](https://docs.anchorage.com/knowledge-base/api-reference/v2/tax-transaction-cost-basis.md): Update the cost basis of a deposit transaction.
+- [Add Tag to Transaction](https://docs.anchorage.com/knowledge-base/api-reference/v2/tax/add-tag-to-transaction.md): Permissions required: **Subaccount**
+- [Get Program Customer Tax Forms](https://docs.anchorage.com/knowledge-base/api-reference/v2/tax/get-program-customer-tax-forms.md): Permissions required: **Subaccount**
+- [Get Subaccount Tax Forms](https://docs.anchorage.com/knowledge-base/api-reference/v2/tax/get-subaccount-tax-forms.md): Permissions required: **Subaccount**
+- [List Gains](https://docs.anchorage.com/knowledge-base/api-reference/v2/tax/list-gains.md): Permissions required: **Subaccount**
+- [List Gains Cost Basis](https://docs.anchorage.com/knowledge-base/api-reference/v2/tax/list-gains-cost-basis.md): Permissions required: **Subaccount**
+- [List of the Inventory for an asset](https://docs.anchorage.com/knowledge-base/api-reference/v2/tax/list-of-the-inventory-for-an-asset.md): Permissions required: **Subaccount**
+- [List summary of Inventory](https://docs.anchorage.com/knowledge-base/api-reference/v2/tax/list-summary-of-inventory.md): Permissions required: **Subaccount**
+- [List Transactions](https://docs.anchorage.com/knowledge-base/api-reference/v2/tax/list-transactions.md): Permissions required: **Subaccount**
+- [Remove Tag from Transaction](https://docs.anchorage.com/knowledge-base/api-reference/v2/tax/remove-tag-from-transaction.md): Permissions required: **Subaccount**
+- [Update Transaction Cost Basis](https://docs.anchorage.com/knowledge-base/api-reference/v2/tax/update-transaction-cost-basis.md): Permissions required: **Subaccount**
+- [Accept a quote](https://docs.anchorage.com/knowledge-base/api-reference/v2/trading/accept-a-quote.md): Permissions required: **Execute trades**
+- [Cancel an async order](https://docs.anchorage.com/knowledge-base/api-reference/v2/trading/cancel-an-async-order.md): Permissions required: **Execute trades**
+- [Get a trading account by id](https://docs.anchorage.com/knowledge-base/api-reference/v2/trading/get-a-trading-account-by-id.md): Permissions required: **Read trade activity**
+- [Get credit limit details](https://docs.anchorage.com/knowledge-base/api-reference/v2/trading/get-credit-limit-details.md): Permissions required: **Execute trades** or **Read trade activity**
+- [Get market data snapshot](https://docs.anchorage.com/knowledge-base/api-reference/v2/trading/get-market-data-snapshot.md): Permissions required: **Execute trades** or **Read trade activity**
+- [Get order by ID](https://docs.anchorage.com/knowledge-base/api-reference/v2/trading/get-order-by-id.md): Permissions required: **Read trade activity** or **Execute trades** (if order created by this API key)
+- [Get settlement by ID](https://docs.anchorage.com/knowledge-base/api-reference/v2/trading/get-settlement-by-id.md): Permissions required: **Execute trades** or **Read trade activity**
+- [Get trade by ID](https://docs.anchorage.com/knowledge-base/api-reference/v2/trading/get-trade-by-id.md): Permissions required: **Read trade activity** or **Execute trades** (if trade created by this API key)
+- [Get trading account credit limit and usage](https://docs.anchorage.com/knowledge-base/api-reference/v2/trading/get-trading-account-credit-limit-and-usage.md): Permissions required: **Read trade activity**
+- [List orders](https://docs.anchorage.com/knowledge-base/api-reference/v2/trading/list-orders.md): Permissions required: **Execute trades** or **Read trade activity**
+- [List outstanding trading positions](https://docs.anchorage.com/knowledge-base/api-reference/v2/trading/list-outstanding-trading-positions.md): Permissions required: **Execute trades** or **Read trade activity**
+- [List settlements](https://docs.anchorage.com/knowledge-base/api-reference/v2/trading/list-settlements.md): Permissions required: **Execute trades** or **Read trade activity**
+- [List supported trading pairs](https://docs.anchorage.com/knowledge-base/api-reference/v2/trading/list-supported-trading-pairs.md): Permissions required: **Execute trades** or **Read trade activity**
+- [List trades](https://docs.anchorage.com/knowledge-base/api-reference/v2/trading/list-trades.md): Permissions required: **Execute trades** or **Read trade activity**
+- [List trades by settlement](https://docs.anchorage.com/knowledge-base/api-reference/v2/trading/list-trades-by-settlement.md): Permissions required: **Execute trades** or **Read trade activity**
+- [List trading account balances](https://docs.anchorage.com/knowledge-base/api-reference/v2/trading/list-trading-account-balances.md): Permissions required: **Read trade activity**
+- [List trading accounts](https://docs.anchorage.com/knowledge-base/api-reference/v2/trading/list-trading-accounts.md): Permissions required: **Read trade activity**
+- [Place an async order](https://docs.anchorage.com/knowledge-base/api-reference/v2/trading/place-an-async-order.md): Permissions required: **Execute trades**
+- [Place an order](https://docs.anchorage.com/knowledge-base/api-reference/v2/trading/place-an-order.md): Permissions required: **Execute trades**
+- [Request a quote](https://docs.anchorage.com/knowledge-base/api-reference/v2/trading/request-a-quote.md): Permissions required: **Execute trades**
+- [Create a collect request](https://docs.anchorage.com/knowledge-base/api-reference/v2/transactions/create-a-collect-request.md): Permissions required: **Initiate Staking and Unstaking**
+- [Create a consolidate stake request](https://docs.anchorage.com/knowledge-base/api-reference/v2/transactions/create-a-consolidate-stake-request.md): Permissions required: **Initiate Staking and Unstaking**
+- [Create a stake request](https://docs.anchorage.com/knowledge-base/api-reference/v2/transactions/create-a-stake-request.md): Permissions required: **Initiate Staking and Unstaking**
+- [Create a withdrawal request](https://docs.anchorage.com/knowledge-base/api-reference/v2/transactions/create-a-withdrawal-request.md): Permissions required: **Initiate withdrawals**
+- [Create an unstake request](https://docs.anchorage.com/knowledge-base/api-reference/v2/transactions/create-an-unstake-request.md): Permissions required: **Initiate Staking and Unstaking**
+- [Get transaction by ID](https://docs.anchorage.com/knowledge-base/api-reference/v2/transactions/get-transaction-by-id.md): Permissions required: **Read vault activity**
+- [List supported delegation addresses](https://docs.anchorage.com/knowledge-base/api-reference/v2/transactions/list-supported-delegation-addresses.md): Permissions required: **Initiate Staking and Unstaking**
+- [List transactions](https://docs.anchorage.com/knowledge-base/api-reference/v2/transactions/list-transactions.md): Permissions required: **Read vault activity**
+- [Cancel a transfer request](https://docs.anchorage.com/knowledge-base/api-reference/v2/transfers/cancel-a-transfer-request.md): Permissions required: **Transfer funds**
+- [Create a transfer request](https://docs.anchorage.com/knowledge-base/api-reference/v2/transfers/create-a-transfer-request.md): Permissions required: **Transfer funds**
+- [Get transfer by ID](https://docs.anchorage.com/knowledge-base/api-reference/v2/transfers/get-transfer-by-id.md): Permissions required: **Transfer funds**
+- [List transfers](https://docs.anchorage.com/knowledge-base/api-reference/v2/transfers/list-transfers.md): Permissions required: **Transfer funds**
+- [Cancel Trusted Destination creation](https://docs.anchorage.com/knowledge-base/api-reference/v2/trusted-destinations/cancel-trusted-destination-creation.md): Permissions required: **Manage Trusted Destinations**
+- [Check status of Trusted Destinations](https://docs.anchorage.com/knowledge-base/api-reference/v2/trusted-destinations/check-status-of-trusted-destinations.md): Permissions required: **Read vault activity**
+- [Create new Trusted Destinations](https://docs.anchorage.com/knowledge-base/api-reference/v2/trusted-destinations/create-new-trusted-destinations.md): Permissions required: **Manage Trusted Destinations**
+- [Delete Trusted Destination](https://docs.anchorage.com/knowledge-base/api-reference/v2/trusted-destinations/delete-trusted-destination.md): Permissions required: **Manage Trusted Destinations**
+- [List trusted destinations](https://docs.anchorage.com/knowledge-base/api-reference/v2/trusted-destinations/list-trusted-destinations.md): Permissions required: **Read vault activity**
+- [Get vault by ID](https://docs.anchorage.com/knowledge-base/api-reference/v2/vaults/get-vault-by-id.md): Permissions required: **Read vault activity**
+- [List vaults](https://docs.anchorage.com/knowledge-base/api-reference/v2/vaults/list-vaults.md): Permissions required: **Read vault activity**
+- [Get vesting balances](https://docs.anchorage.com/knowledge-base/api-reference/v2/vesting-balances-batch.md): Get vesting balances for multiple allocations.
+- [Get vesting balances for an allocation](https://docs.anchorage.com/knowledge-base/api-reference/v2/vesting/get-vesting-balances-for-an-allocation.md): Get vesting balances for a specific allocation ID. Returns the current balance breakdown including available, unvested, and locked amounts.
+- [Activate an existing wallet on additional networks](https://docs.anchorage.com/knowledge-base/api-reference/v2/wallets/activate-an-existing-wallet-on-additional-networks.md): Permissions required: **Create address**
+- [Create a new wallet in a vault](https://docs.anchorage.com/knowledge-base/api-reference/v2/wallets/create-a-new-wallet-in-a-vault.md): Permissions required: **Create address**
+- [List all wallets for a vault](https://docs.anchorage.com/knowledge-base/api-reference/v2/wallets/list-all-wallets-for-a-vault.md): Permissions required: **Read vault activity**
+- [List all wallets for all vaults](https://docs.anchorage.com/knowledge-base/api-reference/v2/wallets/list-all-wallets-for-all-vaults.md): Permissions required: **Read vault activity**
+- [Staking positions for a wallet](https://docs.anchorage.com/knowledge-base/api-reference/v2/wallets/staking-positions-for-a-wallet.md): Permissions required: **Read vault activity**
+- [Staking rewards for a wallet](https://docs.anchorage.com/knowledge-base/api-reference/v2/wallets/staking-rewards-for-a-wallet.md): Permissions required: **Read vault activity**
+- [Wallet details for a wallet](https://docs.anchorage.com/knowledge-base/api-reference/v2/wallets/wallet-details-for-a-wallet.md): Permissions required: **Read vault activity**
+- [Cancel webhook subscription](https://docs.anchorage.com/knowledge-base/api-reference/v2/webhook-notifications/cancel-webhook-subscription.md): Permissions required: **Configure Webhooks**
+- [Create webhook endpoint](https://docs.anchorage.com/knowledge-base/api-reference/v2/webhook-notifications/create-webhook-endpoint.md): Permissions required: **Configure Webhooks**
+- [Create webhook subscriptions](https://docs.anchorage.com/knowledge-base/api-reference/v2/webhook-notifications/create-webhook-subscriptions.md): Permissions required: **Configure Webhooks**
+- [Get webhook endpoint config](https://docs.anchorage.com/knowledge-base/api-reference/v2/webhook-notifications/get-webhook-endpoint-config.md): Permissions required: **Configure Webhooks**
+- [Get webhook validation key](https://docs.anchorage.com/knowledge-base/api-reference/v2/webhook-notifications/get-webhook-validation-key.md): Permissions required: **Configure Webhooks**
+- [List webhook endpoint](https://docs.anchorage.com/knowledge-base/api-reference/v2/webhook-notifications/list-webhook-endpoint.md): Permissions required: **Configure Webhooks**
+- [List webhook endpoint subscriptions](https://docs.anchorage.com/knowledge-base/api-reference/v2/webhook-notifications/list-webhook-endpoint-subscriptions.md): Permissions required: **Configure Webhooks**
+- [List webhook event types](https://docs.anchorage.com/knowledge-base/api-reference/v2/webhook-notifications/list-webhook-event-types.md): Permissions required: **Configure Webhooks**
+- [Update webhook endpoint](https://docs.anchorage.com/knowledge-base/api-reference/v2/webhook-notifications/update-webhook-endpoint.md): Permissions required: **Configure Webhooks**
+- [Connect your AI assistant](https://docs.anchorage.com/knowledge-base/build-with-ai/connect-ai-assistant.md): Add Anchorage Digital docs to your AI tools through the hosted MCP server.
+- [LLM-ready docs](https://docs.anchorage.com/knowledge-base/build-with-ai/llm-ready-docs.md): Pull Anchorage Digital documentation into any AI tool as Markdown.
+- [Build with AI](https://docs.anchorage.com/knowledge-base/build-with-ai/overview.md): Use AI assistants and coding agents to learn and integrate with Anchorage Digital faster.
+- [Ready-made prompts](https://docs.anchorage.com/knowledge-base/build-with-ai/prompts.md): Start common Anchorage Digital integrations from copy-paste AI prompts.
+- [AI security and guardrails](https://docs.anchorage.com/knowledge-base/build-with-ai/security.md): Keep AI assistants and agents safe when building on Anchorage Digital.
+- [Home](https://docs.anchorage.com/knowledge-base/index.md): Run your business on a full-stack platform for digital assets. Anchorage Digital provides the complete infrastructure stack for institutions to participate in the digital asset economy.
+- [Account hierarchy](https://docs.anchorage.com/knowledge-base/platform/developers/account-hierarchy.md): Understand Anchorage Digital's hierarchical model for organizations, accounts, vaults, wallets, and balances.
+- [API keys](https://docs.anchorage.com/knowledge-base/platform/developers/api-keys.md): Generate, use, revoke, and rotate API access keys to authenticate requests to the Anchorage Digital API.
+- [Atlas collateral management](https://docs.anchorage.com/knowledge-base/platform/developers/atlas/atlas-collateral-management.md): Reference guide for Anchorage Digital's Atlas collateral management service, including key concepts, transaction lifecycle, operations management, and notifications.
+- [Settlement API integration guide](https://docs.anchorage.com/knowledge-base/platform/developers/atlas/atlas-settlement-api.md): Integrate with the Atlas settlement network API to propose, accept, authorize, and monitor settlements between participants.
+- [B2B2X accounts](https://docs.anchorage.com/knowledge-base/platform/developers/b2b2x.md): Choose the right account structure for serving your end clients on Anchorage Digital.
+- [Overview](https://docs.anchorage.com/knowledge-base/platform/developers/etf/etf-overview.md): Key terminology, architecture, and APIs for the Anchorage Digital ETF integration.
+- [FAQs](https://docs.anchorage.com/knowledge-base/platform/developers/faqs.md): Frequently asked questions about the Anchorage Digital API, sandbox, devices, and account management.
+- [Deposit](https://docs.anchorage.com/knowledge-base/platform/developers/move-money/deposit.md): Receive digital assets and USD into Anchorage Digital wallets and vaults.
+- [Crypto deposit](https://docs.anchorage.com/knowledge-base/platform/developers/move-money/deposit/crypto.md): Receive digital assets end to end: create and verify a wallet address, track the deposit, and attribute the sender.
+- [USD deposit](https://docs.anchorage.com/knowledge-base/platform/developers/move-money/deposit/usd.md): Receive USD by wire or ACH and reconcile inbound funds from the transaction's fiat details.
+- [Operate](https://docs.anchorage.com/knowledge-base/platform/developers/move-money/operate.md): Monitor movement status and understand network fees once assets are in motion.
+- [Track movement status](https://docs.anchorage.com/knowledge-base/platform/developers/move-money/operate/track-status.md): Follow transfers, withdrawals, and deposits to completion using polling or webhooks.
+- [Overview](https://docs.anchorage.com/knowledge-base/platform/developers/move-money/overview.md): Understand how deposits, transfers, and withdrawals work within Anchorage Digital's security model.
+- [AML questionnaire](https://docs.anchorage.com/knowledge-base/platform/developers/move-money/setup/aml-questionnaire.md): Understand and complete the compliance payload required on every external transfer and withdrawal.
+- [Authentication and request signing](https://docs.anchorage.com/knowledge-base/platform/developers/move-money/setup/authentication.md): Authenticate every API request and sign sensitive move-money operations with Ed25519.
+- [Permission groups and API keys](https://docs.anchorage.com/knowledge-base/platform/developers/move-money/setup/permission-groups.md): Configure the permissions and API keys needed for transfers, withdrawals, and trusted destination management.
+- [Trusted destinations](https://docs.anchorage.com/knowledge-base/platform/developers/move-money/setup/trusted-destinations.md): Allowlist external addresses and bank recipients before making external transfers or withdrawals.
+- [Crypto transfer](https://docs.anchorage.com/knowledge-base/platform/developers/move-money/transfer/crypto.md): Move digital assets between wallets or to an external on-chain address without per-transaction quorum.
+- [USD transfer](https://docs.anchorage.com/knowledge-base/platform/developers/move-money/transfer/usd.md): Move USD between accounts or to a bank trusted destination without per-transaction quorum.
+- [Transfers and withdrawals](https://docs.anchorage.com/knowledge-base/platform/developers/move-money/transfers-vs-withdrawals.md): Two approval models for moving assets out of Anchorage Digital.
+- [Crypto withdrawal](https://docs.anchorage.com/knowledge-base/platform/developers/move-money/withdraw/crypto.md): Move digital assets out of a wallet with quorum approval on every request.
+- [USD withdrawal](https://docs.anchorage.com/knowledge-base/platform/developers/move-money/withdraw/usd.md): Move USD from a wallet to a bank trusted destination with quorum approval on every request.
+- [Network & gas fees](https://docs.anchorage.com/knowledge-base/platform/developers/network-gas-fees.md): How blockchain transaction fees work and how Anchorage Digital manages them.
+- [Permission groups](https://docs.anchorage.com/knowledge-base/platform/developers/permission-groups.md): Create permission groups and select the global and vault-level permissions each API key needs.
+- [Signing requests](https://docs.anchorage.com/knowledge-base/platform/developers/request-signing.md): Create Ed25519 signatures for sensitive Anchorage Digital API requests.
+- [Sandbox onboarding](https://docs.anchorage.com/knowledge-base/platform/developers/sandbox/sandbox-onboarding.md): Onboard to the Anchorage Digital sandbox with the demo app, QR enrollment, and mock KYC.
+- [Sandbox overview](https://docs.anchorage.com/knowledge-base/platform/developers/sandbox/sandbox-overview.md): Explore the Anchorage Digital sandbox environment for safe testing before going to production.
+- [Sandbox testing guide](https://docs.anchorage.com/knowledge-base/platform/developers/sandbox/sandbox-testing-guide.md): Set up access, configure API keys, and fund your Anchorage Digital sandbox environment.
+- [Setting up](https://docs.anchorage.com/knowledge-base/platform/developers/setting-up.md): Set up the permission groups, keys, and signatures you need to call the Anchorage Digital API.
+- [Convert stablecoins](https://docs.anchorage.com/knowledge-base/platform/developers/stablecoins/convert.md): One endpoint handles mint, redeem, and bridge—the asset pair sets the direction.
+- [Bridge across chains](https://docs.anchorage.com/knowledge-base/platform/developers/stablecoins/convert/bridge.md): Move a stablecoin between chains.
+- [Mint](https://docs.anchorage.com/knowledge-base/platform/developers/stablecoins/convert/mint.md): Convert USD into a stablecoin.
+- [Redeem (burn)](https://docs.anchorage.com/knowledge-base/platform/developers/stablecoins/convert/redeem.md): Convert a stablecoin back to USD.
+- [Operate](https://docs.anchorage.com/knowledge-base/platform/developers/stablecoins/operate.md): Track stablecoin conversions and interpret their status.
+- [Track conversion status](https://docs.anchorage.com/knowledge-base/platform/developers/stablecoins/operate/track-status.md): Query conversion history and filter the transactions endpoint.
+- [Overview](https://docs.anchorage.com/knowledge-base/platform/developers/stablecoins/overview.md): Mint, redeem, and bridge stablecoins through a single Anchorage Digital conversion endpoint.
+- [Set up](https://docs.anchorage.com/knowledge-base/platform/developers/stablecoins/setup.md): Identify wallets and asset types, then configure the permission and authentication for stablecoin conversions.
+- [Pectra staking](https://docs.anchorage.com/knowledge-base/platform/developers/staking/eth-pectra-staking.md)
+- [Pre-Pectra staking](https://docs.anchorage.com/knowledge-base/platform/developers/staking/eth-staking.md)
+- [SOL](https://docs.anchorage.com/knowledge-base/platform/developers/staking/sol-staking.md)
+- [Overview](https://docs.anchorage.com/knowledge-base/platform/developers/staking/staking-overview.md)
+- [Cost basis via API](https://docs.anchorage.com/knowledge-base/platform/developers/tax/cost-basis.md): Provide cost basis and acquisition dates for in-kind deposits via API.
+- [Overview](https://docs.anchorage.com/knowledge-base/platform/developers/trading/overview.md): Trading entities, interfaces, trade types, and asset support at Anchorage Digital.
+- [Quickstart](https://docs.anchorage.com/knowledge-base/platform/developers/trading/quickstart.md): Step-by-step guide to understanding your trading account and completing your first trade.
+- [Getting trading data](https://docs.anchorage.com/knowledge-base/platform/developers/trading/read-apis.md): Understand your account configuration and retrieve order, trade, and settlement history.
+- [Quote & placing orders](https://docs.anchorage.com/knowledge-base/platform/developers/trading/rfq-orders.md): Execute trades via request-for-quote or limit/market orders using the REST API and WebSocket.
+- [Settlement process](https://docs.anchorage.com/knowledge-base/platform/developers/trading/settlement.md): How trades settle at Anchorage Digital, including pre-funded and credit limit settlement flows.
+- [Authentication](https://docs.anchorage.com/knowledge-base/platform/developers/trading/websocket-authentication.md): Authenticate WebSocket connections using API keys and Ed25519 signatures.
+- [Getting started](https://docs.anchorage.com/knowledge-base/platform/developers/trading/websocket-getting-started.md): Connect to the Anchorage Digital WebSocket API for real-time market data.
+- [Market data](https://docs.anchorage.com/knowledge-base/platform/developers/trading/websocket-market-data.md): Subscribe to real-time market depth updates via MarketDataSnapshotRequest.
+- [Submitting orders](https://docs.anchorage.com/knowledge-base/platform/developers/trading/websocket-submit-order.md): Submit, cancel, and resend orders over a WebSocket session.
+- [Configure sandbox](https://docs.anchorage.com/knowledge-base/platform/developers/wealth/wealth-management-api-config.md): Set up API permission groups, API keys, and the shared Anchorage Digital key for the wealth management integration.
+- [Capabilities & account support](https://docs.anchorage.com/knowledge-base/platform/developers/wealth/wealth-management-capabilities.md): Supported account types, trading locations, and digital assets for the wealth management integration.
+- [Fund and manage subaccounts](https://docs.anchorage.com/knowledge-base/platform/developers/wealth/wealth-management-funding.md): Fund subaccounts with USD or in-kind digital assets, attribute deposits, and manage balances.
+- [Onboard end clients](https://docs.anchorage.com/knowledge-base/platform/developers/wealth/wealth-management-onboarding.md): Steps to onboard end clients to your Anchorage Digital account via API.
+- [Endpoints and payload details](https://docs.anchorage.com/knowledge-base/platform/developers/wealth/wealth-management-onboarding-endpoints.md): Review API endpoints and payload structure for submitting end client onboarding applications.
+- [FATCA](https://docs.anchorage.com/knowledge-base/platform/developers/wealth/wealth-management-onboarding-fatca.md): Reference enum values for FATCA entity types, FFI status, NFFE status, and exempt beneficial owner status fields.
+- [Hosted terms and conditions](https://docs.anchorage.com/knowledge-base/platform/developers/wealth/wealth-management-onboarding-hosted-terms.md): Use hosted terms and conditions for end clients to agree to Anchorage Digital platform terms.
+- [Onboard individuals](https://docs.anchorage.com/knowledge-base/platform/developers/wealth/wealth-management-onboarding-individuals.md): Submit, upload, and approve individual end client onboarding applications via the Anchorage Digital onboarding API.
+- [Onboard institutions](https://docs.anchorage.com/knowledge-base/platform/developers/wealth/wealth-management-onboarding-institutions.md): Submit, upload, and approve institutional end client onboarding applications via the Anchorage Digital onboarding API.
+- [Tax classifications](https://docs.anchorage.com/knowledge-base/platform/developers/wealth/wealth-management-onboarding-tax-classifications.md): Reference enum values for US and non-US tax classification fields used in onboarding payloads.
+- [Terms and conditions via Docusign](https://docs.anchorage.com/knowledge-base/platform/developers/wealth/wealth-management-onboarding-terms-docusign.md): Create and deliver Anchorage Digital branded terms and conditions to end clients via Docusign.
+- [Terms agreement types](https://docs.anchorage.com/knowledge-base/platform/developers/wealth/wealth-management-onboarding-terms-types.md): Configure terms and conditions delivery method and KYC reliance model for end client onboarding.
+- [Overview](https://docs.anchorage.com/knowledge-base/platform/developers/wealth/wealth-management-overview.md): Key terminology, architecture, lifecycle, and APIs for the Anchorage Digital wealth management integration.
+- [Statements](https://docs.anchorage.com/knowledge-base/platform/developers/wealth/wealth-management-statements.md): Statement types, access, and reporting for wealth managers and end clients.
+- [Create and configure subaccounts](https://docs.anchorage.com/knowledge-base/platform/developers/wealth/wealth-management-subaccounts.md): Create end-client subaccounts, configure billing and fees, and manage the subaccount lifecycle.
+- [Onboarding examples](https://docs.anchorage.com/knowledge-base/platform/developers/wealth/wealth-management-subaccounts-examples.md): Reference subaccount creation payloads for all supported account types, with and without termsAgreementId.
+- [Tax data](https://docs.anchorage.com/knowledge-base/platform/developers/wealth/wealth-management-tax.md): Access and manage subaccount tax transactions, cost basis, inventory, gains/losses, and tax forms.
+- [Trade and rebalance](https://docs.anchorage.com/knowledge-base/platform/developers/wealth/wealth-management-trading.md): Submit single and block trade orders, manage pricing data, and understand the settlement lifecycle.
+- [Withdrawals](https://docs.anchorage.com/knowledge-base/platform/developers/wealth/wealth-management-withdrawals.md): Initiate USD and digital asset withdrawals from end-client subaccounts.
+- [Configure webhooks](https://docs.anchorage.com/knowledge-base/platform/developers/webhooks/webhooks-configure.md): Set up webhook endpoints, subscriptions, and signature validation for event-driven notifications.
+- [Delivery and reliability](https://docs.anchorage.com/knowledge-base/platform/developers/webhooks/webhooks-delivery.md): Understand retry behavior, delivery guarantees, timeout requirements, and best practices for consuming webhooks.
+- [Overview](https://docs.anchorage.com/knowledge-base/platform/developers/webhooks/webhooks-overview.md): Receive event-driven notifications for operations and transactions across crypto and USD.
+- [Webhook testing](https://docs.anchorage.com/knowledge-base/platform/developers/webhooks/webhooks-sandbox.md): Step-by-step guide to testing webhooks in the Anchorage Digital sandbox environment.
+- [Access control](https://docs.anchorage.com/knowledge-base/platform/users/access-control.md): Understand access control on the Anchorage Digital platform.
+- [Adding users](https://docs.anchorage.com/knowledge-base/platform/users/adding-users.md): Add and onboard new users to your organization.
+- [Administrator policy](https://docs.anchorage.com/knowledge-base/platform/users/administrator-policy.md): Customize rules and users for administrator-level operations.
+- [Approvals and quorum](https://docs.anchorage.com/knowledge-base/platform/users/approvals-quorum.md): Approve operations, find pending requests, and resolve approvals that are stuck.
+- [Requesting asset support](https://docs.anchorage.com/knowledge-base/platform/users/asset-support-requests.md): Request support for a new asset or network and understand what to expect.
+- [Atlas](https://docs.anchorage.com/knowledge-base/platform/users/atlas-network.md): Use Atlas for peer-to-peer settlement with trusted counterparties.
+- [Platform capabilities](https://docs.anchorage.com/knowledge-base/platform/users/capabilities.md): Understand full capabilities and what you can do with the Anchorage Digital platform.
+- [Changing permission levels](https://docs.anchorage.com/knowledge-base/platform/users/changing-permission-levels.md): Assign vault Operator access and administrator permissions to users.
+- [Responding to compliance RFIs](https://docs.anchorage.com/knowledge-base/platform/users/compliance-rfi.md): Respond to a request for information (RFI) about a transaction's originator or beneficiary.
+- [Creating a vault](https://docs.anchorage.com/knowledge-base/platform/users/creating-vaults.md): Create and configure vaults on iOS and web dashboard.
+- [Device and login recovery](https://docs.anchorage.com/knowledge-base/platform/users/device-login-recovery.md): Move your user to a new phone, replace a device, regain access after losing one, or fix an enrollment error.
+- [Gas fees and stuck transactions](https://docs.anchorage.com/knowledge-base/platform/users/gas-fees-stuck-transactions.md): Fund network gas per wallet and resolve transactions stuck broadcasting.
+- [Getting started](https://docs.anchorage.com/knowledge-base/platform/users/getting-started.md): Set up the mobile app, add users, join or switch accounts, and create vaults and wallets.
+- [Joining and switching accounts](https://docs.anchorage.com/knowledge-base/platform/users/joining-switching.md): Join new accounts and switch between organizations.
+- [Managing users](https://docs.anchorage.com/knowledge-base/platform/users/managing-users.md): Add, update, and remove users; change permission levels; recover access.
+- [Mobile app](https://docs.anchorage.com/knowledge-base/platform/users/mobile-app.md): Download and set up the Anchorage Digital iOS app.
+- [On-chain interactions](https://docs.anchorage.com/knowledge-base/platform/users/on-chain-interactions.md): Bridge assets and interact with on-chain protocols.
+- [Onboarding your organization](https://docs.anchorage.com/knowledge-base/platform/users/onboarding-organization.md): Onboard a new organization: KYC, enrollment QR codes, entity details, and token lockups.
+- [What is Anchorage Digital?](https://docs.anchorage.com/knowledge-base/platform/users/overview.md): Anchorage Digital institutional digital asset platform.
+- [Policies](https://docs.anchorage.com/knowledge-base/platform/users/policies.md): Configure vault policies, manage rules, and set up quorum approvals.
+- [Receiving assets](https://docs.anchorage.com/knowledge-base/platform/users/receiving-assets.md): Receive crypto deposits with deposit attribution and address poisoning protection.
+- [Rules](https://docs.anchorage.com/knowledge-base/platform/users/rules.md): Add, edit, and delete the rules that govern policy approvals.
+- [Security architecture](https://docs.anchorage.com/knowledge-base/platform/users/security.md): How Anchorage Digital secures digital assets and transaction flows.
+- [Sending assets](https://docs.anchorage.com/knowledge-base/platform/users/sending-assets.md): Withdraw assets from vaults, use the gas station, and batch endorsements.
+- [Stablecoins](https://docs.anchorage.com/knowledge-base/platform/users/stablecoins.md): Mint, redeem, bridge stablecoins, and earn stablecoin rewards.
+- [APT staking](https://docs.anchorage.com/knowledge-base/platform/users/staking/apt.md): Stake Aptos (APT) and manage staking rewards.
+- [AVAX staking](https://docs.anchorage.com/knowledge-base/platform/users/staking/avax.md): Stake Avalanche (AVAX) on P-Chain.
+- [BTC staking with Babylon](https://docs.anchorage.com/knowledge-base/platform/users/staking/babylon-btc.md): Stake Bitcoin using the Babylon Genesis protocol.
+- [CELO staking](https://docs.anchorage.com/knowledge-base/platform/users/staking/celo.md): Stake, unstake, and manage CELO rewards.
+- [COSMOS ecosystem staking](https://docs.anchorage.com/knowledge-base/platform/users/staking/cosmos.md): Stake ATOM and other Cosmos ecosystem assets.
+- [EigenLayer restaking](https://docs.anchorage.com/knowledge-base/platform/users/staking/eigenlayer.md): Restake ETH and EIGEN tokens with EigenLayer using Anchorage Digital.
+- [ETH staking](https://docs.anchorage.com/knowledge-base/platform/users/staking/eth.md): Stake Ethereum (ETH) and manage validators.
+- [FLOW staking](https://docs.anchorage.com/knowledge-base/platform/users/staking/flow.md): Stake FLOW tokens and manage delegations.
+- [HYPE staking](https://docs.anchorage.com/knowledge-base/platform/users/staking/hype.md): Stake HYPE on HyperCore and manage HyperEVM/HyperCore wallets.
+- [HyperCore account linking](https://docs.anchorage.com/knowledge-base/platform/users/staking/hypercore-linking.md): Link a staking account to a trading account on HyperCore to apply fee discounts.
+- [MEZO staking](https://docs.anchorage.com/knowledge-base/platform/users/staking/mezo.md): Lock BTC in the Mezo network.
+- [MON staking](https://docs.anchorage.com/knowledge-base/platform/users/staking/mon.md): Stake MON tokens and manage delegations.
+- [Staking overview](https://docs.anchorage.com/knowledge-base/platform/users/staking/overview.md): Earn staking rewards on supported assets.
+- [SOL staking](https://docs.anchorage.com/knowledge-base/platform/users/staking/sol.md): Stake Solana (SOL) and manage stake accounts.
+- [STABLE staking](https://docs.anchorage.com/knowledge-base/platform/users/staking/stable.md): Stablecoin staking rewards.
+- [STRK staking](https://docs.anchorage.com/knowledge-base/platform/users/staking/strk.md): Stake Starknet (STRK) tokens.
+- [SUI staking](https://docs.anchorage.com/knowledge-base/platform/users/staking/sui.md): Stake SUI tokens.
+- [TRX staking](https://docs.anchorage.com/knowledge-base/platform/users/staking/trx.md): Stake Tron (TRX) through freeze, vote, unstake, withdraw, and reward claim operations.
+- [Travel Rule](https://docs.anchorage.com/knowledge-base/platform/users/travel-rule.md): Complete Travel Rule requirements for deposits and withdrawals between VASPs.
+- [Unsupported assets and wrong networks](https://docs.anchorage.com/knowledge-base/platform/users/unsupported-assets.md): Understand why a deposit isn't showing and how recovery works for unsupported assets.
+- [USD banking](https://docs.anchorage.com/knowledge-base/platform/users/usd-banking.md): Make USD deposits, withdrawals, and earn interest.
+- [Use these docs with AI](https://docs.anchorage.com/knowledge-base/platform/users/using-ai.md): Ask AI about Anchorage Digital, open any page in your assistant, or give your tools the whole knowledge base.
+- [Vault policies](https://docs.anchorage.com/knowledge-base/platform/users/vault-policies.md): Customize quorum and sub-quorum settings for vault operations.
+- [Vaults, wallets & addresses](https://docs.anchorage.com/knowledge-base/platform/users/vaults-wallets.md): Manage vaults, create wallets, and generate deposit addresses.
+- [Deposit attributions](https://docs.anchorage.com/knowledge-base/platform/users/web-dashboard/deposit-attributions.md): Identify deposit sources and manage pending attribution requests.
+- [Developers](https://docs.anchorage.com/knowledge-base/platform/users/web-dashboard/developers.md): Access APIs, create permission groups, and generate API keys from the Anchorage Digital web dashboard.
+- [Operations](https://docs.anchorage.com/knowledge-base/platform/users/web-dashboard/operations.md): View, filter, and download pending and past account operations.
+- [Web dashboard](https://docs.anchorage.com/knowledge-base/platform/users/web-dashboard/overview.md): Manage vaults, assets, operations, and settings from the Anchorage Digital web dashboard.
+- [Reading balances](https://docs.anchorage.com/knowledge-base/platform/users/web-dashboard/reading-balances.md): Understand the dashboard total balance and the line-item balances in vault and wallet views.
+- [Reporting](https://docs.anchorage.com/knowledge-base/platform/users/web-dashboard/reporting.md): View statements, download balances and transaction reports, and manage tax documents and cost basis.
+- [Settings](https://docs.anchorage.com/knowledge-base/platform/users/web-dashboard/settings.md): Configure invoices, and document delivery from the web dashboard.
+- [Team & policies](https://docs.anchorage.com/knowledge-base/platform/users/web-dashboard/team-policies.md): Manage users, roles, and administrator and vault policies from the web dashboard.
+- [Trading](https://docs.anchorage.com/knowledge-base/platform/users/web-dashboard/trading.md): Request quotes and execute trades via the RFQ system in the Anchorage Digital web dashboard.
+- [Trusted destinations](https://docs.anchorage.com/knowledge-base/platform/users/web-dashboard/trusted-destinations.md): Add, manage, and remove trusted withdrawal destinations from the web dashboard.
+- [Trusted sources](https://docs.anchorage.com/knowledge-base/platform/users/web-dashboard/trusted-sources.md): Manage trusted deposit sources for automatic attribution.
+- [Vaults & wallets](https://docs.anchorage.com/knowledge-base/platform/users/web-dashboard/vaults-wallets.md): View portfolio balances, manage vaults and wallets, create deposit addresses, and withdraw assets.
+- [Web3 access](https://docs.anchorage.com/knowledge-base/platform/users/web3-access.md): Connect to Web3 apps via Chrome extension and WalletConnect, and initiate BUIDL redemptions.
+- [Interacting with smart contracts](https://docs.anchorage.com/knowledge-base/porto/advanced/smart-contracts.md): Advanced guide to using smart contracts and custom contract interactions from Porto.
+- [Stablecoin rewards and yield](https://docs.anchorage.com/knowledge-base/porto/advanced/stablecoin-rewards.md): Earn yield on stablecoin holdings within your Porto vaults.
+- [Stablecoin rewards rates](https://docs.anchorage.com/knowledge-base/porto/advanced/stablecoin-rewards-rates.md): Current yield rates for stablecoins in Porto vaults.
+- [Activity & transaction history](https://docs.anchorage.com/knowledge-base/porto/assets/activity-history.md): View and track all operations and transactions across your vaults.
+- [Adding multiple destinations](https://docs.anchorage.com/knowledge-base/porto/assets/adding-multiple-destinations.md): Set up and manage multiple trusted destinations for efficient withdrawals.
+- [Deposits](https://docs.anchorage.com/knowledge-base/porto/assets/deposits.md): Receive digital assets into your vaults and track deposit status.
+- [Receiving assets](https://docs.anchorage.com/knowledge-base/porto/assets/receiving-assets.md): Deposit assets into Porto vaults and request support for new assets.
+- [Sending assets](https://docs.anchorage.com/knowledge-base/porto/assets/sending-assets.md): Withdraw assets, use DApps, manage trusted destinations, and batch endorsements.
+- [Stablecoins](https://docs.anchorage.com/knowledge-base/porto/assets/stablecoins.md): Earn stablecoin rewards in Porto.
+- [Swaps](https://docs.anchorage.com/knowledge-base/porto/assets/swaps.md): Swap assets directly within Porto.
+- [Trusted counterparties](https://docs.anchorage.com/knowledge-base/porto/assets/trusted-counterparties.md): Manage trusted organizations and relationships for regular transfers.
+- [Trusted destinations](https://docs.anchorage.com/knowledge-base/porto/assets/trusted-destinations.md): Pre-approve wallet addresses for faster and safer withdrawals.
+- [Using DApps and smart contracts](https://docs.anchorage.com/knowledge-base/porto/assets/using-dapps.md): Connect your Porto wallet to decentralized applications and smart contracts.
+- [Withdrawals](https://docs.anchorage.com/knowledge-base/porto/assets/withdrawals.md): Send digital assets from your vaults to external addresses.
+- [Atlas network](https://docs.anchorage.com/knowledge-base/porto/atlas.md): Use Atlas settlement network with Porto.
+- [Changelog](https://docs.anchorage.com/knowledge-base/porto/changelog.md): Track updates, new features, and improvements to Porto.
+- [Vaults quick-start](https://docs.anchorage.com/knowledge-base/porto/getting-started/accounts-vaults.md): Quick guide to creating and managing vaults in Porto.
+- [Managing devices](https://docs.anchorage.com/knowledge-base/porto/getting-started/device-management.md): Control which devices can access your Porto account and configure security settings.
+- [How it works](https://docs.anchorage.com/knowledge-base/porto/getting-started/how-it-works.md): Understand Porto's key concepts and how institutional self-custody works.
+- [Joining an account](https://docs.anchorage.com/knowledge-base/porto/getting-started/joining-accounts.md): Accept invitations and join existing Porto organizations.
+- [Logging in & homepage](https://docs.anchorage.com/knowledge-base/porto/getting-started/login-homepage.md): Access Porto and navigate the home screen.
+- [Mobile app & browser extension](https://docs.anchorage.com/knowledge-base/porto/getting-started/mobile-app.md): Download the Porto iOS app and set up the browser extension.
+- [Setting up participants](https://docs.anchorage.com/knowledge-base/porto/getting-started/setup-participants.md): Add your team members to your organization for collaboration.
+- [Switching accounts](https://docs.anchorage.com/knowledge-base/porto/getting-started/switching-accounts.md): Switch between multiple Porto organizations.
+- [What is Porto?](https://docs.anchorage.com/knowledge-base/porto/overview.md): Porto by Anchorage Digital is an institutional self-custody wallet with full Web3 access.
+- [Adding rules to policies](https://docs.anchorage.com/knowledge-base/porto/policies/adding-rules.md): Create custom approval rules for vaults and admin policies.
+- [Adding subquorums](https://docs.anchorage.com/knowledge-base/porto/policies/adding-subquorums.md): Create nested approval structures with subquorums for complex approval flows.
+- [Admin policies](https://docs.anchorage.com/knowledge-base/porto/policies/admin-policies.md): Configure administrator policies and quorum settings.
+- [Batch endorsements](https://docs.anchorage.com/knowledge-base/porto/policies/batch-endorsements.md): Group multiple operations for combined approval and streamlined quorum requirements.
+- [Customizing admin policy](https://docs.anchorage.com/knowledge-base/porto/policies/customizing-admin-policy.md): Configure approval requirements for administrative and user management changes.
+- [Customizing vault policies](https://docs.anchorage.com/knowledge-base/porto/policies/customizing-vault-policies.md): Configure approval requirements and operational rules for individual vaults.
+- [Deleting rules](https://docs.anchorage.com/knowledge-base/porto/policies/deleting-rules.md): Remove policy rules that are no longer needed.
+- [Deleting subquorums](https://docs.anchorage.com/knowledge-base/porto/policies/deleting-subquorums.md): Remove subquorums that are no longer needed.
+- [Editing rules](https://docs.anchorage.com/knowledge-base/porto/policies/editing-rules.md): Modify existing policy rules and update approval requirements.
+- [Editing subquorums](https://docs.anchorage.com/knowledge-base/porto/policies/editing-subquorums.md): Modify subquorum membership and approval requirements.
+- [Managing rules and policies](https://docs.anchorage.com/knowledge-base/porto/policies/managing-rules.md): Overview of maintaining and monitoring your approval rules and policy structures.
+- [Required approvers & sub-quorums](https://docs.anchorage.com/knowledge-base/porto/policies/quorums.md): Configure required approvers and sub-quorums for vault and administrator policies.
+- [Encrypted backups](https://docs.anchorage.com/knowledge-base/porto/security/encrypted-backups.md): Enable encrypted backups of your Porto account data and recovery keys.
+- [Key download preferences](https://docs.anchorage.com/knowledge-base/porto/security/key-download-preferences.md): Control when and how you download private keys or recovery materials from Porto.
+- [Key management & recovery](https://docs.anchorage.com/knowledge-base/porto/security/key-management.md): Manage wallet recovery shares, encrypted backups, and decrypt wallet keys.
+- [Organization recovery document](https://docs.anchorage.com/knowledge-base/porto/security/org-recovery-document.md): Use your organization's recovery document to restore access to your account and vaults.
+- [Recovering access](https://docs.anchorage.com/knowledge-base/porto/security/recovering-access.md): Replace devices, reinstall the app, and recover organization access.
+- [COSMOS staking](https://docs.anchorage.com/knowledge-base/porto/staking/cosmos.md): Stake Cosmos ecosystem assets in Porto.
+- [ETH staking](https://docs.anchorage.com/knowledge-base/porto/staking/eth.md): Stake Ethereum (ETH) in Porto.
+- [SOL staking](https://docs.anchorage.com/knowledge-base/porto/staking/sol.md): Stake Solana (SOL) in Porto.
+- [SUI staking](https://docs.anchorage.com/knowledge-base/porto/staking/sui.md): Stake SUI tokens in Porto.
+- [Adding users with shared policies](https://docs.anchorage.com/knowledge-base/porto/users/adding-users-advanced.md): Invite new users and assign them to existing vault policies.
+- [Managing users](https://docs.anchorage.com/knowledge-base/porto/users/managing-users.md): Change permission levels and remove users from Porto.
+- [Permission levels](https://docs.anchorage.com/knowledge-base/porto/users/permission-levels.md): Understand role-based permissions and what each user role can do.
+- [Removing a user](https://docs.anchorage.com/knowledge-base/porto/users/remove-user.md): Remove team members from your organization or specific vaults.
+- [Use these docs with AI](https://docs.anchorage.com/knowledge-base/porto/using-ai.md): Ask AI about Porto, open any page in your assistant, or download the full knowledge base.
+- [Creating a vault with shared policies](https://docs.anchorage.com/knowledge-base/porto/vaults-wallets/creating-vault-advanced.md): Create a vault using existing shared policies or configure a new policy.
+- [Vaults, wallets & addresses](https://docs.anchorage.com/knowledge-base/porto/vaults-wallets/overview.md): Create and manage vaults, wallets, and deposit addresses in Porto.
+- [Vaults](https://docs.anchorage.com/knowledge-base/porto/vaults-wallets/vaults.md): Create and manage vaults to organize your digital assets.
+- [Wallet recovery](https://docs.anchorage.com/knowledge-base/porto/vaults-wallets/wallet-recovery.md): Recover access to your wallets if you lose your device or need to restore your account.
+- [Wallets](https://docs.anchorage.com/knowledge-base/porto/vaults-wallets/wallets.md): Understand how wallets work within vaults and manage multiple asset addresses.
+- [Web dashboard](https://docs.anchorage.com/knowledge-base/porto/vaults-wallets/web-dashboard.md): Manage vaults, wallets, trusted destinations, and account settings.
+
+## OpenAPI Specs
+
+- [v3](https://docs.anchorage.com/knowledge-base/openapi/v3.yaml)
+- [v2](https://docs.anchorage.com/knowledge-base/openapi/v2.yaml)
+- [openapi](https://docs.anchorage.com/knowledge-base/openapi.json)
