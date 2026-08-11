@@ -789,7 +789,7 @@ common:
   url: https://www.anchorage.com/privacy-policy
 # --- spec + reference artifacts ---
 - type: OpenAPI
-  url: openapi/anchorage-digital-openapi-original.json
+  url: openapi/_original/anchorage-digital-openapi-original.json
 - type: Overlay
   url: overlays/anchorage-digital-openapi-overlay.yaml
 - type: DataModel
