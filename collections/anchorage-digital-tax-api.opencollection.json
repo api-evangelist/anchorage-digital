@@ -1,0 +1,296 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Anchorage Digital API Reference Addresses Tax API",
+    "version": "2.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "Api-Access-Key",
+      "value": "{{Api-Access-Key}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Tax",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Transactions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.anchorage-staging.com/v2/tax/transactions/:subaccountId",
+            "params": [
+              {
+                "name": "subaccountId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the subaccount"
+              },
+              {
+                "name": "startDate",
+                "value": "",
+                "type": "query",
+                "description": "The start date (inclusive) in `YYYY-MM-DD` format. The earliest valid start date is `2017-01-01`. The last valid start date is the current date. Dates are always in UTC [RFC 3339](https://datatracker.ietf.org/doc/html/rfc3339#section-5.6) 'full-date'."
+              },
+              {
+                "name": "endDate",
+                "value": "",
+                "type": "query",
+                "description": "The end date (inclusive) in `YYYY-MM-DD` format. The latest valid end date is the current date. Dates are always in UTC [RFC 3339](https://datatracker.ietf.org/doc/html/rfc3339#section-5.6) 'full-date'."
+              }
+            ]
+          },
+          "docs": "Permissions required: **Subaccount**\n\n\nList tax transactions of a subaccount.\n"
+        },
+        {
+          "info": {
+            "name": "Update Transaction Cost Basis",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.anchorage-staging.com/v2/tax/transaction/:transactionId",
+            "params": [
+              {
+                "name": "transactionId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the transaction to update (Same as the one returned for Transactions in the Subaccounts API )"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Permissions required: **Subaccount**\n\n\nUpdate the cost basis for a deposit or withdraw transaction.\n"
+        },
+        {
+          "info": {
+            "name": "Add Tag to Transaction",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.anchorage-staging.com/v2/tax/transaction/:transactionId/tag",
+            "params": [
+              {
+                "name": "transactionId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the transaction to tag (Same as the one returned for Transactions in the Subaccounts API )"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Permissions required: **Subaccount**\n\n\nTag a prior transaction for tax purposes.\n\n** Under development **\n"
+        },
+        {
+          "info": {
+            "name": "Remove Tag from Transaction",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.anchorage-staging.com/v2/tax/transaction/:transactionId/tag",
+            "params": [
+              {
+                "name": "transactionId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the transaction to tag (Same as the one returned for Transactions in the Subaccounts API )"
+              },
+              {
+                "name": "accountId",
+                "value": "",
+                "type": "query",
+                "description": "The subaccount for which the transaction happened."
+              }
+            ]
+          },
+          "docs": "Permissions required: **Subaccount**\n\n\nRemove tax tag for a prior transaction.\n\n** Under development **\n"
+        },
+        {
+          "info": {
+            "name": "List of the Inventory for an asset",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.anchorage-staging.com/v2/tax/inventory/:subaccountId/:assetTypeId",
+            "params": [
+              {
+                "name": "subaccountId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the subaccount"
+              },
+              {
+                "name": "assetTypeId",
+                "value": "",
+                "type": "path",
+                "description": "Asset type identifier."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Number of results"
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "Offset of the results to start"
+              }
+            ]
+          },
+          "docs": "Permissions required: **Subaccount**\n\n\nList user's inventory for an asset.\n"
+        },
+        {
+          "info": {
+            "name": "List summary of Inventory",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.anchorage-staging.com/v2/tax/inventory/summary/:subaccountId",
+            "params": [
+              {
+                "name": "subaccountId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the subaccount"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Number of results"
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "Offset of the results to start"
+              }
+            ]
+          },
+          "docs": "Permissions required: **Subaccount**\n\n\nList user's inventory summary for all assets.\n"
+        },
+        {
+          "info": {
+            "name": "List Gains Cost Basis",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.anchorage-staging.com/v2/tax/gains/costbasis/:subaccountId",
+            "params": [
+              {
+                "name": "subaccountId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the subaccount"
+              },
+              {
+                "name": "startDateTime",
+                "value": "",
+                "type": "query",
+                "description": "ISO-8601 formatted date as a filter start date."
+              },
+              {
+                "name": "endDateTime",
+                "value": "",
+                "type": "query",
+                "description": "ISO-8601 formatted date as a filter end date."
+              }
+            ]
+          },
+          "docs": "Permissions required: **Subaccount**\n\n\n\nList subaccount's breakdown of combined cost basis, proceeds and gains/losses\n"
+        },
+        {
+          "info": {
+            "name": "List Gains",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.anchorage-staging.com/v2/tax/gains/summary/:subaccountId",
+            "params": [
+              {
+                "name": "subaccountId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the subaccount"
+              },
+              {
+                "name": "startDateTime",
+                "value": "",
+                "type": "query",
+                "description": "ISO-8601 formatted date as a filter start date."
+              },
+              {
+                "name": "endDateTime",
+                "value": "",
+                "type": "query",
+                "description": "ISO-8601 formatted date as a filter end date."
+              }
+            ]
+          },
+          "docs": "Permissions required: **Subaccount**\n\n\n\nList subaccount's gains for a period breakdown to short term, long term and total\n"
+        },
+        {
+          "info": {
+            "name": "Get Subaccount Tax Forms",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.anchorage-staging.com/v2/tax/subaccounts/:subaccountId/forms",
+            "params": [
+              {
+                "name": "subaccountId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the subaccount"
+              }
+            ]
+          },
+          "docs": "Permissions required: **Subaccount**\n\n\nGet subaccount's generated tax forms\n"
+        },
+        {
+          "info": {
+            "name": "Get Program Customer Tax Forms",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.anchorage-staging.com/v2/tax/clients/:customerId/forms",
+            "params": [
+              {
+                "name": "customerId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the customer"
+              }
+            ]
+          },
+          "docs": "Permissions required: **Subaccount**\n\n\nGet a program customer's generated tax forms\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

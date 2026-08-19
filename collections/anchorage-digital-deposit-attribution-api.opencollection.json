@@ -1,0 +1,153 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Anchorage Digital API Reference Addresses Deposit Attribution API",
+    "version": "2.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "Api-Access-Key",
+      "value": "{{Api-Access-Key}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Deposit Attribution",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List deposit attributions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.anchorage-staging.com/v2/deposit-attributions/attributions",
+            "params": [
+              {
+                "name": "afterId",
+                "value": "",
+                "type": "query",
+                "description": "When paginating this is used to provide the starting point for the page to fetch (retrieved from the previous response body)."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of results to return per query."
+              },
+              {
+                "name": "status",
+                "value": "",
+                "type": "query",
+                "description": "Filter by pending or attributed deposits."
+              },
+              {
+                "name": "startDateTime",
+                "value": "",
+                "type": "query",
+                "description": "The start date-time (exclusive) of the deposit attribution process in UTC following [RFC 3339](https://datatracker.ietf.org/doc/html/rfc3339#section-5.6) 'date-time' format. A valid format example is `2021-01-01T00:00:00.000000Z`."
+              },
+              {
+                "name": "endDateTime",
+                "value": "",
+                "type": "query",
+                "description": "The end date-time (exclusive) to consider the start of the deposit attribution process in UTC following [RFC 3339](https://datatracker.ietf.org/doc/html/rfc3339#section-5.6) 'date-time' format. A valid format example is `2021-01-01T00:00:00.000000Z`."
+              },
+              {
+                "name": "attributedAtStartDateTime",
+                "value": "",
+                "type": "query",
+                "description": "The start date-time (exclusive) to consider the attribution date of the deposit in UTC following [RFC 3339](https://datatracker.ietf.org/doc/html/rfc3339#section-5.6) 'date-time' format. A valid format example is `2021-01-01T00:00:00.000000Z`."
+              },
+              {
+                "name": "attributedAtEndDateTime",
+                "value": "",
+                "type": "query",
+                "description": "The end date-time (exclusive) to consider the attribution date of the deposit in UTC following [RFC 3339](https://datatracker.ietf.org/doc/html/rfc3339#section-5.6) 'date-time' format. A valid format example is `2021-01-01T00:00:00.000000Z`."
+              },
+              {
+                "name": "subaccountIds",
+                "value": "",
+                "type": "query",
+                "description": "Filter results to deposits associated with the specified subaccounts. Multiple values may be provided."
+              }
+            ]
+          },
+          "docs": "Permissions required: **Read Deposit Attribution** or **Deposit Attribution**.\n\n\nReturns all Deposit Attributions for an Organization based on the provided query parameters.\n\n\nDefault sorting will be ascending order by createdAt.\n\n"
+        },
+        {
+          "info": {
+            "name": "Attribute a deposit",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.anchorage-staging.com/v2/deposit-attributions/:depositTransactionId",
+            "headers": [
+              {
+                "name": "Api-Signature",
+                "value": ""
+              },
+              {
+                "name": "Api-Timestamp",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "depositTransactionId",
+                "value": "",
+                "type": "path",
+                "description": "The transactionId where the transactionType is `DEPOSIT`."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Permissions required: **Deposit Attribution**.\n\n\nAttribute a deposit by providing information about the originator.\n\n\nOnly attributions in `PENDING` status can be attributed.\n\n\nOnce the attribution is successfully performed the attribution status moves from `PENDING` to `UNDER_REVIEW`.\n\n\nFor attributions performed via API the attributionType will always be `CLIENT_API`.\n\n"
+        },
+        {
+          "info": {
+            "name": "Attribute a deposit as spam",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.anchorage-staging.com/v2/deposit-attributions/:depositTransactionId/spam",
+            "headers": [
+              {
+                "name": "Api-Signature",
+                "value": ""
+              },
+              {
+                "name": "Api-Timestamp",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "depositTransactionId",
+                "value": "",
+                "type": "path",
+                "description": "The transactionId where the transactionType is `DEPOSIT`."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Permissions required: **Deposit Attribution**.\n\n\nAttribute a deposit as spam.\n\n\nOnly attributions in `PENDING` status can be attributed.\n\n\nOnce the attribution is successfully performed the attribution status moves from `PENDING` to `ATTRIBUTED`.\n\n\nFor any spam attribution performed via API, the attributionType will automatically be set to `SPAM` and the deposit's funds will cease to be available.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

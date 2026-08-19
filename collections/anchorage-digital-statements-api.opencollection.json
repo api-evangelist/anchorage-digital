@@ -1,0 +1,151 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Anchorage Digital API Reference Addresses Statements API",
+    "version": "2.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "Api-Access-Key",
+      "value": "{{Api-Access-Key}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Statements",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List statement types",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.anchorage-staging.com/v2/statement-types",
+            "params": [
+              {
+                "name": "afterId",
+                "value": "",
+                "type": "query",
+                "description": "When paginating this is used to provide the starting point for the page to fetch (retrieved from the previous response body)"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of results to return per query"
+              }
+            ]
+          },
+          "docs": "Permissions required: **Read Statement**\n\n\nList the available statement types."
+        },
+        {
+          "info": {
+            "name": "List statements",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.anchorage-staging.com/v2/statements",
+            "params": [
+              {
+                "name": "afterId",
+                "value": "",
+                "type": "query",
+                "description": "When paginating this is used to provide the starting point for the page to fetch (retrieved from the previous response body)"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of results to return per query"
+              },
+              {
+                "name": "ids",
+                "value": "3486b413-93d3-4447-afce-2b9c9dc34a32,8de0fc33-7443-4dcf-bbf1-4ca8d0e0509f",
+                "type": "query"
+              },
+              {
+                "name": "typeIds",
+                "value": "058da362-31a7-4e2b-ae3e-77b095389a5f,b00e2483-57a1-4db4-8ea1-b91223a76a20",
+                "type": "query"
+              },
+              {
+                "name": "customerIds",
+                "value": "1ac10949bbbf483e8df3c0f8ef97146bc9ce6f5890df40fa8777ea63dc932f7b,fbcdb420fca4439d919089e60d59cd5b12b692d215694681b636bffb6cb1618c",
+                "type": "query"
+              },
+              {
+                "name": "createdAfter",
+                "value": "2025-01-01T00:00:00.000Z",
+                "type": "query"
+              },
+              {
+                "name": "createdBefore",
+                "value": "2025-12-31T23:59:59.999Z",
+                "type": "query"
+              },
+              {
+                "name": "correctedAfter",
+                "value": "2025-01-01T00:00:00.000Z",
+                "type": "query",
+                "description": "Filter for statements corrected at or after this time"
+              },
+              {
+                "name": "correctedBefore",
+                "value": "2025-12-31T23:59:59.999Z",
+                "type": "query",
+                "description": "Filter for statements corrected at or before this time"
+              }
+            ]
+          },
+          "docs": "Permissions required: **Read Statement**\n\n\nList the available statements."
+        },
+        {
+          "info": {
+            "name": "Get statement",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.anchorage-staging.com/v2/statements/:statementId",
+            "params": [
+              {
+                "name": "statementId",
+                "value": "3486b413-93d3-4447-afce-2b9c9dc34a32",
+                "type": "path",
+                "description": "Unique identifier for the statement"
+              }
+            ]
+          },
+          "docs": "Permissions required: **Read Statement**\n\n\nGet the details for a statement."
+        },
+        {
+          "info": {
+            "name": "Download a statement",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.anchorage-staging.com/v2/statements/:statementId/download",
+            "params": [
+              {
+                "name": "statementId",
+                "value": "3486b413-93d3-4447-afce-2b9c9dc34a32",
+                "type": "path",
+                "description": "Unique identifier for the statement"
+              }
+            ]
+          },
+          "docs": "Permissions required: **Read Statement**\n\n\nDownload a statement as a PDF file.\n\nThis endpoint streams the PDF file directly. The response body contains the binary content of the PDF file."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

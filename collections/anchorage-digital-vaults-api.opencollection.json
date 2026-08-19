@@ -1,0 +1,70 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Anchorage Digital API Reference Addresses Vaults API",
+    "version": "2.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "Api-Access-Key",
+      "value": "{{Api-Access-Key}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Vaults",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List vaults",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.anchorage-staging.com/v2/vaults",
+            "params": [
+              {
+                "name": "afterId",
+                "value": "",
+                "type": "query",
+                "description": "When paginating this is used to provide the starting point for the page to fetch (retrieved from the previous response body)"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of results to return per query"
+              }
+            ]
+          },
+          "docs": "Permissions required: **Read vault activity**\n\n\n\n\nList vault metadata including name, ID, description, and assets.\n\n\nNOTE: price and USD value information is recent but does not reflect real-time data.\n\n"
+        },
+        {
+          "info": {
+            "name": "Get vault by ID",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.anchorage-staging.com/v2/vaults/:vaultId",
+            "params": [
+              {
+                "name": "vaultId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the vault to get details for"
+              }
+            ]
+          },
+          "docs": "Permissions required: **Read vault activity**\n\n\n\nGet vault by ID\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

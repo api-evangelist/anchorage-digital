@@ -1,0 +1,82 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Anchorage Digital API Reference Addresses API",
+    "version": "2.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "Api-Access-Key",
+      "value": "{{Api-Access-Key}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Addresses",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List all addresses for an asset",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.anchorage-staging.com/v2/vaults/:vaultId/addresses",
+            "params": [
+              {
+                "name": "vaultId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the vault containing the asset type"
+              },
+              {
+                "name": "assetType",
+                "value": "",
+                "type": "query",
+                "description": "The asset type to display addresses for"
+              },
+              {
+                "name": "afterId",
+                "value": "",
+                "type": "query",
+                "description": "When paginating this is used to provide the starting point for the page to fetch (retrieved from the previous response body)"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of results to return per query"
+              }
+            ]
+          },
+          "docs": "Permissions required: **Read vault activity** or **Create address**\n\n\n\nGet all addresses for the asset type within the specified `vaultId`.\n"
+        },
+        {
+          "info": {
+            "name": "Provision a deposit address for a wallet",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.anchorage-staging.com/v2/wallets/:walletId/addresses",
+            "params": [
+              {
+                "name": "walletId",
+                "value": "",
+                "type": "path",
+                "description": "An ID uniquely identifying an Anchorage Digital wallet"
+              }
+            ]
+          },
+          "docs": "Permissions required: **Create address**\n\n\n\n\nThis endpoint allows you to request an asynchronous provision of a signed deposit address for a given wallet. For UTXO-based wallets a new address will always be provisioned upon request. For account-based wallets only one address may be provisioned per wallet and subsequent attempts will return the previously provisioned address.\n\n\nNewly requested addresses may not be available for several minutes once requested.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

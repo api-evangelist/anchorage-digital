@@ -1,0 +1,580 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Anchorage Digital API Reference Addresses Subaccounts API",
+    "version": "2.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "Api-Access-Key",
+      "value": "{{Api-Access-Key}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Subaccounts",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Return wallets linked to a subaccount",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.anchorage-staging.com/v2/subaccounts/accounts/:subaccountId/wallets",
+            "params": [
+              {
+                "name": "networkIds",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "subaccountId",
+                "value": "",
+                "type": "path",
+                "description": "Unique Identifier for the subaccount"
+              }
+            ]
+          },
+          "docs": "Permissions required: **Subaccount** or **Read Subaccount**\n\nReturn wallets linked to a subaccount\n"
+        },
+        {
+          "info": {
+            "name": "Return bank information for a subaccount",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.anchorage-staging.com/v2/subaccounts/accounts/:subaccountId/bank-info",
+            "params": [
+              {
+                "name": "subaccountId",
+                "value": "",
+                "type": "path",
+                "description": "Unique Identifier for the subaccount"
+              }
+            ]
+          },
+          "docs": "Permissions required: **Subaccount** or **Read Subaccount**\n\nReturn bank information for a subaccount\n"
+        },
+        {
+          "info": {
+            "name": "List subaccounts",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.anchorage-staging.com/v2/subaccounts/customers/:customerId/accounts",
+            "params": [
+              {
+                "name": "customerId",
+                "value": "",
+                "type": "path",
+                "description": "Unique Identifier for the customer"
+              },
+              {
+                "name": "endDate",
+                "value": "",
+                "type": "query",
+                "description": "The end date (inclusive) in `YYYY-MM-DD` format. The latest valid end date is the current date. Dates are always in UTC [RFC 3339](https://datatracker.ietf.org/doc/html/rfc3339#section-5.6) 'full-date'."
+              },
+              {
+                "name": "afterId",
+                "value": "",
+                "type": "query",
+                "description": "When paginating this is used to provide the starting point for the page to fetch (retrieved from the previous response body)"
+              },
+              {
+                "name": "statuses",
+                "value": "",
+                "type": "query",
+                "description": "Filter subaccounts by status"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of results to return per query"
+              }
+            ]
+          },
+          "docs": "Permissions required: **Subaccount** or **Read Subaccount**\n\nReturn all subaccounts associated to a customerId\n"
+        },
+        {
+          "info": {
+            "name": "Create a new subaccount for a given program customer",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.anchorage-staging.com/v2/subaccounts/customers/:customerId/accounts",
+            "params": [
+              {
+                "name": "customerId",
+                "value": "",
+                "type": "path",
+                "description": "Unique Identifier for the program customer"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Permissions required: **Subaccount**\n\nOpen a new subaccount for the program customer\n\nDEPRECATED, please use /onboarding/accounts"
+        },
+        {
+          "info": {
+            "name": "List all subaccounts",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.anchorage-staging.com/v2/subaccounts/customers/accounts",
+            "params": [
+              {
+                "name": "subaccountIds",
+                "value": "",
+                "type": "query",
+                "description": "Array of Unique Identifiers for the subaccount"
+              },
+              {
+                "name": "externalIds",
+                "value": "",
+                "type": "query",
+                "description": "Array of Unique Identifiers within an external system"
+              },
+              {
+                "name": "endDate",
+                "value": "",
+                "type": "query",
+                "description": "The end date (inclusive) in `YYYY-MM-DD` format. The latest valid end date is the current date. Dates are always in UTC [RFC 3339](https://datatracker.ietf.org/doc/html/rfc3339#section-5.6) 'full-date'."
+              },
+              {
+                "name": "afterId",
+                "value": "",
+                "type": "query",
+                "description": "When paginating this is used to provide the starting point for the page to fetch (retrieved from the previous response body)"
+              },
+              {
+                "name": "statuses",
+                "value": "",
+                "type": "query",
+                "description": "Filter subaccounts by status"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of results to return per query"
+              }
+            ]
+          },
+          "docs": "Permissions required: **Subaccount**\n\nReturn all subaccounts associated for an organization\n"
+        },
+        {
+          "info": {
+            "name": "Update an existing subaccount",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.anchorage-staging.com/v2/subaccounts/accounts/:subaccountId",
+            "params": [
+              {
+                "name": "subaccountId",
+                "value": "",
+                "type": "path",
+                "description": "Unique Identifier for the subaccount"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Permissions required: **Subaccount**\n\nUpdate a subaccount\n"
+        },
+        {
+          "info": {
+            "name": "List all transactions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.anchorage-staging.com/v2/subaccounts/transactions",
+            "params": [
+              {
+                "name": "subaccountId",
+                "value": "",
+                "type": "query",
+                "description": "Unique Identifier for the Subaccount"
+              },
+              {
+                "name": "afterId",
+                "value": "",
+                "type": "query",
+                "description": "When paginating this is used to provide the starting point for the page to fetch (retrieved from the previous response body)"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of results to return per query"
+              },
+              {
+                "name": "statuses",
+                "value": "",
+                "type": "query",
+                "description": "One or more transaction statuses to filter results"
+              },
+              {
+                "name": "types",
+                "value": "",
+                "type": "query",
+                "description": "One or more transaction types to filter results"
+              },
+              {
+                "name": "startDate",
+                "value": "",
+                "type": "query",
+                "description": "The start date (inclusive) in `YYYY-MM-DD` format. The earliest valid start date is '2017-01-01`. Dates are always in UTC [RFC 3339](https://datatracker.ietf.org/doc/html/rfc3339#section-5.6) 'full-date'."
+              },
+              {
+                "name": "endDate",
+                "value": "",
+                "type": "query",
+                "description": "The end date (inclusive) in `YYYY-MM-DD` format. The earliest valid start date is '2017-01-01`. Dates are always in UTC [RFC 3339](https://datatracker.ietf.org/doc/html/rfc3339#section-5.6) 'full-date'."
+              }
+            ]
+          },
+          "docs": "Permissions required: **Subaccount** or **Read Subaccount**\n\n\nReturn all the transactions, sorted by the creation date, the client has access to\n"
+        },
+        {
+          "info": {
+            "name": "Create new transactions",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.anchorage-staging.com/v2/subaccounts/transactions",
+            "headers": [
+              {
+                "name": "Api-Signature",
+                "value": ""
+              },
+              {
+                "name": "Api-Timestamp",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Permissions required: **Subaccount**\n\n\nCreate new transactions between subaccounts of the same Program Customer. This is a transactional operation, all transactions will be created successfully or none will.\n"
+        },
+        {
+          "info": {
+            "name": "Get list of transactions filter by ID",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.anchorage-staging.com/v2/subaccounts/transactions/:transactionsIds",
+            "params": [
+              {
+                "name": "transactionsIds",
+                "value": "",
+                "type": "path",
+                "description": "Unique Identifiers for the transaction. Invalid transactionIds will be ignored."
+              },
+              {
+                "name": "startDate",
+                "value": "",
+                "type": "query",
+                "description": "The start date (inclusive) in `YYYY-MM-DD` format. The earliest valid start date is '2017-01-01`. Dates are always in UTC [RFC 3339](https://datatracker.ietf.org/doc/html/rfc3339#section-5.6) 'full-date'."
+              },
+              {
+                "name": "endDate",
+                "value": "",
+                "type": "query",
+                "description": "The end date (inclusive) in `YYYY-MM-DD` format. The latest valid end date is the current date. Dates are always in UTC [RFC 3339](https://datatracker.ietf.org/doc/html/rfc3339#section-5.6) 'full-date'."
+              },
+              {
+                "name": "afterId",
+                "value": "",
+                "type": "query",
+                "description": "When paginating this is used to provide the starting point for the page to fetch (retrieved from the previous response body)"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of results to return per query"
+              }
+            ]
+          },
+          "docs": "Permissions required: **Subaccount** or **Read Subaccount**\n\n\nReturn the requested transactions, sorted by the creation date, the client has access too\n"
+        },
+        {
+          "info": {
+            "name": "Fetches a set of filtered transactions allocations",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.anchorage-staging.com/v2/subaccounts/transactions/allocations",
+            "params": [
+              {
+                "name": "subaccountIds",
+                "value": "",
+                "type": "query",
+                "description": "Array of Unique Identifiers for the subaccount"
+              },
+              {
+                "name": "startDate",
+                "value": "",
+                "type": "query",
+                "description": "The start date (inclusive) in `YYYY-MM-DD` format. The earliest valid start date is '2017-01-01`. Dates are always in UTC [RFC 3339](https://datatracker.ietf.org/doc/html/rfc3339#section-5.6) 'full-date'."
+              },
+              {
+                "name": "endDate",
+                "value": "",
+                "type": "query",
+                "description": "The end date (inclusive) in `YYYY-MM-DD` format. The latest valid end date is the current date. Dates are always in UTC [RFC 3339](https://datatracker.ietf.org/doc/html/rfc3339#section-5.6) 'full-date'."
+              },
+              {
+                "name": "transactionsTypes",
+                "value": "",
+                "type": "query",
+                "description": "Filters by DEPOSITs, WITHDRAWALs or both (default)"
+              },
+              {
+                "name": "afterId",
+                "value": "",
+                "type": "query",
+                "description": "When paginating this is used to provide the starting point for the page to fetch (retrieved from the previous response body)"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of results to return per query"
+              }
+            ]
+          },
+          "docs": "Permissions required: **Subaccount** or **Read Subaccount**\n\n\nRetrieves a filtered set of transactions that are connected to funding allocations.\n"
+        },
+        {
+          "info": {
+            "name": "Create new allocations",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.anchorage-staging.com/v2/subaccounts/transactions/allocations",
+            "headers": [
+              {
+                "name": "Api-Signature",
+                "value": ""
+              },
+              {
+                "name": "Api-Timestamp",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Permissions required: **Subaccount**\n\n\nCreate new allocation of pre-funded values between the Funding and Program Customers' subaccounts. This is a transactional operation, all transactions will be created successfully or none will.\n"
+        },
+        {
+          "info": {
+            "name": "Fetches a set of Withdrawals Requests for a subaccount",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.anchorage-staging.com/v2/subaccounts/:subaccountId/fiat/withdrawals",
+            "params": [
+              {
+                "name": "subaccountId",
+                "value": "",
+                "type": "path",
+                "description": "Unique Identifier for the subaccount"
+              },
+              {
+                "name": "withdrawalStatuses",
+                "value": "",
+                "type": "query",
+                "description": "One or more withdrawal statuses to filter results. If no value is passed, it filter by all statuses."
+              },
+              {
+                "name": "startDate",
+                "value": "",
+                "type": "query",
+                "description": "The start date (inclusive) in `YYYY-MM-DD` format. The earliest valid start date is '2017-01-01`. Dates are always in UTC [RFC 3339](https://datatracker.ietf.org/doc/html/rfc3339#section-5.6) 'full-date'."
+              },
+              {
+                "name": "endDate",
+                "value": "",
+                "type": "query",
+                "description": "The end date (inclusive) in `YYYY-MM-DD` format. The latest valid end date is the current date. Dates are always in UTC [RFC 3339](https://datatracker.ietf.org/doc/html/rfc3339#section-5.6) 'full-date'."
+              },
+              {
+                "name": "afterId",
+                "value": "",
+                "type": "query",
+                "description": "When paginating this is used to provide the starting point for the page to fetch (retrieved from the previous response body)"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of results to return per query"
+              }
+            ]
+          },
+          "docs": "Permissions required: **Subaccount** or **Read Subaccount**\n\n\nRetrieves a filtered set of Withdrawal Requests within a Subaccount (FIAT only for now)."
+        },
+        {
+          "info": {
+            "name": "Create a USD Withdrawal Request for a subaccount",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.anchorage-staging.com/v2/subaccounts/:subaccountId/fiat/withdrawals",
+            "headers": [
+              {
+                "name": "Api-Signature",
+                "value": ""
+              },
+              {
+                "name": "Api-Timestamp",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "subaccountId",
+                "value": "",
+                "type": "path",
+                "description": "Unique Identifier for the subaccount"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Permissions required: **Subaccount**\n\n\nCreates a USD Withdrawal Request for an Asset within a Subaccount (FIAT only for now)\n\nThis will trigger an e-mail to be sent to the program customer to authorize the withdrawal."
+        },
+        {
+          "info": {
+            "name": "Get USD Withdrawal Request for a subaccount",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.anchorage-staging.com/v2/subaccounts/:subaccountId/fiat/withdrawals/:transactionId",
+            "params": [
+              {
+                "name": "subaccountId",
+                "value": "",
+                "type": "path",
+                "description": "Unique Identifier for the subaccount"
+              },
+              {
+                "name": "transactionId",
+                "value": "",
+                "type": "path",
+                "description": "Unique Identifier for the Withdrawal Transaction"
+              }
+            ]
+          },
+          "docs": "Permissions required: **Subaccount**\nGet a USD Withdrawal Request\n"
+        },
+        {
+          "info": {
+            "name": "Cancels a Withdrawal Request for a subaccount",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.anchorage-staging.com/v2/subaccounts/:subaccountId/fiat/withdrawals/:transactionId",
+            "headers": [
+              {
+                "name": "Api-Signature",
+                "value": ""
+              },
+              {
+                "name": "Api-Timestamp",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "subaccountId",
+                "value": "",
+                "type": "path",
+                "description": "Unique Identifier for the subaccount"
+              },
+              {
+                "name": "transactionId",
+                "value": "",
+                "type": "path",
+                "description": "Unique Identifier for the Withdrawal Transaction"
+              }
+            ]
+          },
+          "docs": "Permissions required: **Subaccount**\nCancels a Withdrawal Request\n"
+        },
+        {
+          "info": {
+            "name": "Create Manual Billing Charge",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.anchorage-staging.com/v2/subaccounts/billing/charges",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Permissions required: **Subaccount**\n\nCreate Manual Billing Charge"
+        },
+        {
+          "info": {
+            "name": "Cancel Manual Billing Charge",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.anchorage-staging.com/v2/subaccounts/billing/charges/:chargeId",
+            "params": [
+              {
+                "name": "chargeId",
+                "value": "",
+                "type": "path",
+                "description": "The id for your billing charge"
+              }
+            ]
+          },
+          "docs": "Permissions required: **Subaccount**\n\nCancel Manual Billing Charge"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,160 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Anchorage Digital API Reference Addresses Transfers API",
+    "version": "2.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "Api-Access-Key",
+      "value": "{{Api-Access-Key}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Transfers",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List transfers",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.anchorage-staging.com/v2/transfers",
+            "params": [
+              {
+                "name": "vaultId",
+                "value": "",
+                "type": "query",
+                "description": "The ID of a vault. If provided, only transfers originating from this vault will be returned."
+              },
+              {
+                "name": "walletId",
+                "value": "",
+                "type": "query",
+                "description": "The ID of a wallet. If provided, only transfers originating from this wallet will be returned."
+              },
+              {
+                "name": "transferIds",
+                "value": "",
+                "type": "query",
+                "description": "A list of `transferIds` to return. Invalid `transferIds` will be ignored."
+              },
+              {
+                "name": "startDate",
+                "value": "",
+                "type": "query",
+                "description": "The start date (inclusive) in `YYYY-MM-DD` format. The earliest valid start date is '2017-01-01`. Dates are always in UTC [RFC 3339](https://datatracker.ietf.org/doc/html/rfc3339#section-5.6) 'full-date'."
+              },
+              {
+                "name": "endDate",
+                "value": "",
+                "type": "query",
+                "description": "The end date (inclusive) in `YYYY-MM-DD` format. The latest valid end date is the current date. Dates are always in UTC [RFC 3339](https://datatracker.ietf.org/doc/html/rfc3339#section-5.6) 'full-date'."
+              },
+              {
+                "name": "afterId",
+                "value": "",
+                "type": "query",
+                "description": "When paginating this is used to provide the starting point for the page to fetch (retrieved from the previous response body)"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of results to return per query"
+              },
+              {
+                "name": "statuses",
+                "value": "",
+                "type": "query",
+                "description": "One or more transfer statuses to filter results"
+              }
+            ]
+          },
+          "docs": "Permissions required: **Transfer funds**\n\n\n\n\nList all transfers created by your API key.\n\n\n\n**Filters**\n\n\n\nYou may optionally supply the following filters:\n\n\n  - Set a date range by providing the `startDate` and/or `endDate` query parameters. If the date parameters are omitted, all transfers will be returned.\n  - Specify a specific vault to return transfers for by specifying the `vaultId` parameter. If the `vaultId` parameter is omitted, transfers originating from all vaults will be returned. Pr"
+        },
+        {
+          "info": {
+            "name": "Create a transfer request",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.anchorage-staging.com/v2/transfers",
+            "headers": [
+              {
+                "name": "Api-Signature",
+                "value": ""
+              },
+              {
+                "name": "Api-Timestamp",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Permissions required: **Transfer funds**\n\n\n\n\n#### Identify the sending resource and asset\n\n\nTo initiate a transfer between resources, you must identify which resource you'd like to transfer funds from and the asset type to transfer. Provide a `source` and `assetType`.\n\n\n#### Identify the receiving resource\n\n\nChoose a resource to receive the funds as the `destination`. This resource may belong to your organization or another organization that also custodies with Anchorage Digital, or it may also "
+        },
+        {
+          "info": {
+            "name": "Get transfer by ID",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.anchorage-staging.com/v2/transfers/:transferId",
+            "params": [
+              {
+                "name": "transferId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the transfer to get details for"
+              }
+            ]
+          },
+          "docs": "Permissions required: **Transfer funds**\n\n\n\n\nGet transfer by ID, for transfers created by your API key.\n\n\nNOTE: price and USD value information is recent but does not reflect real-time data.\n\n"
+        },
+        {
+          "info": {
+            "name": "Cancel a transfer request",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.anchorage-staging.com/v2/transfers/:transferId",
+            "headers": [
+              {
+                "name": "Api-Signature",
+                "value": ""
+              },
+              {
+                "name": "Api-Timestamp",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "transferId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the transfer to cancel"
+              }
+            ]
+          },
+          "docs": "Permissions required: **Transfer funds**\n\n\n\n\nCancel a transfer request. Transfer requests in the `QUEUED` state can always be cancelled. Transfer requests in the `IN_PROGRESS` state can sometimes be cancelled if the request has not been broadcast on the blockchain. Trying to cancel a request that cannot be cancelled will return a `409 Conflict` error code. Transfers can only be canceled by the API key responsible for creating that transfer (either created directly via CreateTransfer or indirectl"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

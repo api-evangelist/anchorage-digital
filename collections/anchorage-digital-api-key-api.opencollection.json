@@ -1,0 +1,37 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Anchorage Digital API Reference Addresses API Key API",
+    "version": "2.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "Api-Access-Key",
+      "value": "{{Api-Access-Key}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "API Key",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List information for current API key",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.anchorage-staging.com/v2/apikey"
+          },
+          "docs": "Permissions required: none\n\n\nGet the user information for your API key.\n\nAs with any endpoint, a signature included in the request will be validated. This can be used to confirm the associated signing key as well information about the current API key.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

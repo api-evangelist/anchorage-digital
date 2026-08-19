@@ -1,0 +1,153 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Anchorage Digital API Reference Addresses Trusted Destinations API",
+    "version": "2.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "Api-Access-Key",
+      "value": "{{Api-Access-Key}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Trusted Destinations",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List trusted destinations",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.anchorage-staging.com/v2/trusted_destinations",
+            "params": [
+              {
+                "name": "afterId",
+                "value": "",
+                "type": "query",
+                "description": "When paginating this is used to provide the starting point for the page to fetch (retrieved from the previous response body)"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of results to return per query"
+              },
+              {
+                "name": "ownerType",
+                "value": "CUSTOMER",
+                "type": "query",
+                "description": "The type of the owner (currently only CUSTOMER is supported)"
+              },
+              {
+                "name": "ownerId",
+                "value": "",
+                "type": "query",
+                "description": "The ID of the owner (for CUSTOMER type, this is the customerId)"
+              },
+              {
+                "name": "assetTypeId",
+                "value": "",
+                "type": "query",
+                "description": "Asset type identifier. This will return Trusted Destinations with a matching assetTypeId, as well as Trusted Destinations with a matching networkId if network level is true."
+              }
+            ]
+          },
+          "docs": "Permissions required: **Read vault activity**\n\n\nList trusted destinations"
+        },
+        {
+          "info": {
+            "name": "Create new Trusted Destinations",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.anchorage-staging.com/v2/trusted_destinations",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Permissions required: **Manage Trusted Destinations**\n\n\nCreate new Trusted Destinations"
+        },
+        {
+          "info": {
+            "name": "Check status of Trusted Destinations",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.anchorage-staging.com/v2/trusted_destinations/:creationRequestId/status",
+            "params": [
+              {
+                "name": "creationRequestId",
+                "value": "",
+                "type": "path",
+                "description": "Idempotent ID provided in the Create Trusted Destination request"
+              }
+            ]
+          },
+          "docs": "Permissions required: **Read vault activity**\n\n\nCheck status of Trusted Destinations"
+        },
+        {
+          "info": {
+            "name": "Cancel Trusted Destination creation",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.anchorage-staging.com/v2/trusted_destinations/:creationRequestId/cancel",
+            "params": [
+              {
+                "name": "creationRequestId",
+                "value": "",
+                "type": "path",
+                "description": "Idempotent ID provided in the Create Trusted Destination request"
+              }
+            ]
+          },
+          "docs": "Permissions required: **Manage Trusted Destinations**\n\n\nCancel ongoing creation of Trusted Destinations"
+        },
+        {
+          "info": {
+            "name": "Delete Trusted Destination",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.anchorage-staging.com/v2/trusted_destinations/:trustedDestinationId",
+            "params": [
+              {
+                "name": "trustedDestinationId",
+                "value": "",
+                "type": "path",
+                "description": "ID for the Trusted Destination to be deleted"
+              },
+              {
+                "name": "ownerType",
+                "value": "CUSTOMER",
+                "type": "query",
+                "description": "Currently always `CUSTOMER`, but when other types exist this will become an enum with multiple possible values, indicating how the `id` field should be interpreted."
+              },
+              {
+                "name": "ownerId",
+                "value": "",
+                "type": "query",
+                "description": "The id of the Owner of the Trusted Destination.\n* For owner type `CUSTOMER`, this is the respective CustomerID."
+              }
+            ]
+          },
+          "docs": "Permissions required: **Manage Trusted Destinations**\n\n\nDelete a Trusted Destination"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

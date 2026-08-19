@@ -1,0 +1,336 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Anchorage Digital API Reference Addresses Onboarding API",
+    "version": "2.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "Api-Access-Key",
+      "value": "{{Api-Access-Key}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Onboarding",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Retrieve uploaded data and status of all customers onboarding",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.anchorage-staging.com/v2/onboarding/customers",
+            "params": [
+              {
+                "name": "afterId",
+                "value": "",
+                "type": "query",
+                "description": "When paginating this is used to provide the starting point for the page to fetch (retrieved from the previous response body)"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of results to return per query"
+              }
+            ]
+          },
+          "docs": "Permissions required: **Onboarding**\n\nList all customers onboarding application status, missing information and previously uploaded information.\n"
+        },
+        {
+          "info": {
+            "name": "Begin new customer onboarding application",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.anchorage-staging.com/v2/onboarding/customers",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Permissions required: **Onboarding**\nInitiate onboarding application for a new customer of Anchorage Digital\n"
+        },
+        {
+          "info": {
+            "name": "Retrieve uploaded data and status of customer onboarding",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.anchorage-staging.com/v2/onboarding/customers/:customerId",
+            "params": [
+              {
+                "name": "customerId",
+                "value": "",
+                "type": "path",
+                "description": "Customer Id"
+              }
+            ]
+          },
+          "docs": "Permissions required: **Onboarding**\n\nGet customer onboarding application status, missing information and previously uploaded information.\n"
+        },
+        {
+          "info": {
+            "name": "Update customer onboarding application",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.anchorage-staging.com/v2/onboarding/customers/:customerId",
+            "params": [
+              {
+                "name": "customerId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier customer - generated to the client when creating KYC application"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Permissions required: **Onboarding**\nUpdate an existing customer onboarding application. The application data will be updated to match the entries of the update payload. If any field is invalid, the entire update will fail and no data will be updated."
+        },
+        {
+          "info": {
+            "name": "Request a signed URL for document image upload",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.anchorage-staging.com/v2/onboarding/customers/:customerId/document",
+            "params": [
+              {
+                "name": "customerId",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier for the customer"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Permissions required: **Onboarding**\n\nRequest a signed URL for uploading document images for the existing customer onboarding application\n\n\nNote that the URL expires after 15m, you can still generate a new URL if this one expires. If the image file is never uploaded, the document will show as missing in the `GET` response and a new signed URL must be requested.\n"
+        },
+        {
+          "info": {
+            "name": "Submit a completed customer onboarding application",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.anchorage-staging.com/v2/onboarding/customers/:customerId/submit",
+            "params": [
+              {
+                "name": "customerId",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier for the customer"
+              }
+            ]
+          },
+          "docs": "Permissions required: **Onboarding**\n\nIndicate that a customer onboarding application is complete and can be submitted for screening\n"
+        },
+        {
+          "info": {
+            "name": "Retrieves all the agreements questionnaires for the specified agreement type",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.anchorage-staging.com/v2/onboarding/agreements/:agreementType",
+            "params": [
+              {
+                "name": "agreementType",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier for the agreement type"
+              },
+              {
+                "name": "status",
+                "value": "",
+                "type": "query",
+                "description": "Filter by status"
+              },
+              {
+                "name": "afterId",
+                "value": "",
+                "type": "query",
+                "description": "When paginating this is used to provide the starting point for the page to fetch (retrieved from the previous response body)"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of results to return per query"
+              }
+            ]
+          },
+          "docs": "Permissions required: **Onboarding**\n\nRetrieves all the agreements questionnaires for the specified agreement type\n"
+        },
+        {
+          "info": {
+            "name": "Creates a new agreement questionnaire of the given agreementType",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.anchorage-staging.com/v2/onboarding/agreements/:agreementType",
+            "params": [
+              {
+                "name": "agreementType",
+                "value": "",
+                "type": "path",
+                "description": "The type of the agreement"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Permissions required: **Onboarding**\nCreates a new agreement questionnaire\n"
+        },
+        {
+          "info": {
+            "name": "Retrieves the agreement questionnaire of the given agreement type and agreement ID",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.anchorage-staging.com/v2/onboarding/agreements/:agreementType/:agreementId",
+            "params": [
+              {
+                "name": "agreementType",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier for the agreement type"
+              },
+              {
+                "name": "agreementId",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier for the agreement ID"
+              }
+            ]
+          },
+          "docs": "Permissions required: **Onboarding**\n\nRetrieves the agreement questionnaire for the specified agreement type and agreement ID\n"
+        },
+        {
+          "info": {
+            "name": "Retrieve uploaded data and status of all onboarding customer subaccounts",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.anchorage-staging.com/v2/onboarding/subaccounts",
+            "params": [
+              {
+                "name": "afterId",
+                "value": "",
+                "type": "query",
+                "description": "When paginating this is used to provide the starting point for the page to fetch (retrieved from the previous response body)"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of results to return per query"
+              }
+            ]
+          },
+          "docs": "Permissions required: **Onboarding**\n\nList all customer subaccounts onboarding application status, missing information and previously uploaded information.\n"
+        },
+        {
+          "info": {
+            "name": "Begin new customer subaccount onboarding application",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.anchorage-staging.com/v2/onboarding/subaccounts",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Permissions required: **Onboarding**\n\nInitiate onboarding application for a new customer subaccount of Anchorage Digital\n"
+        },
+        {
+          "info": {
+            "name": "Retrieve uploaded data and status of customer subaccount onboarding",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.anchorage-staging.com/v2/onboarding/subaccounts/:subaccountId",
+            "params": [
+              {
+                "name": "subaccountId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier for a customer subaccount - generated to the client when creating subaccount"
+              }
+            ]
+          },
+          "docs": "Permissions required: **Onboarding**\n\nGet customer subaccount onboarding application status, missing information and previously uploaded information."
+        },
+        {
+          "info": {
+            "name": "Update customer subaccount onboarding application",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.anchorage-staging.com/v2/onboarding/subaccounts/:subaccountId",
+            "params": [
+              {
+                "name": "subaccountId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier for a customer subaccount - generated to the client when creating subaccount"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Permissions required: **Onboarding**\nUpdate data of an existing customer subaccount onboarding application"
+        },
+        {
+          "info": {
+            "name": "Submit a completed customer subaccount onboarding application",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.anchorage-staging.com/v2/onboarding/subaccounts/:subaccountId/submit",
+            "params": [
+              {
+                "name": "subaccountId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier for a customer subaccount - generated to the client when creating subaccount"
+              }
+            ]
+          },
+          "docs": "Permissions required: **Onboarding**\n\nIndicate that a customer subaccount onboarding application is complete and can be submitted for screening"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

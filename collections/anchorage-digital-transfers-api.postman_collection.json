@@ -1,0 +1,2138 @@
+{
+  "item": [
+    {
+      "id": "1c8fa3f4-e17e-4115-bf2d-cd51fac527a2",
+      "name": "Transfers",
+      "description": {
+        "content": "These endpoints allow you to transfer assets from one of your API-enabled vaults to *another resource custodied by Anchorage Digital*.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "70adf614-d348-4e3e-b70a-2cdd1aad9eb8",
+          "name": "List transfers",
+          "request": {
+            "name": "List transfers",
+            "description": {
+              "content": "Permissions required: **Transfer funds**\n\n\n\n\nList all transfers created by your API key.\n\n\n\n**Filters**\n\n\n\nYou may optionally supply the following filters:\n\n\n  - Set a date range by providing the `startDate` and/or `endDate` query parameters. If the date parameters are omitted, all transfers will be returned.\n  - Specify a specific vault to return transfers for by specifying the `vaultId` parameter. If the `vaultId` parameter is omitted, transfers originating from all vaults will be returned. Providing both `vaultId` and `walletId` filters will result in an error.\n  - Specify a specific wallet to return transfers for by specifying the `walletId` parameter. If the `walletId` parameter is omitted, transfers originating from all vaults and wallets will be returned. Providing both `vaultId` and `walletId` filters will result in an error.\n  - Filter transfers of one or more statuses with the `statuses` parameter. Multiple statuses should be separated by commas.\n\n\n**Multiple Transfers**\n\n\n\nTo fetch a specific batch of transfers, pass a comma-separated list of `transferIds` as the `transferIds` query parameter.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "transfers"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "vaultId",
+                  "value": "<string>",
+                  "description": "The ID of a vault. If provided, only transfers originating from this vault will be returned."
+                },
+                {
+                  "disabled": false,
+                  "key": "walletId",
+                  "value": "<string>",
+                  "description": "The ID of a wallet. If provided, only transfers originating from this wallet will be returned."
+                },
+                {
+                  "disabled": false,
+                  "key": "transferIds",
+                  "value": "<string>,<string>",
+                  "description": "A list of `transferIds` to return. Invalid `transferIds` will be ignored."
+                },
+                {
+                  "disabled": false,
+                  "key": "startDate",
+                  "value": "<date>",
+                  "description": "The start date (inclusive) in `YYYY-MM-DD` format. The earliest valid start date is '2017-01-01`. Dates are always in UTC [RFC 3339](https://datatracker.ietf.org/doc/html/rfc3339#section-5.6) 'full-date'."
+                },
+                {
+                  "disabled": false,
+                  "key": "endDate",
+                  "value": "<date>",
+                  "description": "The end date (inclusive) in `YYYY-MM-DD` format. The latest valid end date is the current date. Dates are always in UTC [RFC 3339](https://datatracker.ietf.org/doc/html/rfc3339#section-5.6) 'full-date'."
+                },
+                {
+                  "disabled": false,
+                  "key": "afterId",
+                  "value": "<string>",
+                  "description": "When paginating this is used to provide the starting point for the page to fetch (retrieved from the previous response body)"
+                },
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "100",
+                  "description": "Maximum number of results to return per query"
+                },
+                {
+                  "disabled": false,
+                  "key": "statuses",
+                  "value": "<string>,<string>",
+                  "description": "One or more transfer statuses to filter results"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "b26cff9c-4bd2-470b-84d1-494b9fd32186",
+              "name": "A list of transfers.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "transfers"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "vaultId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "walletId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "transferIds",
+                      "value": "<string>,<string>"
+                    },
+                    {
+                      "key": "startDate",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "endDate",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "afterId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "100"
+                    },
+                    {
+                      "key": "statuses",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Api-Access-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"transferId\": \"string\",\n      \"status\": \"COMPLETED\",\n      \"amount\": {\n        \"quantity\": \"10.45234733\",\n        \"assetType\": \"BTC\",\n        \"currentPrice\": \"9751.01\",\n        \"currentUSDValue\": \"101920.94\"\n      },\n      \"assetType\": \"BTC\",\n      \"createdAt\": \"2019-01-02T12:34:56.000Z\",\n      \"blockchainTxId\": \"string\",\n      \"destination\": {\n        \"id\": \"1c920f4241b78a1d483a29f3c24b6c4c\",\n        \"type\": \"VAULT\"\n      },\n      \"endedAt\": \"2019-01-03T12:34:56.000Z\",\n      \"error\": {\n        \"errorType\": \"TooManyRequests\",\n        \"message\": \"Missing required field 'amount'.\"\n      },\n      \"fee\": {\n        \"quantity\": \"10.45234733\",\n        \"assetType\": \"BTC\",\n        \"currentPrice\": \"9751.01\",\n        \"currentUSDValue\": \"101920.94\"\n      },\n      \"source\": {\n        \"id\": \"1c920f4241b78a1d483a29f3c24b6c4c\",\n        \"type\": \"VAULT\"\n      },\n      \"transferMemo\": \"string\"\n    },\n    {\n      \"transferId\": \"string\",\n      \"status\": \"FAILED\",\n      \"amount\": {\n        \"quantity\": \"10.45234733\",\n        \"assetType\": \"BTC\",\n        \"currentPrice\": \"9751.01\",\n        \"currentUSDValue\": \"101920.94\"\n      },\n      \"assetType\": \"BTC\",\n      \"createdAt\": \"2019-01-02T12:34:56.000Z\",\n      \"blockchainTxId\": \"string\",\n      \"destination\": {\n        \"id\": \"1c920f4241b78a1d483a29f3c24b6c4c\",\n        \"type\": \"VAULT\"\n      },\n      \"endedAt\": \"2019-01-03T12:34:56.000Z\",\n      \"error\": {\n        \"errorType\": \"NotImplemented\",\n        \"message\": \"Missing required field 'amount'.\"\n      },\n      \"fee\": {\n        \"quantity\": \"10.45234733\",\n        \"assetType\": \"BTC\",\n        \"currentPrice\": \"9751.01\",\n        \"currentUSDValue\": \"101920.94\"\n      },\n      \"source\": {\n        \"id\": \"1c920f4241b78a1d483a29f3c24b6c4c\",\n        \"type\": \"WALLET\"\n      },\n      \"transferMemo\": \"string\"\n    }\n  ],\n  \"page\": {\n    \"next\": \"<next page url>\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "adfd26ad-0357-487c-93a3-c8cb592f9bb3",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "transfers"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "vaultId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "walletId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "transferIds",
+                      "value": "<string>,<string>"
+                    },
+                    {
+                      "key": "startDate",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "endDate",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "afterId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "100"
+                    },
+                    {
+                      "key": "statuses",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Api-Access-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errorType\": \"Unauthenticated\",\n  \"message\": \"Missing required field 'amount'.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "64f8fa2c-159c-4d8d-a2aa-022fe38f385b",
+              "name": "Unauthenticated",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "transfers"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "vaultId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "walletId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "transferIds",
+                      "value": "<string>,<string>"
+                    },
+                    {
+                      "key": "startDate",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "endDate",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "afterId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "100"
+                    },
+                    {
+                      "key": "statuses",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Api-Access-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errorType\": \"Unauthenticated\",\n  \"message\": \"Missing required field 'amount'.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "279e812e-e21c-4f7a-b140-03821e400856",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "transfers"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "vaultId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "walletId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "transferIds",
+                      "value": "<string>,<string>"
+                    },
+                    {
+                      "key": "startDate",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "endDate",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "afterId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "100"
+                    },
+                    {
+                      "key": "statuses",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Api-Access-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errorType\": \"Unauthenticated\",\n  \"message\": \"Missing required field 'amount'.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "58b068b7-845d-44e1-bc82-f6ccfc3092fe",
+              "name": "Not Found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "transfers"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "vaultId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "walletId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "transferIds",
+                      "value": "<string>,<string>"
+                    },
+                    {
+                      "key": "startDate",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "endDate",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "afterId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "100"
+                    },
+                    {
+                      "key": "statuses",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Api-Access-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errorType\": \"Unauthenticated\",\n  \"message\": \"Missing required field 'amount'.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "61e88b85-b60c-4ab2-81f6-ddaf90da65dc",
+              "name": "Too Many Requests",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "transfers"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "vaultId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "walletId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "transferIds",
+                      "value": "<string>,<string>"
+                    },
+                    {
+                      "key": "startDate",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "endDate",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "afterId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "100"
+                    },
+                    {
+                      "key": "statuses",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Api-Access-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errorType\": \"Unauthenticated\",\n  \"message\": \"Missing required field 'amount'.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "3cd0abaa-6c8b-46cd-bab0-85c2e5739db7",
+              "name": "Internal Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "transfers"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "vaultId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "walletId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "transferIds",
+                      "value": "<string>,<string>"
+                    },
+                    {
+                      "key": "startDate",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "endDate",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "afterId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "100"
+                    },
+                    {
+                      "key": "statuses",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Api-Access-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errorType\": \"Unauthenticated\",\n  \"message\": \"Missing required field 'amount'.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "deb80748-3326-4f84-8623-7b6ff148621a",
+          "name": "Create a transfer request",
+          "request": {
+            "name": "Create a transfer request",
+            "description": {
+              "content": "Permissions required: **Transfer funds**\n\n\n\n\n#### Identify the sending resource and asset\n\n\nTo initiate a transfer between resources, you must identify which resource you'd like to transfer funds from and the asset type to transfer. Provide a `source` and `assetType`.\n\n\n#### Identify the receiving resource\n\n\nChoose a resource to receive the funds as the `destination`. This resource may belong to your organization or another organization that also custodies with Anchorage Digital, or it may also be an approved blockchain address not custodied by Anchorage Digital (see [Permission Groups](#section/Authentication-and-Security/Permission-Groups) for more details). Please note: If you would like to use the Anchorage Digital API to transfer to approved blockchain addresses, please contact [api@anchorage.com](mailto:api@anchorage.com).\n\n\n#### Permissions\n\n\nThe provided API key must be associated with a permission group that has Transfer permissions for the vault from which the assets are being sent. The receiving resource does not need Transfer permissions to receive a transfer of funds.\n\n\n#### Additional Metadata\n\n\nYou may provide a transfer memo with each transfer. If the transfer API request is successful, a transfer transaction will be created that will include this transfer memo in the description. The resulting deposit will also include this memo.\n\n\n\n#### Successful Transfers\n\n\nIf the transfer request is valid, the request will initiate a transfer transaction from the source. This is a special withdrawal that will not require a quorum of approvals and will undergo automated Anchorage Digital Risk Review. When the transaction is broadcasted and confirmed on the blockchain, a subsequent deposit will be detected for the destination. All of these transactions will be visible on the Anchorage Digital iOS Application, the Web Dashboard, and in the [list transactions](#operation/getTransactions) API endpoint.\n\n\n#### Unsuccessful Transfers\n\n\nA transfer request may fail for any of the following reasons:\n\n  - The specified sending resource does not exist or does not support the specified asset type\n  - The specified amount exceeds the available funds for this asset (insufficient funds)\n  - The destination does not exist or does not support the specified asset type\n  - The provided API key does not have permissions to initiate transfers from this wallet\n\n\nIf the transfer request is successful, the actual transfer transaction may fail for any of the following reasons:\n\n  - There are insufficient funds to pay the blockchain network fee at the time of this transaction\n  - The transfer was successfully queued but there were insufficient funds by the time it was processed\n  - There is a failure on the blockchain\n\n#### Idempotent Requests\n\n\nThis endpoint supports [idempotent requests](#section/Idempotency) so that a transfer does not occur twice if an API call was interrupted and must be retried. To send an idempotent request, include the `idempotentId` field in the body of the POST request.\n\n\n#### Queueing\n\n\nTransfer requests are queued and processed in the order they were received. When transferring between wallets, multiple transfer requests may be queued for the same asset in a given wallet, but only one will be processed at a time. The other requests will remain in the `QUEUED` state until the prior transfer is completed or fails.\n\n\n#### Transferring Full Balance\n\n\nFor assets with network fees paid in a separate asset type, transferring the full balance of an asset is no different than transferring any other amount for that asset.\n\n\nFor assets with network fees paid in the same asset type, transferring the full balance is not possible without specifying to the server that the fee should be deducted from the transfer amount. See the `deductFeeFromAmountIfSameType` flag of the `TransfersRequest` model for more detail.\n\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "transfers"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "(Required) A hex-encoded Ed25519 signature of `timestamp_epoch_seconds + uppercase(http_method) + request_path + request_body`.\n\n\n\nConstruction example:\n\n  ```\n  toHex(\n    ed25519Sign(\n      signing_key,\n      '{}{}{}{}'.format(timestamp_epoch_seconds, toUpper(httpMethod), httpRequestPath, httpBody)\n    )\n  )\n  ```\n",
+                "key": "Api-Signature",
+                "value": "<string>"
+              },
+              {
+                "disabled": false,
+                "description": "(Required) Current timestamp, represented as unix epoch seconds",
+                "key": "Api-Timestamp",
+                "value": "<long>"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"assetType\": \"<string>\",\n  \"amount\": \"<string>\",\n  \"assetParametersATOM\": {\n    \"memo\": \"<string>\"\n  },\n  \"assetParametersCosmos\": {\n    \"memo\": \"<string>\"\n  },\n  \"assetParametersExtra\": {\n    \"value\": \"<string>\"\n  },\n  \"assetParametersFiatTrustedDestination\": {\n    \"purpose\": \"<string>\",\n    \"memo\": \"<string>\"\n  },\n  \"assetParametersXLM\": {\n    \"memo\": \"<string>\"\n  },\n  \"assetParametersXRP\": {\n    \"destinationTag\": \"<uint32>\"\n  },\n  \"deductFeeFromAmountIfSameType\": false,\n  \"destination\": {\n    \"id\": \"<string>\",\n    \"type\": \"<string>\"\n  },\n  \"idempotentId\": \"<string>\",\n  \"source\": {\n    \"id\": \"<string>\",\n    \"type\": \"<string>\"\n  },\n  \"transferAmlQuestionnaire\": {\n    \"purpose\": \"<string>\",\n    \"destinationType\": \"<string>\",\n    \"institutionCountry\": \"<string>\",\n    \"institutionName\": \"<string>\",\n    \"originatorCity\": \"<string>\",\n    \"originatorCountry\": \"<string>\",\n    \"originatorName\": \"<string>\",\n    \"originatorPostalCode\": \"<string>\",\n    \"originatorStateProvince\": \"<string>\",\n    \"originatorStreetAddress\": \"<string>\",\n    \"originatorType\": \"<string>\",\n    \"recipientCity\": \"<string>\",\n    \"recipientCountry\": \"<string>\",\n    \"recipientFirstName\": \"<string>\",\n    \"recipientFullName\": \"<string>\",\n    \"recipientLastName\": \"<string>\",\n    \"recipientPostalCode\": \"<string>\",\n    \"recipientStateProvince\": \"<string>\",\n    \"recipientStreetAddress\": \"<string>\",\n    \"recipientType\": \"<string>\",\n    \"selfhostedDescription\": \"<string>\"\n  },\n  \"transferMemo\": \"<string>\",\n  \"useGasStation\": \"<boolean>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "3955eae5-cd91-49cd-8118-da209ca4d5e3",
+              "name": "Successfully initiate a transfer",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "transfers"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Api-Access-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) A hex-encoded Ed25519 signature of `timestamp_epoch_seconds + uppercase(http_method) + request_path + request_body`.\n\n\n\nConstruction example:\n\n  ```\n  toHex(\n    ed25519Sign(\n      signing_key,\n      '{}{}{}{}'.format(timestamp_epoch_seconds, toUpper(httpMethod), httpRequestPath, httpBody)\n    )\n  )\n  ```\n",
+                    "key": "Api-Signature",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Current timestamp, represented as unix epoch seconds",
+                    "key": "Api-Timestamp",
+                    "value": "<long>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"assetType\": \"BTC\",\n  \"amount\": \"1000.00000000\",\n  \"assetParametersATOM\": {\n    \"memo\": \"w3mp19cqp2\"\n  },\n  \"assetParametersCosmos\": {\n    \"memo\": \"w3mp19cqp2\"\n  },\n  \"assetParametersExtra\": {\n    \"value\": \"w3mp19cqp2\"\n  },\n  \"assetParametersFiatTrustedDestination\": {\n    \"purpose\": \"TRADING_SETTLEMENT\",\n    \"memo\": \"Invoice 123\"\n  },\n  \"assetParametersXLM\": {\n    \"memo\": \"w3mp19cqp2\"\n  },\n  \"assetParametersXRP\": {\n    \"destinationTag\": 23874\n  },\n  \"deductFeeFromAmountIfSameType\": false,\n  \"destination\": {\n    \"id\": \"1c920f4241b78a1d483a29f3c24b6c4c\",\n    \"type\": \"<string>\"\n  },\n  \"idempotentId\": \"12838927347\",\n  \"source\": {\n    \"id\": \"1c920f4241b78a1d483a29f3c24b6c4c\",\n    \"type\": \"<string>\"\n  },\n  \"transferAmlQuestionnaire\": {\n    \"originatorType\": \"MY_CLIENT\",\n    \"originatorName\": \"Satoshi Nakamoto\",\n    \"originatorCountry\": \"US\",\n    \"originatorStreetAddress\": \"1234 NW Bobcat Lane, St. Robert, MO\",\n    \"originatorPostalCode\": \"65584-5678\",\n    \"originatorCity\": \"San Francisco\",\n    \"originatorStateProvince\": \"Wyoming\",\n    \"purpose\": \"TRADING_SETTLEMENT\"\n  },\n  \"transferMemo\": \"Internal ID: #12838927347\",\n  \"useGasStation\": \"<boolean>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"transferId\": \"008d3ec72558ce907571886df63ef51594b5bd8cf106a0b7fa8f12a30dfc867f\",\n    \"status\": \"QUEUED\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f1995ef3-dddd-41bf-8784-a8ce29c0a608",
+              "name": "Bad Request or Insufficient Funds",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "transfers"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Api-Access-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) A hex-encoded Ed25519 signature of `timestamp_epoch_seconds + uppercase(http_method) + request_path + request_body`.\n\n\n\nConstruction example:\n\n  ```\n  toHex(\n    ed25519Sign(\n      signing_key,\n      '{}{}{}{}'.format(timestamp_epoch_seconds, toUpper(httpMethod), httpRequestPath, httpBody)\n    )\n  )\n  ```\n",
+                    "key": "Api-Signature",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Current timestamp, represented as unix epoch seconds",
+                    "key": "Api-Timestamp",
+                    "value": "<long>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"assetType\": \"BTC\",\n  \"amount\": \"1000.00000000\",\n  \"assetParametersATOM\": {\n    \"memo\": \"w3mp19cqp2\"\n  },\n  \"assetParametersCosmos\": {\n    \"memo\": \"w3mp19cqp2\"\n  },\n  \"assetParametersExtra\": {\n    \"value\": \"w3mp19cqp2\"\n  },\n  \"assetParametersFiatTrustedDestination\": {\n    \"purpose\": \"TRADING_SETTLEMENT\",\n    \"memo\": \"Invoice 123\"\n  },\n  \"assetParametersXLM\": {\n    \"memo\": \"w3mp19cqp2\"\n  },\n  \"assetParametersXRP\": {\n    \"destinationTag\": 23874\n  },\n  \"deductFeeFromAmountIfSameType\": false,\n  \"destination\": {\n    \"id\": \"1c920f4241b78a1d483a29f3c24b6c4c\",\n    \"type\": \"<string>\"\n  },\n  \"idempotentId\": \"12838927347\",\n  \"source\": {\n    \"id\": \"1c920f4241b78a1d483a29f3c24b6c4c\",\n    \"type\": \"<string>\"\n  },\n  \"transferAmlQuestionnaire\": {\n    \"originatorType\": \"MY_CLIENT\",\n    \"originatorName\": \"Satoshi Nakamoto\",\n    \"originatorCountry\": \"US\",\n    \"originatorStreetAddress\": \"1234 NW Bobcat Lane, St. Robert, MO\",\n    \"originatorPostalCode\": \"65584-5678\",\n    \"originatorCity\": \"San Francisco\",\n    \"originatorStateProvince\": \"Wyoming\",\n    \"purpose\": \"TRADING_SETTLEMENT\"\n  },\n  \"transferMemo\": \"Internal ID: #12838927347\",\n  \"useGasStation\": \"<boolean>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errorType\": \"Unauthenticated\",\n  \"message\": \"Missing required field 'amount'.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "1aba58d3-f62c-469d-a916-00c34d930368",
+              "name": "Unauthenticated",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "transfers"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Api-Access-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) A hex-encoded Ed25519 signature of `timestamp_epoch_seconds + uppercase(http_method) + request_path + request_body`.\n\n\n\nConstruction example:\n\n  ```\n  toHex(\n    ed25519Sign(\n      signing_key,\n      '{}{}{}{}'.format(timestamp_epoch_seconds, toUpper(httpMethod), httpRequestPath, httpBody)\n    )\n  )\n  ```\n",
+                    "key": "Api-Signature",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Current timestamp, represented as unix epoch seconds",
+                    "key": "Api-Timestamp",
+                    "value": "<long>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"assetType\": \"BTC\",\n  \"amount\": \"1000.00000000\",\n  \"assetParametersATOM\": {\n    \"memo\": \"w3mp19cqp2\"\n  },\n  \"assetParametersCosmos\": {\n    \"memo\": \"w3mp19cqp2\"\n  },\n  \"assetParametersExtra\": {\n    \"value\": \"w3mp19cqp2\"\n  },\n  \"assetParametersFiatTrustedDestination\": {\n    \"purpose\": \"TRADING_SETTLEMENT\",\n    \"memo\": \"Invoice 123\"\n  },\n  \"assetParametersXLM\": {\n    \"memo\": \"w3mp19cqp2\"\n  },\n  \"assetParametersXRP\": {\n    \"destinationTag\": 23874\n  },\n  \"deductFeeFromAmountIfSameType\": false,\n  \"destination\": {\n    \"id\": \"1c920f4241b78a1d483a29f3c24b6c4c\",\n    \"type\": \"<string>\"\n  },\n  \"idempotentId\": \"12838927347\",\n  \"source\": {\n    \"id\": \"1c920f4241b78a1d483a29f3c24b6c4c\",\n    \"type\": \"<string>\"\n  },\n  \"transferAmlQuestionnaire\": {\n    \"originatorType\": \"MY_CLIENT\",\n    \"originatorName\": \"Satoshi Nakamoto\",\n    \"originatorCountry\": \"US\",\n    \"originatorStreetAddress\": \"1234 NW Bobcat Lane, St. Robert, MO\",\n    \"originatorPostalCode\": \"65584-5678\",\n    \"originatorCity\": \"San Francisco\",\n    \"originatorStateProvince\": \"Wyoming\",\n    \"purpose\": \"TRADING_SETTLEMENT\"\n  },\n  \"transferMemo\": \"Internal ID: #12838927347\",\n  \"useGasStation\": \"<boolean>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errorType\": \"Unauthenticated\",\n  \"message\": \"Missing required field 'amount'.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c949b3e5-c19b-47d4-8798-09e70cb59366",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "transfers"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Api-Access-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) A hex-encoded Ed25519 signature of `timestamp_epoch_seconds + uppercase(http_method) + request_path + request_body`.\n\n\n\nConstruction example:\n\n  ```\n  toHex(\n    ed25519Sign(\n      signing_key,\n      '{}{}{}{}'.format(timestamp_epoch_seconds, toUpper(httpMethod), httpRequestPath, httpBody)\n    )\n  )\n  ```\n",
+                    "key": "Api-Signature",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Current timestamp, represented as unix epoch seconds",
+                    "key": "Api-Timestamp",
+                    "value": "<long>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"assetType\": \"BTC\",\n  \"amount\": \"1000.00000000\",\n  \"assetParametersATOM\": {\n    \"memo\": \"w3mp19cqp2\"\n  },\n  \"assetParametersCosmos\": {\n    \"memo\": \"w3mp19cqp2\"\n  },\n  \"assetParametersExtra\": {\n    \"value\": \"w3mp19cqp2\"\n  },\n  \"assetParametersFiatTrustedDestination\": {\n    \"purpose\": \"TRADING_SETTLEMENT\",\n    \"memo\": \"Invoice 123\"\n  },\n  \"assetParametersXLM\": {\n    \"memo\": \"w3mp19cqp2\"\n  },\n  \"assetParametersXRP\": {\n    \"destinationTag\": 23874\n  },\n  \"deductFeeFromAmountIfSameType\": false,\n  \"destination\": {\n    \"id\": \"1c920f4241b78a1d483a29f3c24b6c4c\",\n    \"type\": \"<string>\"\n  },\n  \"idempotentId\": \"12838927347\",\n  \"source\": {\n    \"id\": \"1c920f4241b78a1d483a29f3c24b6c4c\",\n    \"type\": \"<string>\"\n  },\n  \"transferAmlQuestionnaire\": {\n    \"originatorType\": \"MY_CLIENT\",\n    \"originatorName\": \"Satoshi Nakamoto\",\n    \"originatorCountry\": \"US\",\n    \"originatorStreetAddress\": \"1234 NW Bobcat Lane, St. Robert, MO\",\n    \"originatorPostalCode\": \"65584-5678\",\n    \"originatorCity\": \"San Francisco\",\n    \"originatorStateProvince\": \"Wyoming\",\n    \"purpose\": \"TRADING_SETTLEMENT\"\n  },\n  \"transferMemo\": \"Internal ID: #12838927347\",\n  \"useGasStation\": \"<boolean>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errorType\": \"Unauthenticated\",\n  \"message\": \"Missing required field 'amount'.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "24e32ed3-da88-4332-89ed-d9c5f471daa9",
+              "name": "Not Found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "transfers"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Api-Access-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) A hex-encoded Ed25519 signature of `timestamp_epoch_seconds + uppercase(http_method) + request_path + request_body`.\n\n\n\nConstruction example:\n\n  ```\n  toHex(\n    ed25519Sign(\n      signing_key,\n      '{}{}{}{}'.format(timestamp_epoch_seconds, toUpper(httpMethod), httpRequestPath, httpBody)\n    )\n  )\n  ```\n",
+                    "key": "Api-Signature",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Current timestamp, represented as unix epoch seconds",
+                    "key": "Api-Timestamp",
+                    "value": "<long>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"assetType\": \"BTC\",\n  \"amount\": \"1000.00000000\",\n  \"assetParametersATOM\": {\n    \"memo\": \"w3mp19cqp2\"\n  },\n  \"assetParametersCosmos\": {\n    \"memo\": \"w3mp19cqp2\"\n  },\n  \"assetParametersExtra\": {\n    \"value\": \"w3mp19cqp2\"\n  },\n  \"assetParametersFiatTrustedDestination\": {\n    \"purpose\": \"TRADING_SETTLEMENT\",\n    \"memo\": \"Invoice 123\"\n  },\n  \"assetParametersXLM\": {\n    \"memo\": \"w3mp19cqp2\"\n  },\n  \"assetParametersXRP\": {\n    \"destinationTag\": 23874\n  },\n  \"deductFeeFromAmountIfSameType\": false,\n  \"destination\": {\n    \"id\": \"1c920f4241b78a1d483a29f3c24b6c4c\",\n    \"type\": \"<string>\"\n  },\n  \"idempotentId\": \"12838927347\",\n  \"source\": {\n    \"id\": \"1c920f4241b78a1d483a29f3c24b6c4c\",\n    \"type\": \"<string>\"\n  },\n  \"transferAmlQuestionnaire\": {\n    \"originatorType\": \"MY_CLIENT\",\n    \"originatorName\": \"Satoshi Nakamoto\",\n    \"originatorCountry\": \"US\",\n    \"originatorStreetAddress\": \"1234 NW Bobcat Lane, St. Robert, MO\",\n    \"originatorPostalCode\": \"65584-5678\",\n    \"originatorCity\": \"San Francisco\",\n    \"originatorStateProvince\": \"Wyoming\",\n    \"purpose\": \"TRADING_SETTLEMENT\"\n  },\n  \"transferMemo\": \"Internal ID: #12838927347\",\n  \"useGasStation\": \"<boolean>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errorType\": \"Unauthenticated\",\n  \"message\": \"Missing required field 'amount'.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "44320ff3-0435-4f9e-8070-f2f84155a5f0",
+              "name": "Too Many Requests",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "transfers"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Api-Access-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) A hex-encoded Ed25519 signature of `timestamp_epoch_seconds + uppercase(http_method) + request_path + request_body`.\n\n\n\nConstruction example:\n\n  ```\n  toHex(\n    ed25519Sign(\n      signing_key,\n      '{}{}{}{}'.format(timestamp_epoch_seconds, toUpper(httpMethod), httpRequestPath, httpBody)\n    )\n  )\n  ```\n",
+                    "key": "Api-Signature",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Current timestamp, represented as unix epoch seconds",
+                    "key": "Api-Timestamp",
+                    "value": "<long>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"assetType\": \"BTC\",\n  \"amount\": \"1000.00000000\",\n  \"assetParametersATOM\": {\n    \"memo\": \"w3mp19cqp2\"\n  },\n  \"assetParametersCosmos\": {\n    \"memo\": \"w3mp19cqp2\"\n  },\n  \"assetParametersExtra\": {\n    \"value\": \"w3mp19cqp2\"\n  },\n  \"assetParametersFiatTrustedDestination\": {\n    \"purpose\": \"TRADING_SETTLEMENT\",\n    \"memo\": \"Invoice 123\"\n  },\n  \"assetParametersXLM\": {\n    \"memo\": \"w3mp19cqp2\"\n  },\n  \"assetParametersXRP\": {\n    \"destinationTag\": 23874\n  },\n  \"deductFeeFromAmountIfSameType\": false,\n  \"destination\": {\n    \"id\": \"1c920f4241b78a1d483a29f3c24b6c4c\",\n    \"type\": \"<string>\"\n  },\n  \"idempotentId\": \"12838927347\",\n  \"source\": {\n    \"id\": \"1c920f4241b78a1d483a29f3c24b6c4c\",\n    \"type\": \"<string>\"\n  },\n  \"transferAmlQuestionnaire\": {\n    \"originatorType\": \"MY_CLIENT\",\n    \"originatorName\": \"Satoshi Nakamoto\",\n    \"originatorCountry\": \"US\",\n    \"originatorStreetAddress\": \"1234 NW Bobcat Lane, St. Robert, MO\",\n    \"originatorPostalCode\": \"65584-5678\",\n    \"originatorCity\": \"San Francisco\",\n    \"originatorStateProvince\": \"Wyoming\",\n    \"purpose\": \"TRADING_SETTLEMENT\"\n  },\n  \"transferMemo\": \"Internal ID: #12838927347\",\n  \"useGasStation\": \"<boolean>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errorType\": \"Unauthenticated\",\n  \"message\": \"Missing required field 'amount'.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d17918a0-be2a-4984-a305-ceecad9ea66a",
+              "name": "Internal Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "transfers"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Api-Access-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) A hex-encoded Ed25519 signature of `timestamp_epoch_seconds + uppercase(http_method) + request_path + request_body`.\n\n\n\nConstruction example:\n\n  ```\n  toHex(\n    ed25519Sign(\n      signing_key,\n      '{}{}{}{}'.format(timestamp_epoch_seconds, toUpper(httpMethod), httpRequestPath, httpBody)\n    )\n  )\n  ```\n",
+                    "key": "Api-Signature",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Current timestamp, represented as unix epoch seconds",
+                    "key": "Api-Timestamp",
+                    "value": "<long>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"assetType\": \"BTC\",\n  \"amount\": \"1000.00000000\",\n  \"assetParametersATOM\": {\n    \"memo\": \"w3mp19cqp2\"\n  },\n  \"assetParametersCosmos\": {\n    \"memo\": \"w3mp19cqp2\"\n  },\n  \"assetParametersExtra\": {\n    \"value\": \"w3mp19cqp2\"\n  },\n  \"assetParametersFiatTrustedDestination\": {\n    \"purpose\": \"TRADING_SETTLEMENT\",\n    \"memo\": \"Invoice 123\"\n  },\n  \"assetParametersXLM\": {\n    \"memo\": \"w3mp19cqp2\"\n  },\n  \"assetParametersXRP\": {\n    \"destinationTag\": 23874\n  },\n  \"deductFeeFromAmountIfSameType\": false,\n  \"destination\": {\n    \"id\": \"1c920f4241b78a1d483a29f3c24b6c4c\",\n    \"type\": \"<string>\"\n  },\n  \"idempotentId\": \"12838927347\",\n  \"source\": {\n    \"id\": \"1c920f4241b78a1d483a29f3c24b6c4c\",\n    \"type\": \"<string>\"\n  },\n  \"transferAmlQuestionnaire\": {\n    \"originatorType\": \"MY_CLIENT\",\n    \"originatorName\": \"Satoshi Nakamoto\",\n    \"originatorCountry\": \"US\",\n    \"originatorStreetAddress\": \"1234 NW Bobcat Lane, St. Robert, MO\",\n    \"originatorPostalCode\": \"65584-5678\",\n    \"originatorCity\": \"San Francisco\",\n    \"originatorStateProvince\": \"Wyoming\",\n    \"purpose\": \"TRADING_SETTLEMENT\"\n  },\n  \"transferMemo\": \"Internal ID: #12838927347\",\n  \"useGasStation\": \"<boolean>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errorType\": \"Unauthenticated\",\n  \"message\": \"Missing required field 'amount'.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "0afbe63e-df20-4a53-bc42-cffc0277b268",
+          "name": "Get transfer by ID",
+          "request": {
+            "name": "Get transfer by ID",
+            "description": {
+              "content": "Permissions required: **Transfer funds**\n\n\n\n\nGet transfer by ID, for transfers created by your API key.\n\n\nNOTE: price and USD value information is recent but does not reflect real-time data.\n\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "transfers",
+                ":transferId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "transferId",
+                  "description": "(Required) The ID of the transfer to get details for"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "99534d69-a34b-47b8-a188-74e79cd349a4",
+              "name": "Metadata about a specific transfer",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "transfers",
+                    ":transferId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "transferId",
+                      "description": "(Required) The ID of the transfer to get details for"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Api-Access-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"transferId\": \"008d3ec72558ce907571886df63ef51594b5bd8cf106a0b7fa8f12a30dfc867f\",\n    \"amount\": {\n      \"quantity\": \"1000.00000000\",\n      \"assetType\": \"USDC\",\n      \"currentPrice\": \"1.00\",\n      \"currentUSDValue\": \"1000.00\"\n    },\n    \"fee\": {\n      \"quantity\": \"0.0002207155625\",\n      \"assetType\": \"ETH\"\n    },\n    \"assetType\": \"USDC\",\n    \"source\": {\n      \"id\": \"1c920f4241b78a1d483a29f3c24b6c4c\",\n      \"type\": \"WALLET\"\n    },\n    \"destination\": {\n      \"id\": \"55e89d4a644d736b01533a2ea9b32a20\",\n      \"type\": \"WALLET\"\n    },\n    \"transferMemo\": \"Internal ID: #12838927347\",\n    \"status\": \"COMPLETED\",\n    \"createdAt\": \"2019-01-02T12:34:56.000Z\",\n    \"endedAt\": \"2019-01-03T12:34:56.000Z\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5b2209ba-ddec-4a7f-a986-12c641692f90",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "transfers",
+                    ":transferId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "transferId",
+                      "description": "(Required) The ID of the transfer to get details for"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Api-Access-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errorType\": \"Unauthenticated\",\n  \"message\": \"Missing required field 'amount'.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "eec871f3-0e8a-44ab-8b11-2aa6a80b26d2",
+              "name": "Unauthenticated",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "transfers",
+                    ":transferId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "transferId",
+                      "description": "(Required) The ID of the transfer to get details for"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Api-Access-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errorType\": \"Unauthenticated\",\n  \"message\": \"Missing required field 'amount'.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "668a2cca-e28b-445f-ae65-4f5b5f0d4cb4",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "transfers",
+                    ":transferId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "transferId",
+                      "description": "(Required) The ID of the transfer to get details for"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Api-Access-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errorType\": \"Unauthenticated\",\n  \"message\": \"Missing required field 'amount'.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e099f3e9-fcd1-4b58-850f-672521c9ec07",
+              "name": "Not Found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "transfers",
+                    ":transferId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "transferId",
+                      "description": "(Required) The ID of the transfer to get details for"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Api-Access-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errorType\": \"Unauthenticated\",\n  \"message\": \"Missing required field 'amount'.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c007cb3d-ce2a-4c1a-9e2c-e9e0a17bce15",
+              "name": "Too Many Requests",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "transfers",
+                    ":transferId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "transferId",
+                      "description": "(Required) The ID of the transfer to get details for"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Api-Access-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errorType\": \"Unauthenticated\",\n  \"message\": \"Missing required field 'amount'.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "1dec24bd-1d62-4450-8464-2ed2049fb27a",
+              "name": "Internal Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "transfers",
+                    ":transferId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "transferId",
+                      "description": "(Required) The ID of the transfer to get details for"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Api-Access-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errorType\": \"Unauthenticated\",\n  \"message\": \"Missing required field 'amount'.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "cb0004fd-9b45-45e4-89fa-0c948314b4ad",
+          "name": "Cancel a transfer request",
+          "request": {
+            "name": "Cancel a transfer request",
+            "description": {
+              "content": "Permissions required: **Transfer funds**\n\n\n\n\nCancel a transfer request. Transfer requests in the `QUEUED` state can always be cancelled. Transfer requests in the `IN_PROGRESS` state can sometimes be cancelled if the request has not been broadcast on the blockchain. Trying to cancel a request that cannot be cancelled will return a `409 Conflict` error code. Transfers can only be canceled by the API key responsible for creating that transfer (either created directly via CreateTransfer or indirectly via ExecuteHold)\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "transfers",
+                ":transferId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "transferId",
+                  "description": "(Required) The ID of the transfer to cancel"
+                }
+              ]
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "(Required) A hex-encoded Ed25519 signature of `timestamp_epoch_seconds + uppercase(http_method) + request_path + request_body`.\n\n\n\nConstruction example:\n\n  ```\n  toHex(\n    ed25519Sign(\n      signing_key,\n      '{}{}{}{}'.format(timestamp_epoch_seconds, toUpper(httpMethod), httpRequestPath, httpBody)\n    )\n  )\n  ```\n",
+                "key": "Api-Signature",
+                "value": "<string>"
+              },
+              {
+                "disabled": false,
+                "description": "(Required) Current timestamp, represented as unix epoch seconds",
+                "key": "Api-Timestamp",
+                "value": "<long>"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "75939f93-83d3-4881-beeb-3a10b59eac17",
+              "name": "Transfer request successfully cancelled",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "transfers",
+                    ":transferId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "transferId",
+                      "description": "(Required) The ID of the transfer to cancel"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Api-Access-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) A hex-encoded Ed25519 signature of `timestamp_epoch_seconds + uppercase(http_method) + request_path + request_body`.\n\n\n\nConstruction example:\n\n  ```\n  toHex(\n    ed25519Sign(\n      signing_key,\n      '{}{}{}{}'.format(timestamp_epoch_seconds, toUpper(httpMethod), httpRequestPath, httpBody)\n    )\n  )\n  ```\n",
+                    "key": "Api-Signature",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Current timestamp, represented as unix epoch seconds",
+                    "key": "Api-Timestamp",
+                    "value": "<long>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "5885f2de-2b58-49fd-bf4a-3e2e1e681728",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "transfers",
+                    ":transferId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "transferId",
+                      "description": "(Required) The ID of the transfer to cancel"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Api-Access-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) A hex-encoded Ed25519 signature of `timestamp_epoch_seconds + uppercase(http_method) + request_path + request_body`.\n\n\n\nConstruction example:\n\n  ```\n  toHex(\n    ed25519Sign(\n      signing_key,\n      '{}{}{}{}'.format(timestamp_epoch_seconds, toUpper(httpMethod), httpRequestPath, httpBody)\n    )\n  )\n  ```\n",
+                    "key": "Api-Signature",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Current timestamp, represented as unix epoch seconds",
+                    "key": "Api-Timestamp",
+                    "value": "<long>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errorType\": \"Unauthenticated\",\n  \"message\": \"Missing required field 'amount'.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "3ac74854-c8de-4c5d-91b0-b655cd24cd84",
+              "name": "Unauthenticated",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "transfers",
+                    ":transferId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "transferId",
+                      "description": "(Required) The ID of the transfer to cancel"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Api-Access-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) A hex-encoded Ed25519 signature of `timestamp_epoch_seconds + uppercase(http_method) + request_path + request_body`.\n\n\n\nConstruction example:\n\n  ```\n  toHex(\n    ed25519Sign(\n      signing_key,\n      '{}{}{}{}'.format(timestamp_epoch_seconds, toUpper(httpMethod), httpRequestPath, httpBody)\n    )\n  )\n  ```\n",
+                    "key": "Api-Signature",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Current timestamp, represented as unix epoch seconds",
+                    "key": "Api-Timestamp",
+                    "value": "<long>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errorType\": \"Unauthenticated\",\n  \"message\": \"Missing required field 'amount'.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a7975a14-fe46-4f5d-9bc1-b37e1679982c",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "transfers",
+                    ":transferId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "transferId",
+                      "description": "(Required) The ID of the transfer to cancel"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Api-Access-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) A hex-encoded Ed25519 signature of `timestamp_epoch_seconds + uppercase(http_method) + request_path + request_body`.\n\n\n\nConstruction example:\n\n  ```\n  toHex(\n    ed25519Sign(\n      signing_key,\n      '{}{}{}{}'.format(timestamp_epoch_seconds, toUpper(httpMethod), httpRequestPath, httpBody)\n    )\n  )\n  ```\n",
+                    "key": "Api-Signature",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Current timestamp, represented as unix epoch seconds",
+                    "key": "Api-Timestamp",
+                    "value": "<long>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errorType\": \"Unauthenticated\",\n  \"message\": \"Missing required field 'amount'.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f946927d-44bd-40e9-92ee-35811e600e86",
+              "name": "Not Found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "transfers",
+                    ":transferId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "transferId",
+                      "description": "(Required) The ID of the transfer to cancel"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Api-Access-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) A hex-encoded Ed25519 signature of `timestamp_epoch_seconds + uppercase(http_method) + request_path + request_body`.\n\n\n\nConstruction example:\n\n  ```\n  toHex(\n    ed25519Sign(\n      signing_key,\n      '{}{}{}{}'.format(timestamp_epoch_seconds, toUpper(httpMethod), httpRequestPath, httpBody)\n    )\n  )\n  ```\n",
+                    "key": "Api-Signature",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Current timestamp, represented as unix epoch seconds",
+                    "key": "Api-Timestamp",
+                    "value": "<long>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errorType\": \"Unauthenticated\",\n  \"message\": \"Missing required field 'amount'.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c09a4c8c-733a-4f91-8917-48d61c5eb4f2",
+              "name": "Conflict",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "transfers",
+                    ":transferId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "transferId",
+                      "description": "(Required) The ID of the transfer to cancel"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Api-Access-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) A hex-encoded Ed25519 signature of `timestamp_epoch_seconds + uppercase(http_method) + request_path + request_body`.\n\n\n\nConstruction example:\n\n  ```\n  toHex(\n    ed25519Sign(\n      signing_key,\n      '{}{}{}{}'.format(timestamp_epoch_seconds, toUpper(httpMethod), httpRequestPath, httpBody)\n    )\n  )\n  ```\n",
+                    "key": "Api-Signature",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Current timestamp, represented as unix epoch seconds",
+                    "key": "Api-Timestamp",
+                    "value": "<long>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Conflict",
+              "code": 409,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errorType\": \"Unauthenticated\",\n  \"message\": \"Missing required field 'amount'.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "1524a0d6-7c5f-4561-a461-c65ca1087684",
+              "name": "Too Many Requests",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "transfers",
+                    ":transferId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "transferId",
+                      "description": "(Required) The ID of the transfer to cancel"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Api-Access-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) A hex-encoded Ed25519 signature of `timestamp_epoch_seconds + uppercase(http_method) + request_path + request_body`.\n\n\n\nConstruction example:\n\n  ```\n  toHex(\n    ed25519Sign(\n      signing_key,\n      '{}{}{}{}'.format(timestamp_epoch_seconds, toUpper(httpMethod), httpRequestPath, httpBody)\n    )\n  )\n  ```\n",
+                    "key": "Api-Signature",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Current timestamp, represented as unix epoch seconds",
+                    "key": "Api-Timestamp",
+                    "value": "<long>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errorType\": \"Unauthenticated\",\n  \"message\": \"Missing required field 'amount'.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d0e11fa6-d1cb-4519-b365-8f5bcc4f5cfe",
+              "name": "Internal Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "transfers",
+                    ":transferId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "transferId",
+                      "description": "(Required) The ID of the transfer to cancel"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Api-Access-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) A hex-encoded Ed25519 signature of `timestamp_epoch_seconds + uppercase(http_method) + request_path + request_body`.\n\n\n\nConstruction example:\n\n  ```\n  toHex(\n    ed25519Sign(\n      signing_key,\n      '{}{}{}{}'.format(timestamp_epoch_seconds, toUpper(httpMethod), httpRequestPath, httpBody)\n    )\n  )\n  ```\n",
+                    "key": "Api-Signature",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Current timestamp, represented as unix epoch seconds",
+                    "key": "Api-Timestamp",
+                    "value": "<long>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errorType\": \"Unauthenticated\",\n  \"message\": \"Missing required field 'amount'.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.anchorage-staging.com/v2",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "Api-Access-Key"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}"
+      },
+      {
+        "key": "in",
+        "value": "header"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "1161201f-cd1c-41be-afb6-c695b869ce25",
+    "name": "Anchorage Digital API Reference Addresses Transfers API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "# Introduction\n*CONFIDENTIAL: Please do not distribute this documentation externally without prior Anchorage Digital approval.*\n\n\nThe Anchorage Digital REST API v2.0 provides a set of operations and resources that allow Anchorage Digital clients and partners to:\n  - Programmatically transfer funds from an Anchorage Digital vault or wallet without human intervention\n  - Create and list deposit addresses in a vault\n  - Read and monitor vault balances\n  - Query transaction history including deposits\n  - Request quotes from and execute trades with the Anchorage Digital trading desk\n\n\nWant help or to share your opinion on how this API works for you? Please contact api@anchorage.com.\n\n\n# Authentication and Security\n\nThe Anchorage Digital API performs authentication and authorization via a combination of:\n\n\n* An API key, which is a bearer token\n\n* A permission group signed by the user's organization, which is linked to the API key\n\n* An Ed25519 Signature, which comes from a user-generated key and is required for certain requests\n\n\n## Permission Groups\n\n\nA permission group acts as a set of rules for how an organization and its resources can be accessed. Permission groups are created independently of API keys, and new permission groups must be created prior to making an API key.\n\n\nEach permission group has a name, a description and a set of permissions which can be applied to your organization's vaults. Updating, creating and deleting permissions groups require a quorum of approvals. After creation, a permission group can be freely assigned to an unlimited number of API keys.\n\n\nEach API key inherits its permissions from the associated permission group. When the permission group is updated, all API keys associated with it will inherit the updated permission set. If a permission group is deleted, all associated API keys will no longer work.\n\n\nEach organization is created with a default permission group that allows read-only access. This permission group may be modified or deleted at any time, and no API keys are created by default with this permission group.\n\n\n### Permissions\n\n\nPossible vault permissions include the following:\n\n\n<table>\n  <tr>\n    <td><b>Read vault activity (READ)</b></td>\n    <td>See an overview of your vault(s) and wallets. Read vault details, balances, asset types, transaction history and deposit addresses.</td>\n  </tr>\n  <tr>\n    <td><b>Create address (CREATE_DEPOSIT_ADDRESS)</b></td>\n    <td>Receive deposits in the vault from external sources. Create and read deposit addresses.</td>\n  </tr>\n  <tr>\n    <td><b>Transfer funds (TRANSFER)</b></td>\n    <td>This permission is configurable to enable an API key endowed with this permission to either 1) Transfer funds to any Anchorage Digital institutional account, including those outside of your organization or 2) Transfer funds to any blockchain address not custodied by Anchorage Digital that has gone through quorum approval.</td>\n  </tr>\n  <tr>\n    <td><b>Propose and accept settlements (PROPOSE_ACCEPT_SETTLEMENTS)</b></td>\n    <td>This is an Atlas specific permission for initiating settlements.</td>\n  </tr>\n  <tr>\n    <td><b>Authorize settlements (AUTHORIZE_SETTLEMENTS)</b></td>\n    <td>This is an Atlas specific permission for authorizing settlements after they've been proposed or accepted.</td>\n  </tr>\n</table>\n\n\nThere are also special vault permissions for enabled by Anchorage Digital on a per-organization basis:\n\nAdditionally, there are global permissions which apply to the entire organization:\n\n\n<table>\n  <tr>\n    <td><b>Initiate withdrawals (INITIATE_WITHDRAWAL)</b></td>\n    <td>Initiate withdrawals to external destinations. All withdrawals require quorum approval through the Anchorage Digital mobile app.</td>\n  </tr>\n  <tr>\n    <td><b>Execute trades (TRADE)</b></td>\n    <td>Request for quotes (RFQ) from the Anchorage Digital trading desk. Create and accept quotes. Read data of trades and settlements created by this key.</td>\n  </tr>\n  <tr>\n    <td><b>Read trade activity (READ_TRADE)</b></td>\n    <td>Read trade activity and trade settlements data of your organization.</td>\n  </tr>\n  <tr>\n    <td><b>Read lending activity (LENDER_READ)</b></td>\n    <td>Read lending activity of your organization.</td>\n  </tr>\n  <tr>\n    <td><b>Read facility data (FACILITY_ONLY)</b></td>\n    <td>Read lending facility data.</td>\n  </tr>\n  <tr>\n    <td><b>Read deposit attribution activity (READ_DEPOSIT_ATTRIBUTION)</b></td>\n    <td>Read deposit attribution activity of your organization.</td>\n  </tr>\n  <tr>\n    <td><b>Manage deposit attributions (DEPOSIT_ATTRIBUTION)</b></td>\n    <td>Read deposit attribution activity of your organization. Perform deposit attributions.</td>\n  </tr>\n  <tr>\n    <td><b>Initiate Staking and Unstaking (STAKE)</b></td>\n    <td>Initiate staking or unstaking operation. All operations require quorum approval through the Anchorage Digital mobile app.</td>\n  </tr>\n</table>\n\n\n### Example Workflow - Allow transfers from specific vaults\n\nTo create an API key with the ability to transfer funds from an Anchorage Digital vaults or wallet, a permission group must first be created with the **Transfer funds** permission for the desired source vaults. Creating this permission group requires a quorum of approvals on the Anchorage Digital iOS app. Once the creation is confirmed, any number of API keys may be created with this permission group in the Anchorage Digital Web Dashboard under the API 2.0 section.\n\nTo add additional permissions to the API key, update the associated permission group through the Anchorage Digital Web Dashboard. To revoke any permissions, the individual API key may be revoked, or the permission group may be updated or deleted to remove Transfer access.\n\n## API Keys\n\nAll API requests must be made over HTTPS and must include authentication using the following scheme.\n\n<!-- ReDoc-Inject: <security-definitions> -->\n\n### Generating an API Key\n\nIn order to make a valid API request, you must first create an API key. API keys can be created and managed in the Anchorage Digital Web Dashboard under the [API 2.0 tab](https://anchoragelogin.com/api). When you create an API key, there are 3 pieces of information you will need to remember:\n  - API access key\n  - Ed25519 public key (optional for read-only requests)\n  - Ed25519 private/signing key (optional for read-only requests)\n\nYou must generate an Ed25519 signing key pair and save the public portion in the Anchorage Digital Web Dashboard when creating the API access key. The signing key pair is used for added security with sensitive requests.\n\nPlease note, Anchorage Digital cannot recover your API access key or private signing key if you forget them. You may generate a new access key and signing key at any time if you lose access.\n\n### API Key Permissions\n\nEach API key is associated with a permission group. This permission group specifies the permitted actions for all associated API keys. Read more about permission groups [here](#section/Authentication-and-Security/Permission-Groups).\n\n### Creating a request\n\nAll requests must include the `Api-Access-Key` header, which contains your API access key as a string.\n\nEndpoints that require a signature must include the `Api-Signature` and `Api-Timestamp` headers. Read more about signatures [here](#section/Authentication-and-Security/Signatures).\n\nAll request bodies must be valid JSON and have the content type `application/json`.\n\n## Request Signatures\n\nCertain endpoints require an Ed25519 signature to be provided alongside the API key. These endpoints will specify the `Api-Signature` and `Api-Timestamp` headers as additional parameters.\n\nSignatures are optional unless explicitly required, but are encouraged for all requests. If a signature is provided, it will be verified.\n\n### Signing Keys\n\nA signing key pair is generated by the user and the corresponding public key must be provided when creating an API key.\n\nWhen creating an API key, you will be prompted to provide an Ed25519 public key. You must use the associated Ed25519 signing key (private key) when creating signatures for requests from this API key.\n\nPlease note that signing keys (Ed25519 private keys) should be stored securely by the user. The signing key should only be used to derive request signatures and should never be sent in a request. Anchorage Digital will never request you share your private key.\n\n### Generating a Signing Key\n\nThe user must securely generate an Ed25519 key pair on their own hardware and retain both the public and private portions. The Anchorage Digital API accepts a 64-character (32 bytes) hex-encoded Ed25519 public key when creating an API access key.\n\n\n#### Code sample (Python)\n\n*Generate a new signing key pair*\n\n```python\n# https://pypi.org/project/PyNaCl/\n\nimport nacl\nimport nacl.signing\nimport secrets\n\nseed = secrets.token_bytes(32)\n\n# Generate a new random signing key\nsigning_key = nacl.signing.SigningKey(seed)\n\n# Obtain the hex-encoded signing key\nprint('Signing key:')\nprint(signing_key.encode().hex())\n\n# Obtain the hex-encoded verify key for the given signing key\n# Use this in the Anchorage Digital Web Dashboard when creating an API key\nprint('Public key:')\nprint(signing_key.verify_key.encode().hex())\n```\n\n\n### Signing a Request\n\nTo sign a request, generate a request signature using the Ed25519 private (signing) key and provide it alongside the request in the `Api-Signature` header.\n\nTo create a request signature, first concatenate the `timestamp`, `method`, `request path`, and `body` into a string. Then, create a signature of this message using the Ed25519 private key and hex-encode the output. Use this value as the `Api-Signature` header and use the `timestamp` value as the `Api-Timestamp` header.\n\n- The `method` is an uppercase HTTP method (ex. `GET`, `POST`, `DELETE`)\n- The `request path` should contain all query parameters (ex. `/v2/transfers?foo=bar&baz=bang`)\n- The `body` is a stringified HTTP request body\n- The `body` should be omitted if the request does not contain a body (ex. a `GET` or `DELETE` request)\n- The `timestamp` is the same as the `Api-Timestamp` header\n- The `timestamp` is a number of seconds since the Unix Epoch in UTC, and must be within one minute of the API service's time when the request is received\n\n### Reference signature\n\nTo verify your signature generation code is correct, generate a signature for the following request and timestamp using the provided signing key. If the generated signature matches the signature below, your signature generation code is correct.\n\n\n<table>\n  <tr>\n    <td>Timestamp</td>\n    <td>1577880000</td>\n  </tr>\n  <tr>\n    <td>HTTP Method (Uppercase)</td>\n    <td>POST</td>\n  </tr>\n  <tr>\n    <td>HTTP Path + query</td>\n    <td>/v2/transfers?foo=bar&baz=bang</td>\n  </tr>\n  <tr>\n    <td>HTTP Body</td>\n    <td>{\"source\": {\"id\": \"1c920f4241b78a1d483a29f3c24b6c4c\", \"type\": \"VAULT\"}, \"assetType\": \"ETH\", \"destination\": {\"id\": \"55e89d4a644d736b01533a2ea9b32a20\", \"type\": \"VAULT\"}, \"amount\": \"1000.00000000\"}</td>\n  </tr>\n  <tr>\n    <td>Signing Key (Ed25519 Private Key Seed)</td>\n    <td>0101010101010101010101010101010101010101010101010101010101010101</td>\n  </tr>\n  <tr>\n    <td>Public Key</td>\n    <td>8a88e3dd7409f195fd52db2d3cba5d72ca6709bf1d94121bf3748801b40f6f5c</td>\n  </tr>\n  <tr>\n    <td>Signature</td>\n    <td>4bf42054bf7db1f8a2a2bc83d2a108502ee7a9d2ac7a2738adc2f932922446786fb9be1bd1eb475023296c6cba4ddbe28b04baca4b7521b1f1840a4ffd2b4d0d</td>\n  </tr>\n</table>\n\n## Reference clients\n\n### Python (with `requests` library)\n\n*Authorize and sign requests*\n\n```python\n\n# https://pypi.org/project/PyNaCl/\n\nfrom nacl import signing\n\nimport time\n\nimport requests\n\n\nclass AnchorageAuth(requests.auth.AuthBase):\n    ACCESS_KEY_HEADER = \"Api-Access-Key\"\n    SIGNATURE_HEADER = \"Api-Signature\"\n    TIMESTAMP_HEADER = \"Api-Timestamp\"\n\n    access_key: str\n    signing_key: signing.SigningKey\n\n    def __init__(self, access_key: str, signing_key_seed: bytes):\n        self.access_key = access_key\n        self.signing_key = signing.SigningKey(signing_key_seed)\n\n    def __call__(self, r: requests.PreparedRequest):\n        r.headers[self.ACCESS_KEY_HEADER] = self.access_key\n\n        timestamp = str(int(time.time()))\n        method = r.method.upper() if r.method else \"GET\"\n        body: bytes = bytes()\n        if r.body and isinstance(r.body, bytes):\n            body = r.body\n        elif r.body and isinstance(r.body, str):\n            body = bytearray(r.body, \"utf-8\")\n        message = b\"\".join(\n            [bytearray(timestamp, \"utf-8\"), bytearray(method, \"utf-8\"), bytearray(r.path_url, \"utf-8\"), body]\n        )\n        signature = self.signing_key.sign(message).signature.hex()\n        r.headers[self.SIGNATURE_HEADER] = signature\n        r.headers[self.TIMESTAMP_HEADER] = timestamp\n        return r\n\n\n# load secrets\n\n# Use the API key generated in the Anchorage Digital Web Dashboard\n\naccess_key = ...\n\n# Use the Ed25519 signing private key\n\nsigning_key_str = ... # load the raw string\n\nsigning_key = bytes(bytearray.fromhex(signing_key_str))\n\ndata = {}\n\nanchorage_auth = AnchorageAuth(access_key, signing_key)\n\nr = requests.post(\"https://api.anchorage.com/v2/transfers\", data=data, auth=anchorage_auth)\n\n```\n\n### Ruby - Reproduce reference signature\n```ruby\n  require \"ed25519\"\n  require \"net/http\"\n  require \"time\"\n\n  def hex_to_bin(s)\n      [s].pack('H*')\n  end\n\n  def bin_to_hex(s)\n      s.unpack('H*').first\n  end\n\n  private_key_seed_hex = '0101010101010101010101010101010101010101010101010101010101010101'\n  public_key_hex = '8a88e3dd7409f195fd52db2d3cba5d72ca6709bf1d94121bf3748801b40f6f5c'\n  key_pair_hex = private_key_seed_hex + public_key_hex\n\n  key_pair = hex_to_bin(key_pair_hex)\n\n  signing_key = Ed25519::SigningKey.from_keypair(key_pair)\n\n  timestamp = '1577880000' # Time.now.to_i.to_s\n\n  req = Net::HTTP::Post.new('/v2/transfers?foo=bar&baz=bang')\n  req.body = '{\"source\": {\"id\": \"1c920f4241b78a1d483a29f3c24b6c4c\", \"type\": \"VAULT\"}, \"assetType\": \"ETH\", \"destination\": {\"id\": \"55e89d4a644d736b01533a2ea9b32a20\", \"type\": VAULT\"}, \"amount\": \"1000.00000000\"}'\n\n  signature = signing_key.sign(timestamp + req.method + req.path + req.body)\n\n  req['Api-Access-Key'] = 'YOUR_ACCESS_KEY'\n  req['Api-Timestamp'] = timestamp\n  req['Api-Signature'] = bin_to_hex(signature)\n\n  puts bin_to_hex(signature)\n```\n\n# Errors\n\n\nThe Anchorage Digital API returns standard HTTP error codes for each API request.\n\n\n<table>\n  <tr>\n    <th style=\"width: 30%;\">Response Code</th>\n    <th>Description</th>\n  <tr>\n  <tr>\n    <td>200 OK</td>\n    <td>The request was successful.</td>\n  </tr>\n  <tr>\n    <td>400 Bad Request</td>\n    <td>The request was improperly formed and could not be understood by the server, often due to invalid syntax, insufficient funds, or a missing required parameter.</td>\n  </tr>\n  <tr>\n    <td>401 Unauthorized</td>\n    <td>The request was missing a valid API key.</td>\n  </tr>\n  <tr>\n    <td>403 Forbidden</td>\n    <td>The provided API key does not have permission to perform the requested action.</td>\n  </tr>\n  <tr>\n    <td>404 Not Found</td>\n    <td>The requested resource does not exist.</td>\n  </tr>\n  <tr>\n    <td>409 Conflict</td>\n    <td>The requested resource cannot proceed with the requested action because it is not in the required state.</td>\n  </tr>\n   <tr>\n    <td>429 Too Many Requests</td>\n    <td>Too many requests have been sent in a given amount of time.</td>\n  </tr>\n  <tr>\n    <td>\n      500 Internal Server Error\n      <br />\n      502 Bad Gateway\n      <br />\n      503 Service Unavailable\n      <br />\n      504 Gateway Timeout\n    </td>\n    <td>Something went wrong on Anchorage’s side. We have been alerted and are working on it.</td>\n  </tr>\n</table>\n\n\nIn addition to returning HTTP error codes for failed requests, the Anchorage Digital API includes a readable error message describing what went wrong in the response body.\n\n\n<SchemaDefinition schemaRef=\"#/components/schemas/ErrorDetails\" showReadOnly={true} showWriteOnly={true} />\n\n\n# Idempotency\n\n\nCertain endpoints support idempotent requests so that a given request can be safely retried without performing the same operation twice. For example, if a request to transfer funds does not respond due to network issues, you can retry the request using the same idempotent ID to ensure that only one transfer is created.\n\n\nEndpoints that support idempotent requests have an optional `idempotentId` field that can be included in the body of the `POST` request. Provide a unique string using your method of choice (such as a v4 UUID).\n\n\nIf a request is valid, Anchorage Digital will save the request indefinitely. If a subsequent request is received with the same `idempotentId` we will return the previously saved response for that `idempotentId`.\n\n\n# Rate Limits\n\n\nKeys provisioned by an Organization share one common rate limit. API requests are limited to 20 requests per second per Organization, allowing for bursts of up to 100 requests within a single second.\n\n\n# Pagination\n\n\nCursor pagination is used for REST endpoints which return multiple data points. Pagination allows for fetching data after the current page and specifying how many records to return. The `next` cursor is available in responses with the `page` attribute. Requests should use the `next` cursor URL to query subsequent data. Query parameter `afterId` specifies the last record previously retrieved. Some endpoints instead use the `endDate` parameter to specify the end date and older for records to retrieve. Query parameter `limit` specifies the maximum number of records in a response.\n\n## Parameters\n\n<table>\n  <tr>\n    <th style=\"width: 30%;\">Parameter</th>\n    <th>Description</th\n  </tr>\n  <tr>\n    <td>afterId</td>\n    <td>Request page after (older than) this pagination id.</td>\n  </tr>\n  <tr>\n    <td>endDate</td>\n    <td>Request records older than this date (YYYY-MM-DD format). Used for /trading/trades and /trading/settlements resources.</td>\n  </tr>\n  <tr>\n    <td>limit</td>\n    <td>Maximum number of results requested. Default usually 25, but varies depending on resource.</td>\n  </tr>\n</table>\n\n## Example\n\n`GET /v2/transfers?afterId=1968b94b09b8a1a8a381775d1f04978c424d891d50e517774bf984297985b471&limit=100`\n\n## Next cursor\n\nThe `next` cursor is a URL which references the last record in a set of records. When queried, the `next` cursor URL will return subsequent records, but otherwise using the same query parameters.\n\nContact Support:\n Email: api@anchorage.com",
+      "type": "text/plain"
+    }
+  }
+}

@@ -1,0 +1,321 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Anchorage Digital API Reference Addresses Atlas Settlement Network API",
+    "version": "2.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "Api-Access-Key",
+      "value": "{{Api-Access-Key}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Atlas Settlement Network",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List settlements",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.anchorage-staging.com/v2/atlas/settlements",
+            "params": [
+              {
+                "name": "afterId",
+                "value": "",
+                "type": "query",
+                "description": "When paginating this is used to provide the starting point for the page to fetch (retrieved from the previous response body)"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of results to return per query"
+              }
+            ]
+          },
+          "docs": "Permissions required: **Read vault activity**\n\n\nGet settlements proposed by you or proposed to you."
+        },
+        {
+          "info": {
+            "name": "Propose a settlement",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.anchorage-staging.com/v2/atlas/settlements",
+            "headers": [
+              {
+                "name": "Api-Signature",
+                "value": ""
+              },
+              {
+                "name": "Api-Timestamp",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Permissions required: **Propose and Accept settlements**\n\n\nPropose a settlement with a counterparty for a list of assets coming from and/or arriving into wallets owned by your participant.\n\nPositive amounts indicate funds to be received and negative amounts indicate funds to be sent.\n\n```json\n[\n\t{\n\t\t\"walletId\": \"d4578f401daadff65615236c5ad1e12c\",\n\t\t\"quantity\": \"-1.1\",\n\t\t\"assetType\": \"BTC\"\n\t},\n\t{\n\t\t\"walletId\": \"43a9aeac02c851f4868f9d89aabde494\",\n\t\t\"quantity\": \"20.62\",\n\t\t\"assetType\": \"ETH\"\n\t}\n]\n``"
+        },
+        {
+          "info": {
+            "name": "Reject a settlement proposal",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.anchorage-staging.com/v2/atlas/settlements/:settlementId/reject",
+            "headers": [
+              {
+                "name": "Api-Signature",
+                "value": ""
+              },
+              {
+                "name": "Api-Timestamp",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "settlementId",
+                "value": "",
+                "type": "path",
+                "description": "ID of settlement to reject"
+              }
+            ]
+          },
+          "docs": "Permissions required: **Propose and Accept settlements** or **Authorize Settlements**\n\n\nRejects a proposed settlement for your Atlas participant. Proposed settlements cannot be rejected if they have already been authorized."
+        },
+        {
+          "info": {
+            "name": "Authorize a settlement",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.anchorage-staging.com/v2/atlas/settlements/:settlementId/authorize",
+            "headers": [
+              {
+                "name": "Api-Signature",
+                "value": ""
+              },
+              {
+                "name": "Api-Timestamp",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "settlementId",
+                "value": "",
+                "type": "path",
+                "description": "ID of settlement to authorize"
+              },
+              {
+                "name": "participantId",
+                "value": "",
+                "type": "query",
+                "description": "ID of participant authorizing the settlement"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Permissions required: **Authorize Settlements**\n\n\nAfter your participant has proposed a settlement or accepted a settlement proposal, the details of the settlement must be authorized.\n\nTo authorize via API, the API key must have a special permission. Otherwise, authorization takes place in the app according to organization policy."
+        },
+        {
+          "info": {
+            "name": "Accept a settlement",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.anchorage-staging.com/v2/atlas/settlements/:settlementId/accept",
+            "headers": [
+              {
+                "name": "Api-Signature",
+                "value": ""
+              },
+              {
+                "name": "Api-Timestamp",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "settlementId",
+                "value": "",
+                "type": "path",
+                "description": "ID of settlement to authorize"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Permissions required: **Propose and Accept settlements** and **Read vault activity**\n\n\nAccept a proposed settlement and select wallets to receive funds to and/or send funds from."
+        },
+        {
+          "info": {
+            "name": "Get a settlement by ID",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.anchorage-staging.com/v2/atlas/settlements/:settlementId",
+            "params": [
+              {
+                "name": "settlementId",
+                "value": "",
+                "type": "path",
+                "description": "ID of settlement to fetch"
+              }
+            ]
+          },
+          "docs": "Permissions required: **Read vault activity**\n\n\nGet a single settlement by its ID."
+        },
+        {
+          "info": {
+            "name": "List trusted counterparties",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.anchorage-staging.com/v2/atlas/directory/counterparties",
+            "params": [
+              {
+                "name": "participantId",
+                "value": "",
+                "type": "query",
+                "description": "ID of the participant this trusted counterparty is for"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of results to return per query"
+              },
+              {
+                "name": "afterId",
+                "value": "",
+                "type": "query",
+                "description": "When paginating this is used to provide the starting point for the page to fetch (retrieved from the previous response body)"
+              }
+            ]
+          },
+          "docs": "Permissions required: **Read vault activity**\n\n\nGet trusted counterparties."
+        },
+        {
+          "info": {
+            "name": "Propose a trusted counterparty",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.anchorage-staging.com/v2/atlas/directory/counterparties",
+            "headers": [
+              {
+                "name": "Api-Signature",
+                "value": ""
+              },
+              {
+                "name": "Api-Timestamp",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Permissions required: **Propose Trusted Counterparty**\n\n\nPropose adding a new trusted counterparty for a participant."
+        },
+        {
+          "info": {
+            "name": "Get a counterparty by ID",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.anchorage-staging.com/v2/atlas/directory/counterparties/:counterpartyId",
+            "params": [
+              {
+                "name": "counterpartyId",
+                "value": "",
+                "type": "path",
+                "description": "ID of trusted counterparty to fetch"
+              },
+              {
+                "name": "participantId",
+                "value": "",
+                "type": "query",
+                "description": "ID of the participant this trusted counterparty is for"
+              }
+            ]
+          },
+          "docs": "Permissions required: **Read vault activity**\n\n\nGet a single trusted counterparty by its ID."
+        },
+        {
+          "info": {
+            "name": "Get a participant by ID",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.anchorage-staging.com/v2/atlas/directory/participants/:participantId",
+            "params": [
+              {
+                "name": "participantId",
+                "value": "",
+                "type": "path",
+                "description": "ID of participant to fetch"
+              }
+            ]
+          },
+          "docs": "Permissions required: **Read vault activity**\n\nGet a single participant by its ID."
+        },
+        {
+          "info": {
+            "name": "List participants",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.anchorage-staging.com/v2/atlas/directory/participants",
+            "params": [
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of results to return per query"
+              },
+              {
+                "name": "afterId",
+                "value": "",
+                "type": "query",
+                "description": "When paginating this is used to provide the starting point for the page to fetch (retrieved from the previous response body)"
+              }
+            ]
+          },
+          "docs": "Permissions required: **Read vault activity**\n\n\nGet the list of participants you have access to."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

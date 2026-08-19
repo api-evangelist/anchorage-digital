@@ -1,0 +1,3764 @@
+{
+  "item": [
+    {
+      "id": "bbe62c35-5753-4891-b448-6e6ffceb0a7e",
+      "name": "Webhook Notifications",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "19cfffa2-796a-41c4-b95e-f3bebe1839e5",
+          "name": "Get webhook validation key",
+          "request": {
+            "name": "Get webhook validation key",
+            "description": {
+              "content": "Permissions required: **Configure Webhooks**\n\n\nGet key to validate webhook authenticity.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "webhook",
+                "validation-key"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "5931db2d-eed7-4456-8a28-5b999319c039",
+              "name": "Webhook event type list",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "webhook",
+                    "validation-key"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Api-Access-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"value\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "3e68906c-23bc-4f2d-9548-d2a94b0cc0f8",
+              "name": "Unauthenticated",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "webhook",
+                    "validation-key"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Api-Access-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errorType\": \"InsufficientFunds\",\n  \"message\": \"Missing required field 'amount'.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "74708c42-6016-4df1-bff0-63674f01df78",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "webhook",
+                    "validation-key"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Api-Access-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errorType\": \"InsufficientFunds\",\n  \"message\": \"Missing required field 'amount'.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "464477c0-d838-4ebe-bf7e-8f2d233862cc",
+              "name": "Too Many Requests",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "webhook",
+                    "validation-key"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Api-Access-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errorType\": \"InsufficientFunds\",\n  \"message\": \"Missing required field 'amount'.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "9ce2eb51-a3d7-4cc5-814e-e16e43143ade",
+              "name": "Internal Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "webhook",
+                    "validation-key"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Api-Access-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errorType\": \"InsufficientFunds\",\n  \"message\": \"Missing required field 'amount'.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "044465e4-52ec-4932-8fde-8219258bfc7f",
+          "name": "List webhook event types",
+          "request": {
+            "name": "List webhook event types",
+            "description": {
+              "content": "Permissions required: **Configure Webhooks**\n\n\nList the available webhook event types that you can subscribe to.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "webhook",
+                "event-types"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "afterId",
+                  "value": "<string>",
+                  "description": "When paginating this is used to provide the starting point for the page to fetch (retrieved from the previous response body)"
+                },
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "25",
+                  "description": "Maximum number of results to return per query"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "3d678911-28b5-4c3f-925b-2e7c11b47d5b",
+              "name": "Webhook event type list",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "webhook",
+                    "event-types"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "afterId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "25"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Api-Access-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"id\": \"string\",\n      \"description\": \"string\"\n    },\n    {\n      \"id\": \"string\",\n      \"description\": \"string\"\n    }\n  ],\n  \"page\": {\n    \"next\": \"<next page url>\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "de0fe0d1-d16a-4c1b-9189-ebc3c2a6c49b",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "webhook",
+                    "event-types"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "afterId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "25"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Api-Access-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errorType\": \"InsufficientFunds\",\n  \"message\": \"Missing required field 'amount'.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "edd754f8-4da8-413f-80e0-5a9841a18e75",
+              "name": "Unauthenticated",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "webhook",
+                    "event-types"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "afterId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "25"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Api-Access-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errorType\": \"InsufficientFunds\",\n  \"message\": \"Missing required field 'amount'.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "21fbcbc0-685e-4aca-82c6-b1063e8152bd",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "webhook",
+                    "event-types"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "afterId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "25"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Api-Access-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errorType\": \"InsufficientFunds\",\n  \"message\": \"Missing required field 'amount'.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "da14008b-1f71-4076-be5a-9206f5a105de",
+              "name": "Too Many Requests",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "webhook",
+                    "event-types"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "afterId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "25"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Api-Access-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errorType\": \"InsufficientFunds\",\n  \"message\": \"Missing required field 'amount'.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "0b0ac1fc-7ee0-4889-aba4-1090977f7b12",
+              "name": "Internal Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "webhook",
+                    "event-types"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "afterId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "25"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Api-Access-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errorType\": \"InsufficientFunds\",\n  \"message\": \"Missing required field 'amount'.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "9ba78ded-99be-4a4e-a1ec-ff936de46166",
+          "name": "Create webhook endpoint",
+          "request": {
+            "name": "Create webhook endpoint",
+            "description": {
+              "content": "Permissions required: **Configure Webhooks**\n\n\nCreate a new endpoint where you would like to receive webhook notifications.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "webhook",
+                "endpoints"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "[\n  {\n    \"url\": \"<uri>\",\n    \"description\": \"<string>\",\n    \"publicKey\": \"<string>\",\n    \"subscriptions\": [\n      {\n        \"eventTypeId\": \"<string>\"\n      },\n      {\n        \"eventTypeId\": \"<string>\"\n      }\n    ]\n  },\n  {\n    \"url\": \"<uri>\",\n    \"description\": \"<string>\",\n    \"publicKey\": \"<string>\",\n    \"subscriptions\": [\n      {\n        \"eventTypeId\": \"<string>\"\n      },\n      {\n        \"eventTypeId\": \"<string>\"\n      }\n    ]\n  }\n]",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "621ad64e-1994-4154-b25b-0a0bcf2c9388",
+              "name": "Created webhook endpoint ids",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "webhook",
+                    "endpoints"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Api-Access-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "[\n  {\n    \"url\": \"<uri>\",\n    \"description\": \"<string>\",\n    \"publicKey\": \"<string>\",\n    \"subscriptions\": [\n      {\n        \"eventTypeId\": \"<string>\"\n      },\n      {\n        \"eventTypeId\": \"<string>\"\n      }\n    ]\n  },\n  {\n    \"url\": \"<uri>\",\n    \"description\": \"<string>\",\n    \"publicKey\": \"<string>\",\n    \"subscriptions\": [\n      {\n        \"eventTypeId\": \"<string>\"\n      },\n      {\n        \"eventTypeId\": \"<string>\"\n      }\n    ]\n  }\n]",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    \"b5b7350c-4906-fb52-b265-60509e77199c\",\n    \"db343783-5aaf-9b6b-9a67-e6d614e57ed9\"\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d0e6c9d7-7e43-4ab3-9e76-4455da1b1f7c",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "webhook",
+                    "endpoints"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Api-Access-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "[\n  {\n    \"url\": \"<uri>\",\n    \"description\": \"<string>\",\n    \"publicKey\": \"<string>\",\n    \"subscriptions\": [\n      {\n        \"eventTypeId\": \"<string>\"\n      },\n      {\n        \"eventTypeId\": \"<string>\"\n      }\n    ]\n  },\n  {\n    \"url\": \"<uri>\",\n    \"description\": \"<string>\",\n    \"publicKey\": \"<string>\",\n    \"subscriptions\": [\n      {\n        \"eventTypeId\": \"<string>\"\n      },\n      {\n        \"eventTypeId\": \"<string>\"\n      }\n    ]\n  }\n]",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errorType\": \"InsufficientFunds\",\n  \"message\": \"Missing required field 'amount'.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "0b8b3814-27f6-4b5f-a338-ab3ab2eaf502",
+              "name": "Unauthenticated",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "webhook",
+                    "endpoints"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Api-Access-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "[\n  {\n    \"url\": \"<uri>\",\n    \"description\": \"<string>\",\n    \"publicKey\": \"<string>\",\n    \"subscriptions\": [\n      {\n        \"eventTypeId\": \"<string>\"\n      },\n      {\n        \"eventTypeId\": \"<string>\"\n      }\n    ]\n  },\n  {\n    \"url\": \"<uri>\",\n    \"description\": \"<string>\",\n    \"publicKey\": \"<string>\",\n    \"subscriptions\": [\n      {\n        \"eventTypeId\": \"<string>\"\n      },\n      {\n        \"eventTypeId\": \"<string>\"\n      }\n    ]\n  }\n]",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errorType\": \"InsufficientFunds\",\n  \"message\": \"Missing required field 'amount'.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "28f49ea8-4a1a-4e54-9ad6-a5f12ebdad47",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "webhook",
+                    "endpoints"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Api-Access-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "[\n  {\n    \"url\": \"<uri>\",\n    \"description\": \"<string>\",\n    \"publicKey\": \"<string>\",\n    \"subscriptions\": [\n      {\n        \"eventTypeId\": \"<string>\"\n      },\n      {\n        \"eventTypeId\": \"<string>\"\n      }\n    ]\n  },\n  {\n    \"url\": \"<uri>\",\n    \"description\": \"<string>\",\n    \"publicKey\": \"<string>\",\n    \"subscriptions\": [\n      {\n        \"eventTypeId\": \"<string>\"\n      },\n      {\n        \"eventTypeId\": \"<string>\"\n      }\n    ]\n  }\n]",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errorType\": \"InsufficientFunds\",\n  \"message\": \"Missing required field 'amount'.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d2d2bb53-b4cd-486c-8ef2-944e3b28cb49",
+              "name": "Conflict",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "webhook",
+                    "endpoints"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Api-Access-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "[\n  {\n    \"url\": \"<uri>\",\n    \"description\": \"<string>\",\n    \"publicKey\": \"<string>\",\n    \"subscriptions\": [\n      {\n        \"eventTypeId\": \"<string>\"\n      },\n      {\n        \"eventTypeId\": \"<string>\"\n      }\n    ]\n  },\n  {\n    \"url\": \"<uri>\",\n    \"description\": \"<string>\",\n    \"publicKey\": \"<string>\",\n    \"subscriptions\": [\n      {\n        \"eventTypeId\": \"<string>\"\n      },\n      {\n        \"eventTypeId\": \"<string>\"\n      }\n    ]\n  }\n]",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Conflict",
+              "code": 409,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errorType\": \"InsufficientFunds\",\n  \"message\": \"Missing required field 'amount'.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e4a56f96-17ca-4fe1-8ec1-e728dce976bb",
+              "name": "Too Many Requests",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "webhook",
+                    "endpoints"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Api-Access-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "[\n  {\n    \"url\": \"<uri>\",\n    \"description\": \"<string>\",\n    \"publicKey\": \"<string>\",\n    \"subscriptions\": [\n      {\n        \"eventTypeId\": \"<string>\"\n      },\n      {\n        \"eventTypeId\": \"<string>\"\n      }\n    ]\n  },\n  {\n    \"url\": \"<uri>\",\n    \"description\": \"<string>\",\n    \"publicKey\": \"<string>\",\n    \"subscriptions\": [\n      {\n        \"eventTypeId\": \"<string>\"\n      },\n      {\n        \"eventTypeId\": \"<string>\"\n      }\n    ]\n  }\n]",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errorType\": \"InsufficientFunds\",\n  \"message\": \"Missing required field 'amount'.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "745d04b0-02d0-4e37-a9d9-23d250d3d66a",
+              "name": "Internal Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "webhook",
+                    "endpoints"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Api-Access-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "[\n  {\n    \"url\": \"<uri>\",\n    \"description\": \"<string>\",\n    \"publicKey\": \"<string>\",\n    \"subscriptions\": [\n      {\n        \"eventTypeId\": \"<string>\"\n      },\n      {\n        \"eventTypeId\": \"<string>\"\n      }\n    ]\n  },\n  {\n    \"url\": \"<uri>\",\n    \"description\": \"<string>\",\n    \"publicKey\": \"<string>\",\n    \"subscriptions\": [\n      {\n        \"eventTypeId\": \"<string>\"\n      },\n      {\n        \"eventTypeId\": \"<string>\"\n      }\n    ]\n  }\n]",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errorType\": \"InsufficientFunds\",\n  \"message\": \"Missing required field 'amount'.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "0e088090-32c1-48fa-904e-f3bec4b9efd2",
+          "name": "List webhook endpoint",
+          "request": {
+            "name": "List webhook endpoint",
+            "description": {
+              "content": "Permissions required: **Configure Webhooks**\n\n\nList all of your webhook endpoints.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "webhook",
+                "endpoints"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "afterId",
+                  "value": "<string>",
+                  "description": "When paginating this is used to provide the starting point for the page to fetch (retrieved from the previous response body)"
+                },
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "25",
+                  "description": "Maximum number of results to return per query"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "340096d0-25bb-432e-8ce4-2b59234ca416",
+              "name": "Webhook endpoint list",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "webhook",
+                    "endpoints"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "afterId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "25"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Api-Access-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"id\": \"7c66e367-2290-93c8-3f64-5f9a504d724b\",\n      \"createdAt\": \"2013-05-16T22:35:28.744Z\",\n      \"url\": \"https://pDzsAjKjiNJl.dagNJqvaxizcL++3xaEsL.K,rURJ0vCI6xDS8EU4kjF2RSeUkkorvtd\",\n      \"description\": \"string\",\n      \"publicKey\": \"string\",\n      \"updatedAt\": \"1993-12-22T18:42:34.828Z\"\n    },\n    {\n      \"id\": \"dc0db415-47e4-ef15-e4a3-34e2869bb685\",\n      \"createdAt\": \"2001-04-27T17:00:26.843Z\",\n      \"url\": \"https://zxIveeTEt.gmbhypAz1RKE3kwjjmeQpTgqO,Q9X2nvbZdSR\",\n      \"description\": \"string\",\n      \"publicKey\": \"string\",\n      \"updatedAt\": \"1957-09-16T13:15:47.463Z\"\n    }\n  ],\n  \"page\": {\n    \"next\": \"<next page url>\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "63cfcd1d-fb2b-4a3a-975b-1f4f3065a8f2",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "webhook",
+                    "endpoints"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "afterId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "25"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Api-Access-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errorType\": \"InsufficientFunds\",\n  \"message\": \"Missing required field 'amount'.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "8e11e235-ab59-4a23-bc32-fb5864142d2d",
+              "name": "Unauthenticated",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "webhook",
+                    "endpoints"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "afterId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "25"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Api-Access-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errorType\": \"InsufficientFunds\",\n  \"message\": \"Missing required field 'amount'.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "750ac3de-6780-408b-8f25-6fa9b0598968",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "webhook",
+                    "endpoints"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "afterId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "25"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Api-Access-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errorType\": \"InsufficientFunds\",\n  \"message\": \"Missing required field 'amount'.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "3b114b19-ad27-4f75-9ab5-9e2e232df5f0",
+              "name": "Too Many Requests",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "webhook",
+                    "endpoints"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "afterId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "25"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Api-Access-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errorType\": \"InsufficientFunds\",\n  \"message\": \"Missing required field 'amount'.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ebe65600-61c2-443e-8058-e99d5cd06c73",
+              "name": "Internal Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "webhook",
+                    "endpoints"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "afterId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "25"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Api-Access-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errorType\": \"InsufficientFunds\",\n  \"message\": \"Missing required field 'amount'.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "ae9eb73f-660a-4653-a0c2-4eeb747a8351",
+          "name": "Get webhook endpoint config",
+          "request": {
+            "name": "Get webhook endpoint config",
+            "description": {
+              "content": "Permissions required: **Configure Webhooks**\n\n\nGet the configuration details for an endpoint.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "webhook",
+                "endpoints",
+                ":endpointId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "endpointId",
+                  "description": "(Required) Unique identifier for the endpoint"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "fd055dc5-0ce6-427e-ba76-02468d359bbf",
+              "name": "Webhook endpoint",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "webhook",
+                    "endpoints",
+                    ":endpointId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "endpointId",
+                      "description": "(Required) Unique identifier for the endpoint"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Api-Access-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"id\": \"86b1758c-a661-be80-ea09-81bcff57f4ba\",\n    \"createdAt\": \"2013-02-06T01:28:35.811Z\",\n    \"url\": \"http://qJuZWVKbgGGUpz.ruideX-t9yoIG\",\n    \"description\": \"string\",\n    \"publicKey\": \"string\",\n    \"updatedAt\": \"1989-07-20T05:19:10.927Z\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "db733485-8351-45c5-b210-df642697361f",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "webhook",
+                    "endpoints",
+                    ":endpointId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "endpointId",
+                      "description": "(Required) Unique identifier for the endpoint"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Api-Access-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errorType\": \"InsufficientFunds\",\n  \"message\": \"Missing required field 'amount'.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c51db1b1-3f70-41aa-bcbd-b9c475a0e6da",
+              "name": "Unauthenticated",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "webhook",
+                    "endpoints",
+                    ":endpointId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "endpointId",
+                      "description": "(Required) Unique identifier for the endpoint"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Api-Access-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errorType\": \"InsufficientFunds\",\n  \"message\": \"Missing required field 'amount'.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "913f5b29-81f0-455e-b3bc-6a0efe91a0bd",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "webhook",
+                    "endpoints",
+                    ":endpointId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "endpointId",
+                      "description": "(Required) Unique identifier for the endpoint"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Api-Access-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errorType\": \"InsufficientFunds\",\n  \"message\": \"Missing required field 'amount'.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "692041ab-6a50-4208-b860-bd6e53272ba6",
+              "name": "Not Found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "webhook",
+                    "endpoints",
+                    ":endpointId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "endpointId",
+                      "description": "(Required) Unique identifier for the endpoint"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Api-Access-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errorType\": \"InsufficientFunds\",\n  \"message\": \"Missing required field 'amount'.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e1a358a3-0393-48c2-8518-aee8bb62e825",
+              "name": "Too Many Requests",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "webhook",
+                    "endpoints",
+                    ":endpointId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "endpointId",
+                      "description": "(Required) Unique identifier for the endpoint"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Api-Access-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errorType\": \"InsufficientFunds\",\n  \"message\": \"Missing required field 'amount'.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "9eae8578-7a03-49fc-8298-618ed4784857",
+              "name": "Internal Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "webhook",
+                    "endpoints",
+                    ":endpointId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "endpointId",
+                      "description": "(Required) Unique identifier for the endpoint"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Api-Access-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errorType\": \"InsufficientFunds\",\n  \"message\": \"Missing required field 'amount'.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "3727e3b2-6872-4499-a142-222b7dbc3f48",
+          "name": "Update webhook endpoint",
+          "request": {
+            "name": "Update webhook endpoint",
+            "description": {
+              "content": "Permissions required: **Configure Webhooks**\n\n\nUpdate the configuration for an endpoint.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "webhook",
+                "endpoints",
+                ":endpointId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "endpointId",
+                  "description": "(Required) Unique identifier for the endpoint"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PATCH",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"description\": \"<string>\",\n  \"publicKey\": \"<string>\",\n  \"subscriptions\": [\n    {\n      \"eventTypeId\": \"<string>\"\n    },\n    {\n      \"eventTypeId\": \"<string>\"\n    }\n  ],\n  \"url\": \"<uri>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "95e722db-e989-440a-9841-6d9686720e6c",
+              "name": "Successfully updated webhook endpoint",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "webhook",
+                    "endpoints",
+                    ":endpointId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "endpointId",
+                      "description": "(Required) Unique identifier for the endpoint"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Api-Access-Key",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"description\": \"<string>\",\n  \"publicKey\": \"<string>\",\n  \"subscriptions\": [\n    {\n      \"eventTypeId\": \"<string>\"\n    },\n    {\n      \"eventTypeId\": \"<string>\"\n    }\n  ],\n  \"url\": \"<uri>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "4f3b6fe0-9ceb-4491-9847-a4950e1bdae9",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "webhook",
+                    "endpoints",
+                    ":endpointId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "endpointId",
+                      "description": "(Required) Unique identifier for the endpoint"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Api-Access-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"description\": \"<string>\",\n  \"publicKey\": \"<string>\",\n  \"subscriptions\": [\n    {\n      \"eventTypeId\": \"<string>\"\n    },\n    {\n      \"eventTypeId\": \"<string>\"\n    }\n  ],\n  \"url\": \"<uri>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errorType\": \"InsufficientFunds\",\n  \"message\": \"Missing required field 'amount'.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "949efc9a-cd3e-416d-b1b9-8f969b9e0041",
+              "name": "Unauthenticated",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "webhook",
+                    "endpoints",
+                    ":endpointId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "endpointId",
+                      "description": "(Required) Unique identifier for the endpoint"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Api-Access-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"description\": \"<string>\",\n  \"publicKey\": \"<string>\",\n  \"subscriptions\": [\n    {\n      \"eventTypeId\": \"<string>\"\n    },\n    {\n      \"eventTypeId\": \"<string>\"\n    }\n  ],\n  \"url\": \"<uri>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errorType\": \"InsufficientFunds\",\n  \"message\": \"Missing required field 'amount'.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "36d040bd-e33a-4e15-bbe2-e5fb5ee4d6e7",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "webhook",
+                    "endpoints",
+                    ":endpointId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "endpointId",
+                      "description": "(Required) Unique identifier for the endpoint"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Api-Access-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"description\": \"<string>\",\n  \"publicKey\": \"<string>\",\n  \"subscriptions\": [\n    {\n      \"eventTypeId\": \"<string>\"\n    },\n    {\n      \"eventTypeId\": \"<string>\"\n    }\n  ],\n  \"url\": \"<uri>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errorType\": \"InsufficientFunds\",\n  \"message\": \"Missing required field 'amount'.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d0a717f2-4c8b-414d-9c9c-ef8bcb4cdf01",
+              "name": "Not Found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "webhook",
+                    "endpoints",
+                    ":endpointId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "endpointId",
+                      "description": "(Required) Unique identifier for the endpoint"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Api-Access-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"description\": \"<string>\",\n  \"publicKey\": \"<string>\",\n  \"subscriptions\": [\n    {\n      \"eventTypeId\": \"<string>\"\n    },\n    {\n      \"eventTypeId\": \"<string>\"\n    }\n  ],\n  \"url\": \"<uri>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errorType\": \"InsufficientFunds\",\n  \"message\": \"Missing required field 'amount'.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "75107bbe-ea4e-475d-826a-a7357ab36519",
+              "name": "Too Many Requests",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "webhook",
+                    "endpoints",
+                    ":endpointId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "endpointId",
+                      "description": "(Required) Unique identifier for the endpoint"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Api-Access-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"description\": \"<string>\",\n  \"publicKey\": \"<string>\",\n  \"subscriptions\": [\n    {\n      \"eventTypeId\": \"<string>\"\n    },\n    {\n      \"eventTypeId\": \"<string>\"\n    }\n  ],\n  \"url\": \"<uri>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errorType\": \"InsufficientFunds\",\n  \"message\": \"Missing required field 'amount'.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "4c457e00-e03c-4b31-b633-d6f1ef238508",
+              "name": "Internal Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "webhook",
+                    "endpoints",
+                    ":endpointId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "endpointId",
+                      "description": "(Required) Unique identifier for the endpoint"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Api-Access-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"description\": \"<string>\",\n  \"publicKey\": \"<string>\",\n  \"subscriptions\": [\n    {\n      \"eventTypeId\": \"<string>\"\n    },\n    {\n      \"eventTypeId\": \"<string>\"\n    }\n  ],\n  \"url\": \"<uri>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errorType\": \"InsufficientFunds\",\n  \"message\": \"Missing required field 'amount'.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "85bdd724-e201-4942-aade-547beaee0dde",
+          "name": "Create webhook subscriptions",
+          "request": {
+            "name": "Create webhook subscriptions",
+            "description": {
+              "content": "Permissions required: **Configure Webhooks**\n\n\nSubscribe to event types to receive notifications in a webhook endpoint.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "webhook",
+                "endpoints",
+                ":endpointId",
+                "subscriptions"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "endpointId",
+                  "description": "(Required) Unique identifier for the endpoint"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "[\n  {\n    \"eventTypeId\": \"<string>\"\n  },\n  {\n    \"eventTypeId\": \"<string>\"\n  }\n]",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "a56c5d0c-13b8-4cba-aa30-2f127b211730",
+              "name": "Successfully created webhook subscription",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "webhook",
+                    "endpoints",
+                    ":endpointId",
+                    "subscriptions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "endpointId",
+                      "description": "(Required) Unique identifier for the endpoint"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Api-Access-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "[\n  {\n    \"eventTypeId\": \"<string>\"\n  },\n  {\n    \"eventTypeId\": \"<string>\"\n  }\n]",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "3444458c-69b3-4e72-a2ad-375d858d2247",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "webhook",
+                    "endpoints",
+                    ":endpointId",
+                    "subscriptions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "endpointId",
+                      "description": "(Required) Unique identifier for the endpoint"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Api-Access-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "[\n  {\n    \"eventTypeId\": \"<string>\"\n  },\n  {\n    \"eventTypeId\": \"<string>\"\n  }\n]",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errorType\": \"InsufficientFunds\",\n  \"message\": \"Missing required field 'amount'.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "10bf65e2-26ad-4769-8971-237e72ba514c",
+              "name": "Unauthenticated",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "webhook",
+                    "endpoints",
+                    ":endpointId",
+                    "subscriptions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "endpointId",
+                      "description": "(Required) Unique identifier for the endpoint"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Api-Access-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "[\n  {\n    \"eventTypeId\": \"<string>\"\n  },\n  {\n    \"eventTypeId\": \"<string>\"\n  }\n]",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errorType\": \"InsufficientFunds\",\n  \"message\": \"Missing required field 'amount'.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "50ed8004-4754-4c54-80cc-0d924fa0a74e",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "webhook",
+                    "endpoints",
+                    ":endpointId",
+                    "subscriptions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "endpointId",
+                      "description": "(Required) Unique identifier for the endpoint"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Api-Access-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "[\n  {\n    \"eventTypeId\": \"<string>\"\n  },\n  {\n    \"eventTypeId\": \"<string>\"\n  }\n]",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errorType\": \"InsufficientFunds\",\n  \"message\": \"Missing required field 'amount'.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "aba14c79-e5b2-4f62-913f-7799e74c74f3",
+              "name": "Not Found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "webhook",
+                    "endpoints",
+                    ":endpointId",
+                    "subscriptions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "endpointId",
+                      "description": "(Required) Unique identifier for the endpoint"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Api-Access-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "[\n  {\n    \"eventTypeId\": \"<string>\"\n  },\n  {\n    \"eventTypeId\": \"<string>\"\n  }\n]",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errorType\": \"InsufficientFunds\",\n  \"message\": \"Missing required field 'amount'.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "4a0b71ff-d92f-4c13-bcfc-fcc134eda392",
+              "name": "Too Many Requests",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "webhook",
+                    "endpoints",
+                    ":endpointId",
+                    "subscriptions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "endpointId",
+                      "description": "(Required) Unique identifier for the endpoint"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Api-Access-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "[\n  {\n    \"eventTypeId\": \"<string>\"\n  },\n  {\n    \"eventTypeId\": \"<string>\"\n  }\n]",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errorType\": \"InsufficientFunds\",\n  \"message\": \"Missing required field 'amount'.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "37fcdca6-f6b5-4e21-bdff-4d67d1e31671",
+              "name": "Internal Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "webhook",
+                    "endpoints",
+                    ":endpointId",
+                    "subscriptions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "endpointId",
+                      "description": "(Required) Unique identifier for the endpoint"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Api-Access-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "[\n  {\n    \"eventTypeId\": \"<string>\"\n  },\n  {\n    \"eventTypeId\": \"<string>\"\n  }\n]",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errorType\": \"InsufficientFunds\",\n  \"message\": \"Missing required field 'amount'.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "f6ddeaf5-1b80-43c5-b732-1dc518fbe104",
+          "name": "List webhook endpoint subscriptions",
+          "request": {
+            "name": "List webhook endpoint subscriptions",
+            "description": {
+              "content": "Permissions required: **Configure Webhooks**\n\n\nList the subscriptions that you configured for a webhook endpoint.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "webhook",
+                "endpoints",
+                ":endpointId",
+                "subscriptions"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "afterId",
+                  "value": "<string>",
+                  "description": "When paginating this is used to provide the starting point for the page to fetch (retrieved from the previous response body)"
+                },
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "25",
+                  "description": "Maximum number of results to return per query"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "endpointId",
+                  "description": "(Required) Unique identifier for the endpoint"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "82aa23fc-f00a-47ce-a5b7-ac4a45842117",
+              "name": "Webhook subscription list",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "webhook",
+                    "endpoints",
+                    ":endpointId",
+                    "subscriptions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "afterId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "25"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "endpointId",
+                      "description": "(Required) Unique identifier for the endpoint"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Api-Access-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"createdAt\": \"1972-01-30T10:53:45.368Z\",\n      \"eventTypeId\": \"string\"\n    },\n    {\n      \"createdAt\": \"1962-04-10T02:37:04.512Z\",\n      \"eventTypeId\": \"string\"\n    }\n  ],\n  \"page\": {\n    \"next\": \"<next page url>\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f3c743d0-a6b0-4a1a-a67b-abd6e650bf8e",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "webhook",
+                    "endpoints",
+                    ":endpointId",
+                    "subscriptions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "afterId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "25"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "endpointId",
+                      "description": "(Required) Unique identifier for the endpoint"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Api-Access-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errorType\": \"InsufficientFunds\",\n  \"message\": \"Missing required field 'amount'.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7265e1cf-7b3d-4a6e-a0eb-f35e04bdf86e",
+              "name": "Unauthenticated",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "webhook",
+                    "endpoints",
+                    ":endpointId",
+                    "subscriptions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "afterId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "25"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "endpointId",
+                      "description": "(Required) Unique identifier for the endpoint"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Api-Access-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errorType\": \"InsufficientFunds\",\n  \"message\": \"Missing required field 'amount'.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7cda82e7-3666-4923-b8cb-7537c0f47187",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "webhook",
+                    "endpoints",
+                    ":endpointId",
+                    "subscriptions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "afterId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "25"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "endpointId",
+                      "description": "(Required) Unique identifier for the endpoint"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Api-Access-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errorType\": \"InsufficientFunds\",\n  \"message\": \"Missing required field 'amount'.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "3344e1ee-7426-4ab6-9a33-b68f272b896a",
+              "name": "Not Found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "webhook",
+                    "endpoints",
+                    ":endpointId",
+                    "subscriptions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "afterId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "25"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "endpointId",
+                      "description": "(Required) Unique identifier for the endpoint"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Api-Access-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errorType\": \"InsufficientFunds\",\n  \"message\": \"Missing required field 'amount'.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ef6487f8-de20-43d9-9faa-e944f259f998",
+              "name": "Too Many Requests",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "webhook",
+                    "endpoints",
+                    ":endpointId",
+                    "subscriptions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "afterId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "25"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "endpointId",
+                      "description": "(Required) Unique identifier for the endpoint"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Api-Access-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errorType\": \"InsufficientFunds\",\n  \"message\": \"Missing required field 'amount'.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "8d7706d4-5768-4cc0-8aad-bd2a89cf25d3",
+              "name": "Internal Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "webhook",
+                    "endpoints",
+                    ":endpointId",
+                    "subscriptions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "afterId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "25"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "endpointId",
+                      "description": "(Required) Unique identifier for the endpoint"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Api-Access-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errorType\": \"InsufficientFunds\",\n  \"message\": \"Missing required field 'amount'.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "a65ab6c4-4009-46dd-a277-5644763c4039",
+          "name": "Cancel webhook subscription",
+          "request": {
+            "name": "Cancel webhook subscription",
+            "description": {
+              "content": "Permissions required: **Configure Webhooks**\n\n\nCancel a webhook subscription to stop receiving notifications for its event type in its webhook endpoint.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "webhook",
+                "endpoints",
+                ":endpointId",
+                "subscriptions",
+                ":eventTypeId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "endpointId",
+                  "description": "(Required) Unique identifier for the endpoint"
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "eventTypeId",
+                  "description": "(Required) concatenation of topic+\".\"+name"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "941b929b-276b-4426-8c72-24cb45400fa4",
+              "name": "Successfully canceled webhook subscription",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "webhook",
+                    "endpoints",
+                    ":endpointId",
+                    "subscriptions",
+                    ":eventTypeId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "endpointId",
+                      "description": "(Required) Unique identifier for the endpoint"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "eventTypeId",
+                      "description": "(Required) concatenation of topic+\".\"+name"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Api-Access-Key",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "f9e29d5c-b9df-4d41-8901-e21467a8de56",
+              "name": "Unauthenticated",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "webhook",
+                    "endpoints",
+                    ":endpointId",
+                    "subscriptions",
+                    ":eventTypeId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "endpointId",
+                      "description": "(Required) Unique identifier for the endpoint"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "eventTypeId",
+                      "description": "(Required) concatenation of topic+\".\"+name"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Api-Access-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errorType\": \"InsufficientFunds\",\n  \"message\": \"Missing required field 'amount'.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "11f01764-e741-4421-bbf9-8b1873536a53",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "webhook",
+                    "endpoints",
+                    ":endpointId",
+                    "subscriptions",
+                    ":eventTypeId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "endpointId",
+                      "description": "(Required) Unique identifier for the endpoint"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "eventTypeId",
+                      "description": "(Required) concatenation of topic+\".\"+name"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Api-Access-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errorType\": \"InsufficientFunds\",\n  \"message\": \"Missing required field 'amount'.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "61a6f9bf-8966-48c5-a68f-13496c1f4b79",
+              "name": "Not Found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "webhook",
+                    "endpoints",
+                    ":endpointId",
+                    "subscriptions",
+                    ":eventTypeId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "endpointId",
+                      "description": "(Required) Unique identifier for the endpoint"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "eventTypeId",
+                      "description": "(Required) concatenation of topic+\".\"+name"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Api-Access-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errorType\": \"InsufficientFunds\",\n  \"message\": \"Missing required field 'amount'.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "55b664bd-6ea7-44a3-b065-c31e15fafa01",
+              "name": "Too Many Requests",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "webhook",
+                    "endpoints",
+                    ":endpointId",
+                    "subscriptions",
+                    ":eventTypeId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "endpointId",
+                      "description": "(Required) Unique identifier for the endpoint"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "eventTypeId",
+                      "description": "(Required) concatenation of topic+\".\"+name"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Api-Access-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errorType\": \"InsufficientFunds\",\n  \"message\": \"Missing required field 'amount'.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "8959131d-bd11-4ef5-b6f6-5fef05dffb77",
+              "name": "Internal Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "webhook",
+                    "endpoints",
+                    ":endpointId",
+                    "subscriptions",
+                    ":eventTypeId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "endpointId",
+                      "description": "(Required) Unique identifier for the endpoint"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "eventTypeId",
+                      "description": "(Required) concatenation of topic+\".\"+name"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Api-Access-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errorType\": \"InsufficientFunds\",\n  \"message\": \"Missing required field 'amount'.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.anchorage-staging.com/v2",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "Api-Access-Key"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}"
+      },
+      {
+        "key": "in",
+        "value": "header"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "f1c3856a-71ef-4acc-b2ed-8579f5c9aa13",
+    "name": "Anchorage Digital API Reference Addresses Webhook Notifications API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "# Introduction\n*CONFIDENTIAL: Please do not distribute this documentation externally without prior Anchorage Digital approval.*\n\n\nThe Anchorage Digital REST API v2.0 provides a set of operations and resources that allow Anchorage Digital clients and partners to:\n  - Programmatically transfer funds from an Anchorage Digital vault or wallet without human intervention\n  - Create and list deposit addresses in a vault\n  - Read and monitor vault balances\n  - Query transaction history including deposits\n  - Request quotes from and execute trades with the Anchorage Digital trading desk\n\n\nWant help or to share your opinion on how this API works for you? Please contact api@anchorage.com.\n\n\n# Authentication and Security\n\nThe Anchorage Digital API performs authentication and authorization via a combination of:\n\n\n* An API key, which is a bearer token\n\n* A permission group signed by the user's organization, which is linked to the API key\n\n* An Ed25519 Signature, which comes from a user-generated key and is required for certain requests\n\n\n## Permission Groups\n\n\nA permission group acts as a set of rules for how an organization and its resources can be accessed. Permission groups are created independently of API keys, and new permission groups must be created prior to making an API key.\n\n\nEach permission group has a name, a description and a set of permissions which can be applied to your organization's vaults. Updating, creating and deleting permissions groups require a quorum of approvals. After creation, a permission group can be freely assigned to an unlimited number of API keys.\n\n\nEach API key inherits its permissions from the associated permission group. When the permission group is updated, all API keys associated with it will inherit the updated permission set. If a permission group is deleted, all associated API keys will no longer work.\n\n\nEach organization is created with a default permission group that allows read-only access. This permission group may be modified or deleted at any time, and no API keys are created by default with this permission group.\n\n\n### Permissions\n\n\nPossible vault permissions include the following:\n\n\n<table>\n  <tr>\n    <td><b>Read vault activity (READ)</b></td>\n    <td>See an overview of your vault(s) and wallets. Read vault details, balances, asset types, transaction history and deposit addresses.</td>\n  </tr>\n  <tr>\n    <td><b>Create address (CREATE_DEPOSIT_ADDRESS)</b></td>\n    <td>Receive deposits in the vault from external sources. Create and read deposit addresses.</td>\n  </tr>\n  <tr>\n    <td><b>Transfer funds (TRANSFER)</b></td>\n    <td>This permission is configurable to enable an API key endowed with this permission to either 1) Transfer funds to any Anchorage Digital institutional account, including those outside of your organization or 2) Transfer funds to any blockchain address not custodied by Anchorage Digital that has gone through quorum approval.</td>\n  </tr>\n  <tr>\n    <td><b>Propose and accept settlements (PROPOSE_ACCEPT_SETTLEMENTS)</b></td>\n    <td>This is an Atlas specific permission for initiating settlements.</td>\n  </tr>\n  <tr>\n    <td><b>Authorize settlements (AUTHORIZE_SETTLEMENTS)</b></td>\n    <td>This is an Atlas specific permission for authorizing settlements after they've been proposed or accepted.</td>\n  </tr>\n</table>\n\n\nThere are also special vault permissions for enabled by Anchorage Digital on a per-organization basis:\n\nAdditionally, there are global permissions which apply to the entire organization:\n\n\n<table>\n  <tr>\n    <td><b>Initiate withdrawals (INITIATE_WITHDRAWAL)</b></td>\n    <td>Initiate withdrawals to external destinations. All withdrawals require quorum approval through the Anchorage Digital mobile app.</td>\n  </tr>\n  <tr>\n    <td><b>Execute trades (TRADE)</b></td>\n    <td>Request for quotes (RFQ) from the Anchorage Digital trading desk. Create and accept quotes. Read data of trades and settlements created by this key.</td>\n  </tr>\n  <tr>\n    <td><b>Read trade activity (READ_TRADE)</b></td>\n    <td>Read trade activity and trade settlements data of your organization.</td>\n  </tr>\n  <tr>\n    <td><b>Read lending activity (LENDER_READ)</b></td>\n    <td>Read lending activity of your organization.</td>\n  </tr>\n  <tr>\n    <td><b>Read facility data (FACILITY_ONLY)</b></td>\n    <td>Read lending facility data.</td>\n  </tr>\n  <tr>\n    <td><b>Read deposit attribution activity (READ_DEPOSIT_ATTRIBUTION)</b></td>\n    <td>Read deposit attribution activity of your organization.</td>\n  </tr>\n  <tr>\n    <td><b>Manage deposit attributions (DEPOSIT_ATTRIBUTION)</b></td>\n    <td>Read deposit attribution activity of your organization. Perform deposit attributions.</td>\n  </tr>\n  <tr>\n    <td><b>Initiate Staking and Unstaking (STAKE)</b></td>\n    <td>Initiate staking or unstaking operation. All operations require quorum approval through the Anchorage Digital mobile app.</td>\n  </tr>\n</table>\n\n\n### Example Workflow - Allow transfers from specific vaults\n\nTo create an API key with the ability to transfer funds from an Anchorage Digital vaults or wallet, a permission group must first be created with the **Transfer funds** permission for the desired source vaults. Creating this permission group requires a quorum of approvals on the Anchorage Digital iOS app. Once the creation is confirmed, any number of API keys may be created with this permission group in the Anchorage Digital Web Dashboard under the API 2.0 section.\n\nTo add additional permissions to the API key, update the associated permission group through the Anchorage Digital Web Dashboard. To revoke any permissions, the individual API key may be revoked, or the permission group may be updated or deleted to remove Transfer access.\n\n## API Keys\n\nAll API requests must be made over HTTPS and must include authentication using the following scheme.\n\n<!-- ReDoc-Inject: <security-definitions> -->\n\n### Generating an API Key\n\nIn order to make a valid API request, you must first create an API key. API keys can be created and managed in the Anchorage Digital Web Dashboard under the [API 2.0 tab](https://anchoragelogin.com/api). When you create an API key, there are 3 pieces of information you will need to remember:\n  - API access key\n  - Ed25519 public key (optional for read-only requests)\n  - Ed25519 private/signing key (optional for read-only requests)\n\nYou must generate an Ed25519 signing key pair and save the public portion in the Anchorage Digital Web Dashboard when creating the API access key. The signing key pair is used for added security with sensitive requests.\n\nPlease note, Anchorage Digital cannot recover your API access key or private signing key if you forget them. You may generate a new access key and signing key at any time if you lose access.\n\n### API Key Permissions\n\nEach API key is associated with a permission group. This permission group specifies the permitted actions for all associated API keys. Read more about permission groups [here](#section/Authentication-and-Security/Permission-Groups).\n\n### Creating a request\n\nAll requests must include the `Api-Access-Key` header, which contains your API access key as a string.\n\nEndpoints that require a signature must include the `Api-Signature` and `Api-Timestamp` headers. Read more about signatures [here](#section/Authentication-and-Security/Signatures).\n\nAll request bodies must be valid JSON and have the content type `application/json`.\n\n## Request Signatures\n\nCertain endpoints require an Ed25519 signature to be provided alongside the API key. These endpoints will specify the `Api-Signature` and `Api-Timestamp` headers as additional parameters.\n\nSignatures are optional unless explicitly required, but are encouraged for all requests. If a signature is provided, it will be verified.\n\n### Signing Keys\n\nA signing key pair is generated by the user and the corresponding public key must be provided when creating an API key.\n\nWhen creating an API key, you will be prompted to provide an Ed25519 public key. You must use the associated Ed25519 signing key (private key) when creating signatures for requests from this API key.\n\nPlease note that signing keys (Ed25519 private keys) should be stored securely by the user. The signing key should only be used to derive request signatures and should never be sent in a request. Anchorage Digital will never request you share your private key.\n\n### Generating a Signing Key\n\nThe user must securely generate an Ed25519 key pair on their own hardware and retain both the public and private portions. The Anchorage Digital API accepts a 64-character (32 bytes) hex-encoded Ed25519 public key when creating an API access key.\n\n\n#### Code sample (Python)\n\n*Generate a new signing key pair*\n\n```python\n# https://pypi.org/project/PyNaCl/\n\nimport nacl\nimport nacl.signing\nimport secrets\n\nseed = secrets.token_bytes(32)\n\n# Generate a new random signing key\nsigning_key = nacl.signing.SigningKey(seed)\n\n# Obtain the hex-encoded signing key\nprint('Signing key:')\nprint(signing_key.encode().hex())\n\n# Obtain the hex-encoded verify key for the given signing key\n# Use this in the Anchorage Digital Web Dashboard when creating an API key\nprint('Public key:')\nprint(signing_key.verify_key.encode().hex())\n```\n\n\n### Signing a Request\n\nTo sign a request, generate a request signature using the Ed25519 private (signing) key and provide it alongside the request in the `Api-Signature` header.\n\nTo create a request signature, first concatenate the `timestamp`, `method`, `request path`, and `body` into a string. Then, create a signature of this message using the Ed25519 private key and hex-encode the output. Use this value as the `Api-Signature` header and use the `timestamp` value as the `Api-Timestamp` header.\n\n- The `method` is an uppercase HTTP method (ex. `GET`, `POST`, `DELETE`)\n- The `request path` should contain all query parameters (ex. `/v2/transfers?foo=bar&baz=bang`)\n- The `body` is a stringified HTTP request body\n- The `body` should be omitted if the request does not contain a body (ex. a `GET` or `DELETE` request)\n- The `timestamp` is the same as the `Api-Timestamp` header\n- The `timestamp` is a number of seconds since the Unix Epoch in UTC, and must be within one minute of the API service's time when the request is received\n\n### Reference signature\n\nTo verify your signature generation code is correct, generate a signature for the following request and timestamp using the provided signing key. If the generated signature matches the signature below, your signature generation code is correct.\n\n\n<table>\n  <tr>\n    <td>Timestamp</td>\n    <td>1577880000</td>\n  </tr>\n  <tr>\n    <td>HTTP Method (Uppercase)</td>\n    <td>POST</td>\n  </tr>\n  <tr>\n    <td>HTTP Path + query</td>\n    <td>/v2/transfers?foo=bar&baz=bang</td>\n  </tr>\n  <tr>\n    <td>HTTP Body</td>\n    <td>{\"source\": {\"id\": \"1c920f4241b78a1d483a29f3c24b6c4c\", \"type\": \"VAULT\"}, \"assetType\": \"ETH\", \"destination\": {\"id\": \"55e89d4a644d736b01533a2ea9b32a20\", \"type\": \"VAULT\"}, \"amount\": \"1000.00000000\"}</td>\n  </tr>\n  <tr>\n    <td>Signing Key (Ed25519 Private Key Seed)</td>\n    <td>0101010101010101010101010101010101010101010101010101010101010101</td>\n  </tr>\n  <tr>\n    <td>Public Key</td>\n    <td>8a88e3dd7409f195fd52db2d3cba5d72ca6709bf1d94121bf3748801b40f6f5c</td>\n  </tr>\n  <tr>\n    <td>Signature</td>\n    <td>4bf42054bf7db1f8a2a2bc83d2a108502ee7a9d2ac7a2738adc2f932922446786fb9be1bd1eb475023296c6cba4ddbe28b04baca4b7521b1f1840a4ffd2b4d0d</td>\n  </tr>\n</table>\n\n## Reference clients\n\n### Python (with `requests` library)\n\n*Authorize and sign requests*\n\n```python\n\n# https://pypi.org/project/PyNaCl/\n\nfrom nacl import signing\n\nimport time\n\nimport requests\n\n\nclass AnchorageAuth(requests.auth.AuthBase):\n    ACCESS_KEY_HEADER = \"Api-Access-Key\"\n    SIGNATURE_HEADER = \"Api-Signature\"\n    TIMESTAMP_HEADER = \"Api-Timestamp\"\n\n    access_key: str\n    signing_key: signing.SigningKey\n\n    def __init__(self, access_key: str, signing_key_seed: bytes):\n        self.access_key = access_key\n        self.signing_key = signing.SigningKey(signing_key_seed)\n\n    def __call__(self, r: requests.PreparedRequest):\n        r.headers[self.ACCESS_KEY_HEADER] = self.access_key\n\n        timestamp = str(int(time.time()))\n        method = r.method.upper() if r.method else \"GET\"\n        body: bytes = bytes()\n        if r.body and isinstance(r.body, bytes):\n            body = r.body\n        elif r.body and isinstance(r.body, str):\n            body = bytearray(r.body, \"utf-8\")\n        message = b\"\".join(\n            [bytearray(timestamp, \"utf-8\"), bytearray(method, \"utf-8\"), bytearray(r.path_url, \"utf-8\"), body]\n        )\n        signature = self.signing_key.sign(message).signature.hex()\n        r.headers[self.SIGNATURE_HEADER] = signature\n        r.headers[self.TIMESTAMP_HEADER] = timestamp\n        return r\n\n\n# load secrets\n\n# Use the API key generated in the Anchorage Digital Web Dashboard\n\naccess_key = ...\n\n# Use the Ed25519 signing private key\n\nsigning_key_str = ... # load the raw string\n\nsigning_key = bytes(bytearray.fromhex(signing_key_str))\n\ndata = {}\n\nanchorage_auth = AnchorageAuth(access_key, signing_key)\n\nr = requests.post(\"https://api.anchorage.com/v2/transfers\", data=data, auth=anchorage_auth)\n\n```\n\n### Ruby - Reproduce reference signature\n```ruby\n  require \"ed25519\"\n  require \"net/http\"\n  require \"time\"\n\n  def hex_to_bin(s)\n      [s].pack('H*')\n  end\n\n  def bin_to_hex(s)\n      s.unpack('H*').first\n  end\n\n  private_key_seed_hex = '0101010101010101010101010101010101010101010101010101010101010101'\n  public_key_hex = '8a88e3dd7409f195fd52db2d3cba5d72ca6709bf1d94121bf3748801b40f6f5c'\n  key_pair_hex = private_key_seed_hex + public_key_hex\n\n  key_pair = hex_to_bin(key_pair_hex)\n\n  signing_key = Ed25519::SigningKey.from_keypair(key_pair)\n\n  timestamp = '1577880000' # Time.now.to_i.to_s\n\n  req = Net::HTTP::Post.new('/v2/transfers?foo=bar&baz=bang')\n  req.body = '{\"source\": {\"id\": \"1c920f4241b78a1d483a29f3c24b6c4c\", \"type\": \"VAULT\"}, \"assetType\": \"ETH\", \"destination\": {\"id\": \"55e89d4a644d736b01533a2ea9b32a20\", \"type\": VAULT\"}, \"amount\": \"1000.00000000\"}'\n\n  signature = signing_key.sign(timestamp + req.method + req.path + req.body)\n\n  req['Api-Access-Key'] = 'YOUR_ACCESS_KEY'\n  req['Api-Timestamp'] = timestamp\n  req['Api-Signature'] = bin_to_hex(signature)\n\n  puts bin_to_hex(signature)\n```\n\n# Errors\n\n\nThe Anchorage Digital API returns standard HTTP error codes for each API request.\n\n\n<table>\n  <tr>\n    <th style=\"width: 30%;\">Response Code</th>\n    <th>Description</th>\n  <tr>\n  <tr>\n    <td>200 OK</td>\n    <td>The request was successful.</td>\n  </tr>\n  <tr>\n    <td>400 Bad Request</td>\n    <td>The request was improperly formed and could not be understood by the server, often due to invalid syntax, insufficient funds, or a missing required parameter.</td>\n  </tr>\n  <tr>\n    <td>401 Unauthorized</td>\n    <td>The request was missing a valid API key.</td>\n  </tr>\n  <tr>\n    <td>403 Forbidden</td>\n    <td>The provided API key does not have permission to perform the requested action.</td>\n  </tr>\n  <tr>\n    <td>404 Not Found</td>\n    <td>The requested resource does not exist.</td>\n  </tr>\n  <tr>\n    <td>409 Conflict</td>\n    <td>The requested resource cannot proceed with the requested action because it is not in the required state.</td>\n  </tr>\n   <tr>\n    <td>429 Too Many Requests</td>\n    <td>Too many requests have been sent in a given amount of time.</td>\n  </tr>\n  <tr>\n    <td>\n      500 Internal Server Error\n      <br />\n      502 Bad Gateway\n      <br />\n      503 Service Unavailable\n      <br />\n      504 Gateway Timeout\n    </td>\n    <td>Something went wrong on Anchorage’s side. We have been alerted and are working on it.</td>\n  </tr>\n</table>\n\n\nIn addition to returning HTTP error codes for failed requests, the Anchorage Digital API includes a readable error message describing what went wrong in the response body.\n\n\n<SchemaDefinition schemaRef=\"#/components/schemas/ErrorDetails\" showReadOnly={true} showWriteOnly={true} />\n\n\n# Idempotency\n\n\nCertain endpoints support idempotent requests so that a given request can be safely retried without performing the same operation twice. For example, if a request to transfer funds does not respond due to network issues, you can retry the request using the same idempotent ID to ensure that only one transfer is created.\n\n\nEndpoints that support idempotent requests have an optional `idempotentId` field that can be included in the body of the `POST` request. Provide a unique string using your method of choice (such as a v4 UUID).\n\n\nIf a request is valid, Anchorage Digital will save the request indefinitely. If a subsequent request is received with the same `idempotentId` we will return the previously saved response for that `idempotentId`.\n\n\n# Rate Limits\n\n\nKeys provisioned by an Organization share one common rate limit. API requests are limited to 20 requests per second per Organization, allowing for bursts of up to 100 requests within a single second.\n\n\n# Pagination\n\n\nCursor pagination is used for REST endpoints which return multiple data points. Pagination allows for fetching data after the current page and specifying how many records to return. The `next` cursor is available in responses with the `page` attribute. Requests should use the `next` cursor URL to query subsequent data. Query parameter `afterId` specifies the last record previously retrieved. Some endpoints instead use the `endDate` parameter to specify the end date and older for records to retrieve. Query parameter `limit` specifies the maximum number of records in a response.\n\n## Parameters\n\n<table>\n  <tr>\n    <th style=\"width: 30%;\">Parameter</th>\n    <th>Description</th\n  </tr>\n  <tr>\n    <td>afterId</td>\n    <td>Request page after (older than) this pagination id.</td>\n  </tr>\n  <tr>\n    <td>endDate</td>\n    <td>Request records older than this date (YYYY-MM-DD format). Used for /trading/trades and /trading/settlements resources.</td>\n  </tr>\n  <tr>\n    <td>limit</td>\n    <td>Maximum number of results requested. Default usually 25, but varies depending on resource.</td>\n  </tr>\n</table>\n\n## Example\n\n`GET /v2/transfers?afterId=1968b94b09b8a1a8a381775d1f04978c424d891d50e517774bf984297985b471&limit=100`\n\n## Next cursor\n\nThe `next` cursor is a URL which references the last record in a set of records. When queried, the `next` cursor URL will return subsequent records, but otherwise using the same query parameters.\n\nContact Support:\n Email: api@anchorage.com",
+      "type": "text/plain"
+    }
+  }
+}

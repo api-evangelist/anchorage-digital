@@ -1,0 +1,262 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Anchorage Digital API Reference Addresses Transactions API",
+    "version": "2.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "Api-Access-Key",
+      "value": "{{Api-Access-Key}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Transactions",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Create a withdrawal request",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.anchorage-staging.com/v2/transactions/withdrawal",
+            "headers": [
+              {
+                "name": "Api-Signature",
+                "value": ""
+              },
+              {
+                "name": "Api-Timestamp",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Permissions required: **Initiate withdrawals**\n\n\n\n#### Identify the sending asset\n\n\nTo initiate a withdrawal from a wallet to an external destination, you must identify which asset you'd like to withdraw funds from. Provide a `source` (with `id` and `type`).\n\n\n#### Identify the receiving resource\n\n\nChoose a resource to receive the funds as the `destination`. This resource may belong to your organization (wallet) or another organization (address, standing instruction).\n\n\n#### Permissions\n\n\nThe pr"
+        },
+        {
+          "info": {
+            "name": "List transactions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.anchorage-staging.com/v2/transactions",
+            "params": [
+              {
+                "name": "vaultId",
+                "value": "",
+                "type": "query",
+                "description": "The vault ID to get transactions for"
+              },
+              {
+                "name": "startDate",
+                "value": "",
+                "type": "query",
+                "description": "The start date (inclusive) in `YYYY-MM-DD` format. The earliest valid start date is '2017-01-01`. Dates are always in UTC [RFC 3339](https://datatracker.ietf.org/doc/html/rfc3339#section-5.6) 'full-date'."
+              },
+              {
+                "name": "endDate",
+                "value": "",
+                "type": "query",
+                "description": "The end date (inclusive) in `YYYY-MM-DD` format. The latest valid end date is the current date. Dates are always in UTC [RFC 3339](https://datatracker.ietf.org/doc/html/rfc3339#section-5.6) 'full-date'."
+              },
+              {
+                "name": "afterId",
+                "value": "",
+                "type": "query",
+                "description": "When paginating this is used to provide the starting point for the page to fetch (retrieved from the previous response body)"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of results to return per query"
+              },
+              {
+                "name": "types",
+                "value": "",
+                "type": "query",
+                "description": "A comma-separated list of transaction types to return."
+              },
+              {
+                "name": "walletId",
+                "value": "",
+                "type": "query",
+                "description": "An ID uniquely identifying an Anchorage Digital wallet"
+              },
+              {
+                "name": "destinationAddress",
+                "value": "",
+                "type": "query",
+                "description": "The destination address on the transaction for which results will be returned"
+              }
+            ]
+          },
+          "docs": "Permissions required: **Read vault activity**\n\n\n\n\nList all transactions for the vaults permissioned to your API key. You can retrieve metadata about your API key from the [API Key](#tags/API-Key) endpoints.\n\n\nNOTE: price and USD value information is recent but does not reflect real-time data.\n\n\n**Filters**\n\n\n\nYou may optionally supply the following filters:\n\n\n  - Set a date range by providing the `startDate` and/or `endDate` query parameters. The date refers to the end time of a transaction: whe"
+        },
+        {
+          "info": {
+            "name": "Get transaction by ID",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.anchorage-staging.com/v2/transactions/:transactionId",
+            "params": [
+              {
+                "name": "transactionId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the transaction to get details for"
+              }
+            ]
+          },
+          "docs": "Permissions required: **Read vault activity**\n\n\nGet transaction by ID.\n"
+        },
+        {
+          "info": {
+            "name": "Create a stake request",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.anchorage-staging.com/v2/transactions/stake",
+            "headers": [
+              {
+                "name": "Api-Signature",
+                "value": ""
+              },
+              {
+                "name": "Api-Timestamp",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Permissions required: **Initiate Staking and Unstaking**\n\n\n\n#### Identify the sending asset\n\n\nTo initiate a staking operation, you must identify which asset you'd like to stake funds from. Provide a `source` and `assetType`.\n\n\n\n#### Permissions\n\n\nThe provided API key must be associated with a [permission group](#section/Authentication-and-Security/Permission-Groups) that has Initiate Staking and Unstaking permission for the sending vault.\n\n\n#### Additional Metadata\n\n\nYou may provide a `descripti"
+        },
+        {
+          "info": {
+            "name": "Create an unstake request",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.anchorage-staging.com/v2/transactions/unstake",
+            "headers": [
+              {
+                "name": "Api-Signature",
+                "value": ""
+              },
+              {
+                "name": "Api-Timestamp",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Permissions required: **Initiate Staking and Unstaking**\n\n\n\n#### Identify the sending asset\n\n\nTo initiate an unstake transaction, you must identify which asset you'd like to unstake funds from. Provide a `source` and `assetType`.\n\n\n\n#### Permissions\n\n\nThe provided API key must be associated with a [permission group](#section/Authentication-and-Security/Permission-Groups) that has Initiate Staking and Unstaking permission for the sending vault.\n\n\n#### Additional Metadata\n\n\nYou may provide a `desc"
+        },
+        {
+          "info": {
+            "name": "Create a collect request",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.anchorage-staging.com/v2/transactions/collect",
+            "headers": [
+              {
+                "name": "Api-Signature",
+                "value": ""
+              },
+              {
+                "name": "Api-Timestamp",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Permissions required: **Initiate Staking and Unstaking**\n\n\n\nIn staking, the \"collect\" operation is the action of claiming inactive unstaked amount back to\nthe available balance by moving them from the staking protocol or pool into a personal wallet. Once collected, these amounts are fully under wallet's owner control.\n\n*NOTE: This endpoint is under development.*"
+        },
+        {
+          "info": {
+            "name": "Create a consolidate stake request",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.anchorage-staging.com/v2/transactions/consolidate-stake",
+            "headers": [
+              {
+                "name": "Api-Signature",
+                "value": ""
+              },
+              {
+                "name": "Api-Timestamp",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Permissions required: **Initiate Staking and Unstaking**\n\n\n\nConsolidate a source staking position into a target staking position.\nOnly supported for Ethereum 0x02 validators.\n"
+        },
+        {
+          "info": {
+            "name": "List supported delegation addresses",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.anchorage-staging.com/v2/delegation-addresses/:assetType",
+            "params": [
+              {
+                "name": "assetType",
+                "value": "",
+                "type": "path",
+                "description": "The asset type to retrieve delegation addresses"
+              },
+              {
+                "name": "afterId",
+                "value": "",
+                "type": "query",
+                "description": "When paginating this is used to provide the starting point for the page to fetch (retrieved from the previous response body)"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of results to return per query"
+              }
+            ]
+          },
+          "docs": "Permissions required: **Initiate Staking and Unstaking**\n\n\n\n#### Identify the sending asset\n\n\nTo initiate an operation, you must identify which asset you'd like to view the delegation addresses for. Provide an `assetType`.\n\n\n\n#### Permissions\n\n\nThe provided API key must be associated with a [permission group](#section/Authentication-and-Security/Permission-Groups) that has Initiate Staking and Unstaking permission for the sending vault.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

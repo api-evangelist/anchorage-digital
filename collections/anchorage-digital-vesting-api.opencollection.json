@@ -1,0 +1,91 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Anchorage Digital API Reference Addresses Vesting API",
+    "version": "2.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "Api-Access-Key",
+      "value": "{{Api-Access-Key}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Vesting",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get vesting balances for multiple allocations",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.anchorage-staging.com/v2/vesting/balances",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Get vesting balances for multiple allocation IDs in a single request. Returns per-allocation results with balance breakdowns including available, unvested, and locked amounts. Individual allocation errors are returned inline rather than failing the entire batch.\n"
+        },
+        {
+          "info": {
+            "name": "Get vesting balances for an allocation",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.anchorage-staging.com/v2/vesting/balances/:allocationId",
+            "params": [
+              {
+                "name": "allocationId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the allocation to get vesting balances for"
+              },
+              {
+                "name": "stakeholderId",
+                "value": "",
+                "type": "query",
+                "description": "The external stakeholder ID (optional, used to retrieve wallet info when no transactions exist yet)"
+              }
+            ]
+          },
+          "docs": "Get vesting balances for a specific allocation ID. Returns the current balance breakdown including available, unvested, and locked amounts.\n"
+        },
+        {
+          "info": {
+            "name": "List offchain vesting schedules for an organization",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.anchorage-staging.com/v2/offchainvesting/schedules",
+            "params": [
+              {
+                "name": "afterId",
+                "value": "",
+                "type": "query",
+                "description": "When paginating this is used to provide the starting point for the page to fetch (retrieved from the previous response body)"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of results to return per query"
+              }
+            ]
+          },
+          "docs": "Get all offchain vesting schedules for an organization."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

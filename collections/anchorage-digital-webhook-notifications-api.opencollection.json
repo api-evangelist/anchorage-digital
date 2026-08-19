@@ -1,0 +1,223 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Anchorage Digital API Reference Addresses Webhook Notifications API",
+    "version": "2.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "Api-Access-Key",
+      "value": "{{Api-Access-Key}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Webhook Notifications",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get webhook validation key",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.anchorage-staging.com/v2/webhook/validation-key"
+          },
+          "docs": "Permissions required: **Configure Webhooks**\n\n\nGet key to validate webhook authenticity."
+        },
+        {
+          "info": {
+            "name": "List webhook event types",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.anchorage-staging.com/v2/webhook/event-types",
+            "params": [
+              {
+                "name": "afterId",
+                "value": "",
+                "type": "query",
+                "description": "When paginating this is used to provide the starting point for the page to fetch (retrieved from the previous response body)"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of results to return per query"
+              }
+            ]
+          },
+          "docs": "Permissions required: **Configure Webhooks**\n\n\nList the available webhook event types that you can subscribe to."
+        },
+        {
+          "info": {
+            "name": "List webhook endpoint",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.anchorage-staging.com/v2/webhook/endpoints",
+            "params": [
+              {
+                "name": "afterId",
+                "value": "",
+                "type": "query",
+                "description": "When paginating this is used to provide the starting point for the page to fetch (retrieved from the previous response body)"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of results to return per query"
+              }
+            ]
+          },
+          "docs": "Permissions required: **Configure Webhooks**\n\n\nList all of your webhook endpoints."
+        },
+        {
+          "info": {
+            "name": "Create webhook endpoint",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.anchorage-staging.com/v2/webhook/endpoints",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Permissions required: **Configure Webhooks**\n\n\nCreate a new endpoint where you would like to receive webhook notifications."
+        },
+        {
+          "info": {
+            "name": "Get webhook endpoint config",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.anchorage-staging.com/v2/webhook/endpoints/:endpointId",
+            "params": [
+              {
+                "name": "endpointId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier for the endpoint"
+              }
+            ]
+          },
+          "docs": "Permissions required: **Configure Webhooks**\n\n\nGet the configuration details for an endpoint."
+        },
+        {
+          "info": {
+            "name": "Update webhook endpoint",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.anchorage-staging.com/v2/webhook/endpoints/:endpointId",
+            "params": [
+              {
+                "name": "endpointId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier for the endpoint"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Permissions required: **Configure Webhooks**\n\n\nUpdate the configuration for an endpoint."
+        },
+        {
+          "info": {
+            "name": "List webhook endpoint subscriptions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.anchorage-staging.com/v2/webhook/endpoints/:endpointId/subscriptions",
+            "params": [
+              {
+                "name": "endpointId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier for the endpoint"
+              },
+              {
+                "name": "afterId",
+                "value": "",
+                "type": "query",
+                "description": "When paginating this is used to provide the starting point for the page to fetch (retrieved from the previous response body)"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of results to return per query"
+              }
+            ]
+          },
+          "docs": "Permissions required: **Configure Webhooks**\n\n\nList the subscriptions that you configured for a webhook endpoint."
+        },
+        {
+          "info": {
+            "name": "Create webhook subscriptions",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.anchorage-staging.com/v2/webhook/endpoints/:endpointId/subscriptions",
+            "params": [
+              {
+                "name": "endpointId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier for the endpoint"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Permissions required: **Configure Webhooks**\n\n\nSubscribe to event types to receive notifications in a webhook endpoint."
+        },
+        {
+          "info": {
+            "name": "Cancel webhook subscription",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.anchorage-staging.com/v2/webhook/endpoints/:endpointId/subscriptions/:eventTypeId",
+            "params": [
+              {
+                "name": "endpointId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier for the endpoint"
+              },
+              {
+                "name": "eventTypeId",
+                "value": "withdrawal.initiated",
+                "type": "path",
+                "description": "concatenation of topic+\".\"+name"
+              }
+            ]
+          },
+          "docs": "Permissions required: **Configure Webhooks**\n\n\nCancel a webhook subscription to stop receiving notifications for its event type in its webhook endpoint."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

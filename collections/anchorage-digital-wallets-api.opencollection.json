@@ -1,0 +1,258 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Anchorage Digital API Reference Addresses Wallets API",
+    "version": "2.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "Api-Access-Key",
+      "value": "{{Api-Access-Key}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Wallets",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List all wallets for a vault",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.anchorage-staging.com/v2/vaults/:vaultId/wallets",
+            "params": [
+              {
+                "name": "vaultId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the vault containing the wallets"
+              },
+              {
+                "name": "afterId",
+                "value": "",
+                "type": "query",
+                "description": "When paginating this is used to provide the starting point for the page to fetch (retrieved from the previous response body)"
+              },
+              {
+                "name": "networkId",
+                "value": "",
+                "type": "query",
+                "description": "If set, only wallets for this Network ID will be returned"
+              },
+              {
+                "name": "assetType",
+                "value": "",
+                "type": "query",
+                "description": "If set, only wallets for this Asset Type ID will be returned"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of results to return per query"
+              },
+              {
+                "name": "filterByIsArchived",
+                "value": "",
+                "type": "query",
+                "description": "Filter by the whether a wallet is archived. If true, then only archived wallets will be returned. If false, then only not-archived wallets are returned. If not specified, then all wallets are returned."
+              }
+            ]
+          },
+          "docs": "Permissions required: **Read vault activity**\n\n\n\nGet all wallets for the specified `vaultId`.\n"
+        },
+        {
+          "info": {
+            "name": "Create a new wallet in a vault",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.anchorage-staging.com/v2/vaults/:vaultId/wallets",
+            "params": [
+              {
+                "name": "vaultId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the vault holding the new wallet"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Permissions required: **Create address**\n\n\n\nCreate a wallet in the specified `vaultId`.\n"
+        },
+        {
+          "info": {
+            "name": "List all wallets for all vaults",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.anchorage-staging.com/v2/wallets",
+            "params": [
+              {
+                "name": "afterId",
+                "value": "",
+                "type": "query",
+                "description": "When paginating this is used to provide the starting point for the page to fetch (retrieved from the previous response body)"
+              },
+              {
+                "name": "subaccountIds",
+                "value": "",
+                "type": "query",
+                "description": "If subaccountIds filter is present, only wallets linked to those subaccountIds will be returned."
+              },
+              {
+                "name": "networkId",
+                "value": "",
+                "type": "query",
+                "description": "If set, only wallets for this Network ID will be returned"
+              },
+              {
+                "name": "assetType",
+                "value": "",
+                "type": "query",
+                "description": "If set, only wallets for this Asset Type ID will be returned"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of results to return per query"
+              },
+              {
+                "name": "filterByIsArchived",
+                "value": "",
+                "type": "query",
+                "description": "Filter by the whether a wallet is archived. If true, then only archived wallets will be returned. If false, then only not-archived wallets are returned. If not specified, then all wallets are returned."
+              },
+              {
+                "name": "searchByAddress",
+                "value": "",
+                "type": "query",
+                "description": "Search wallets based on addresses in this wallet. The search length should be at least 3 characters."
+              }
+            ]
+          },
+          "docs": "Permissions required: **Read vault activity**\n\n\n\nList wallet metadata for the current user.\n"
+        },
+        {
+          "info": {
+            "name": "Wallet details for a wallet",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.anchorage-staging.com/v2/wallets/:walletId",
+            "params": [
+              {
+                "name": "walletId",
+                "value": "",
+                "type": "path",
+                "description": "An ID uniquely identifying an Anchorage Digital wallet"
+              },
+              {
+                "name": "filterByIsArchived",
+                "value": "",
+                "type": "query",
+                "description": "Filter by the whether a wallet is archived. If true, then only archived wallets will be returned. If false, then only not-archived wallets are returned. If  not specified, all wallets are returned."
+              }
+            ]
+          },
+          "docs": "Permissions required: **Read vault activity**\n\n\n\nGet wallet details for the specified `walletId`.\n"
+        },
+        {
+          "info": {
+            "name": "Staking rewards for a wallet",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.anchorage-staging.com/v2/wallets/:walletId/staking/rewards",
+            "params": [
+              {
+                "name": "walletId",
+                "value": "",
+                "type": "path",
+                "description": "An ID uniquely identifying an Anchorage Digital wallet"
+              },
+              {
+                "name": "startDate",
+                "value": "",
+                "type": "query",
+                "description": "The start date (inclusive) in `YYYY-MM-DD` format. The earliest valid start date is '2017-01-01`. Dates are always in UTC [RFC 3339](https://datatracker.ietf.org/doc/html/rfc3339#section-5.6) 'full-date'."
+              },
+              {
+                "name": "endDate",
+                "value": "",
+                "type": "query",
+                "description": "The end date (inclusive) in `YYYY-MM-DD` format. The latest valid end date is the current date. Dates are always in UTC [RFC 3339](https://datatracker.ietf.org/doc/html/rfc3339#section-5.6) 'full-date'."
+              },
+              {
+                "name": "afterId",
+                "value": "",
+                "type": "query",
+                "description": "When paginating this is used to provide the starting point for the page to fetch (retrieved from the previous response body)"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of results to return per query"
+              }
+            ]
+          },
+          "docs": "Permissions required: **Read vault activity**\n\n\nGet wallet rewards details for the specified `walletId`.\n"
+        },
+        {
+          "info": {
+            "name": "Staking positions for a wallet",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.anchorage-staging.com/v2/wallets/:walletId/staking/positions",
+            "params": [
+              {
+                "name": "walletId",
+                "value": "",
+                "type": "path",
+                "description": "An ID uniquely identifying an Anchorage Digital wallet"
+              },
+              {
+                "name": "afterId",
+                "value": "",
+                "type": "query",
+                "description": "When paginating this is used to provide the starting point for the page to fetch (retrieved from the previous response body)"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of results to return per query"
+              },
+              {
+                "name": "transactionId",
+                "value": "",
+                "type": "query",
+                "description": "The transaction Id to filter the wallet positions"
+              }
+            ]
+          },
+          "docs": "Permissions required: **Read vault activity**\n\n\nGet wallet staking positions details for the specified `walletId`.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

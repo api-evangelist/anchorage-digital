@@ -1,0 +1,632 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Anchorage Digital API Reference Addresses Trading API",
+    "version": "2.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "Api-Access-Key",
+      "value": "{{Api-Access-Key}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Trading",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Request a quote",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.anchorage-staging.com/v2/trading/quote",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Permissions required: **Execute trades**\n\n\nRequest a quote\n\n#### Idempotent Requests\n\nThis endpoint supports [idempotent requests](#section/Idempotency) so that quote is not requested twice if an API call was interrupted and must be retried. To send an idempotent request, include the `idempotentId` field in the body of the POST request.\n"
+        },
+        {
+          "info": {
+            "name": "Accept a quote",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.anchorage-staging.com/v2/trading/quote/accept",
+            "headers": [
+              {
+                "name": "Api-Signature",
+                "value": ""
+              },
+              {
+                "name": "Api-Timestamp",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Permissions required: **Execute trades**\n\n\nAccept a quote by its quoteID and side.\n\n#### Idempotent Requests\n\nThis endpoint supports [idempotent requests](#section/Idempotency) so that a quote cannot be accepted twice if an API call was interrupted and is retried. To send an idempotent request, include the `idempotentId` field in the body of the POST request.\n"
+        },
+        {
+          "info": {
+            "name": "Place an order",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.anchorage-staging.com/v2/trading/order",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Permissions required: **Execute trades**\n\nPlace an order, either Market or Limit, currently only FillOrKill is supported.\n\nOne of `accountId` or `subaccountId` must be specified but not both."
+        },
+        {
+          "info": {
+            "name": "List orders",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.anchorage-staging.com/v2/trading/orders",
+            "params": [
+              {
+                "name": "accountId",
+                "value": "",
+                "type": "query",
+                "description": "The ID of the account to filter orders by. If provided, only orders for this account will be returned."
+              },
+              {
+                "name": "subaccountId",
+                "value": "",
+                "type": "query",
+                "description": "The ID of the subaccount to filter orders by. If provided, only orders for this subaccount will be returned."
+              },
+              {
+                "name": "startDateTime",
+                "value": "",
+                "type": "query",
+                "description": "The start date-time of the trades (exclusive) in `YYYY-MM-DDTHH:MM:SS.nnnnnnnnn` format. The earliest valid start date-time is '2017-01-01T00:00:00.000000000'. The last valid start date-time is the current date-time. Date-times are always in UTC [RFC 3339](https://datatracker.ietf.org/doc/html/rfc3339#section-5.6) 'date-time'."
+              },
+              {
+                "name": "endDateTime",
+                "value": "",
+                "type": "query",
+                "description": "The end date-time of the trades (exclusive) in `YYYY-MM-DDTHH:MM:SS.nnnnnnnnn` format. The latest valid end date-time is the current date-time. The earliest valid end date-time is '2017-01-01T00:00:00.000000000'. Date-times are always in UTC [RFC 3339](https://datatracker.ietf.org/doc/html/rfc3339#section-5.6) 'date-time'."
+              },
+              {
+                "name": "status",
+                "value": "",
+                "type": "query",
+                "description": "One or more statuses to filter orders. If provided, only orders matching these statuses will be returned. If `OPEN` status is specified, the call returns all orders in [PENDING,NEW,PENDING_CANCEL,PARTIALLY_FILLED] states."
+              },
+              {
+                "name": "orderIds",
+                "value": "",
+                "type": "query",
+                "description": "A list of `orderIds` to return. Invalid `orderIds` will be ignored. A maximum number of unique 500 order ids are enforced per call."
+              },
+              {
+                "name": "clientOrderIds",
+                "value": "",
+                "type": "query",
+                "description": "A list of `clientOrderIds` to return. Invalid `clientOrderIds` will be ignored. A maximum number of unique 500 order ids are enforced per call."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of results to return per query"
+              },
+              {
+                "name": "orderTypes",
+                "value": "",
+                "type": "query",
+                "description": "One or more types to filter orders. If provided, only orders matching these types will be returned."
+              }
+            ]
+          },
+          "docs": "Permissions required: **Execute trades** or **Read trade activity**\n\nList all orders. With the permission **Read trade activity** all orders of the organization may be read. With the permission **Execute trades** only the orders created by this API key may be read.\n\nOrders are sorted in a descending order by their timestamp, i.e. the most recent order or the order with a timestamp closest to `endDate` is listed first.\n\nWhen filtering by `subaccountId`, the allocation information is included but "
+        },
+        {
+          "info": {
+            "name": "Get order by ID",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.anchorage-staging.com/v2/trading/orders/:orderId",
+            "params": [
+              {
+                "name": "orderId",
+                "value": "",
+                "type": "path",
+                "description": "The orderId or clientOrderId for the order to get details for"
+              }
+            ]
+          },
+          "docs": "Permissions required: **Read trade activity** or **Execute trades** (if order created by this API key)\n\nGet order by ID, where the ID can be anchorage generated orderId or clientOrderId"
+        },
+        {
+          "info": {
+            "name": "List trades",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.anchorage-staging.com/v2/trading/trades",
+            "params": [
+              {
+                "name": "startDate",
+                "value": "",
+                "type": "query",
+                "description": "The start date of the trades (inclusive) in `YYYY-MM-DD` format. The earliest valid start date is `2017-01-01`. The last valid start date is the current date. A `startDate` of '2021-01-10' is equivalent to a `startDateTime` of '2021-01-10.00:00:00.000000000'. Dates are always in UTC [RFC 3339](https://datatracker.ietf.org/doc/html/rfc3339#section-5.6) 'full-date'."
+              },
+              {
+                "name": "endDate",
+                "value": "",
+                "type": "query",
+                "description": "The end date of the trades (exclusive) in `YYYY-MM-DD` format. The latest valid end date is the current date. If not provided, defaults to the most recently closed day. An `endDate` of '2021-01-10' is equivalent to an `endDateTime` of '2021-01-10.00:00:00.000000000'. Dates are always in UTC [RFC 3339](https://datatracker.ietf.org/doc/html/rfc3339#section-5.6) 'full-date'."
+              },
+              {
+                "name": "startDateTime",
+                "value": "",
+                "type": "query",
+                "description": "The start date-time of the trades (exclusive) in `YYYY-MM-DDTHH:MM:SS.nnnnnnnnn` format. The earliest valid start date-time is '2017-01-01T00:00:00.000000000'. The last valid start date-time is the current date-time. `startDateTime` will be used if both `startDate` and `startDateTime` are specified. Date-times are always in UTC [RFC 3339](https://datatracker.ietf.org/doc/html/rfc3339#section-5.6) 'date-time'."
+              },
+              {
+                "name": "endDateTime",
+                "value": "",
+                "type": "query",
+                "description": "The end date-time of the trades (exclusive) in `YYYY-MM-DDTHH:MM:SS.nnnnnnnnn` format. The latest valid end date-time is the current date-time. The earliest valid end date-time is '2017-01-01T00:00:00.000000000'. `endDateTime` will be used if both `endDate` and `endDateTime` are specified. Date-times are always in UTC [RFC 3339](https://datatracker.ietf.org/doc/html/rfc3339#section-5.6) 'date-time'."
+              },
+              {
+                "name": "status",
+                "value": "",
+                "type": "query",
+                "description": "One or more statuses to filter trades. If provided, only trades matching these statuses will be returned."
+              },
+              {
+                "name": "side",
+                "value": "",
+                "type": "query",
+                "description": "Filter by the side of a trade. If provided, only trades matching this side will be returned."
+              },
+              {
+                "name": "tradingPair",
+                "value": "",
+                "type": "query",
+                "description": "Filter by the trading pair of a trade. If provided, only trades matching this pair of assets will be returned."
+              },
+              {
+                "name": "accountId",
+                "value": "",
+                "type": "query",
+                "description": "Filter by the trading account ID of a trade. If provided, only trades linked to this account ID will be returned."
+              },
+              {
+                "name": "subaccountId",
+                "value": "",
+                "type": "query",
+                "description": "Filter by the trading account ID of a trade. If provided, only trades linked to this account ID will be returned."
+              },
+              {
+                "name": "orderId",
+                "value": "",
+                "type": "query",
+                "description": "Filter by the order ID of a trade. The orderId is the anchorage orderId on execution report. If provided, only trades of the specified order will be returned."
+              },
+              {
+                "name": "vaultId",
+                "value": "",
+                "type": "query",
+                "description": "Filter by the vault ID of a trade. If provided, only trades linked to this vault ID will be returned."
+              },
+              {
+                "name": "tradeIds",
+                "value": "",
+                "type": "query",
+                "description": "A list of `tradeIds` to return. Invalid `tradeIds` will be ignored. A maximum number of unique 500 trade ids are enforced per call."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of results to return per query"
+              }
+            ]
+          },
+          "docs": "Permissions required: **Execute trades** or **Read trade activity**\n\nList all trades. With the permission **Read trade activity** all trades of the organization may be read. With the permission **Execute trades** only the trades created by this API key may be read.\n\nTrades are sorted in a descending order by their timestamp, i.e. the most recent trade or the trade with a timestamp closest to `endDate` is listed first.\n\n#### Filters\n\nYou may optionally supply the following filters:\n\n- Specify a `"
+        },
+        {
+          "info": {
+            "name": "Get trade by ID",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.anchorage-staging.com/v2/trading/trades/:tradeId",
+            "params": [
+              {
+                "name": "tradeId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the trade to get details for"
+              }
+            ]
+          },
+          "docs": "Permissions required: **Read trade activity** or **Execute trades** (if trade created by this API key)\n\nGet trade by ID."
+        },
+        {
+          "info": {
+            "name": "Get credit limit details",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.anchorage-staging.com/v2/trading/creditLimit"
+          },
+          "docs": "Permissions required: **Execute trades** or **Read trade activity**\n\nGet your current credit limit details.\n\nThe credit limit represents the maximum USD value you are allowed to trade. The credit spent represents the USD value you have spent and it is automatically updated when your trades (buy or sell trades) are executed. If the credit limit is exhausted or will be exhausted with a trade, Anchorage Digital will then reject your request to trade (i.e. request to accept a quote)."
+        },
+        {
+          "info": {
+            "name": "List outstanding trading positions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.anchorage-staging.com/v2/trading/positions"
+          },
+          "docs": "Permissions required: **Execute trades** or **Read trade activity**\n\nGet the list of outstanding trading positions."
+        },
+        {
+          "info": {
+            "name": "List settlements",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.anchorage-staging.com/v2/trading/settlements",
+            "params": [
+              {
+                "name": "startDate",
+                "value": "",
+                "type": "query",
+                "description": "The start date (inclusive) in `YYYY-MM-DD` format. The earliest valid start date is `2017-01-01`. The last valid start date is the current date. Dates are always in UTC [RFC 3339](https://datatracker.ietf.org/doc/html/rfc3339#section-5.6) 'full-date'."
+              },
+              {
+                "name": "endDate",
+                "value": "",
+                "type": "query",
+                "description": "The end date (inclusive) in `YYYY-MM-DD` format. The latest valid end date is the current date. Dates are always in UTC [RFC 3339](https://datatracker.ietf.org/doc/html/rfc3339#section-5.6) 'full-date'."
+              },
+              {
+                "name": "status",
+                "value": "",
+                "type": "query",
+                "description": "One or more statuses to filter settlements. If provided, only settlements matching these statuses will be returned."
+              },
+              {
+                "name": "vaultID",
+                "value": "",
+                "type": "query",
+                "description": "Filter by the vault ID of a settlement. If provided, only settlements linked to this vault ID will be returned."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of results to return per query"
+              },
+              {
+                "name": "excludePositions",
+                "value": "",
+                "type": "query",
+                "description": "If `true`, `positions` property will be excluded from the response. If `false`, `positions` will be included in the response as demonstrated in the example."
+              },
+              {
+                "name": "excludeSettlementInstructions",
+                "value": "",
+                "type": "query",
+                "description": "If `true`, `instructionsCrypto` property will be excluded from the response. If `false`, it will be included in the response as demonstrated in the example."
+              },
+              {
+                "name": "accountId",
+                "value": "",
+                "type": "query",
+                "description": "Filter by the trading account ID of a trade. If provided, only trades linked to this account ID will be returned."
+              }
+            ]
+          },
+          "docs": "Permissions required: **Execute trades** or **Read trade activity**\n\nList of all settlements. With permission **Read trade activity** all settlements of the organization may be read. With permission **Execute trades** only settlements this api key has created may be read.\n\nSettlements are sorted in a descending order by their timestamp, i.e. the most recent settlement or the settlement with a timestamp closest to `endDate` is listed first.\n\n#### Filters\n\nYou may optionally supply the following f"
+        },
+        {
+          "info": {
+            "name": "Get settlement by ID",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.anchorage-staging.com/v2/trading/settlements/:settlementId",
+            "params": [
+              {
+                "name": "settlementId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the settlement to get details for"
+              },
+              {
+                "name": "excludeTrades",
+                "value": "",
+                "type": "query",
+                "description": "If `true`, `trades` property will be excluded from the response. If `false`, `trades` will be included in the response as demonstrated in the example. In order to get the full list of trades for a settlement, favor the usage of the [list trades by settlement](#operation/getTradesBySettlement) API endpoint."
+              },
+              {
+                "name": "excludePositions",
+                "value": "",
+                "type": "query",
+                "description": "If `true`, `positions` property will be excluded from the response. If `false`, `positions` will be included in the response as demonstrated in the example."
+              },
+              {
+                "name": "excludeSettlementInstructions",
+                "value": "",
+                "type": "query",
+                "description": "If `true`, `instructionsCrypto` property will be excluded from the response. If `false`, it will be included in the response as demonstrated in the example."
+              }
+            ]
+          },
+          "docs": "Permissions required: **Execute trades** or **Read trade activity**\n\nGet settlement details by ID."
+        },
+        {
+          "info": {
+            "name": "List trades by settlement",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.anchorage-staging.com/v2/trading/settlements/:settlementId/trades",
+            "params": [
+              {
+                "name": "settlementId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the settlement to retrieve"
+              },
+              {
+                "name": "startDateTime",
+                "value": "",
+                "type": "query",
+                "description": "The start date-time of the trades in `YYYY-MM-DDTHH:MM:SS.nnnnnnnnn` format. The earliest valid start date-time is '2017-01-01T00:00:00.000000000'. Date-times are always in UTC [RFC 3339](https://datatracker.ietf.org/doc/html/rfc3339#section-5.6) 'date-time'."
+              },
+              {
+                "name": "endDateTime",
+                "value": "",
+                "type": "query",
+                "description": "The end date-time of the trades (exclusive) in `YYYY-MM-DDTHH:MM:SS.nnnnnnnnn` format. Defaults to the current date-time if not specified. `endDateTime` must be after `startDateTime`. Date-times are always in UTC [RFC 3339](https://datatracker.ietf.org/doc/html/rfc3339#section-5.6) 'date-time'."
+              },
+              {
+                "name": "side",
+                "value": "",
+                "type": "query",
+                "description": "Filter by the side of a trade. If provided, only trades matching this side will be returned."
+              },
+              {
+                "name": "tradingPair",
+                "value": "",
+                "type": "query",
+                "description": "Filter by the trading pair of a trade. If provided, only trades matching this pair of assets will be returned."
+              },
+              {
+                "name": "afterId",
+                "value": "",
+                "type": "query",
+                "description": "When paginating this is used to provide the starting point for the page to fetch (retrieved from the previous response body)"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of results to return per query"
+              }
+            ]
+          },
+          "docs": "Permissions required: **Execute trades** or **Read trade activity**\n\nList trades for the provided settlement. With the permission **Read trade activity** all trades of the organization may be read. With the permission **Execute trades** only the trades created by this API key may be read.\n\nTrades are sorted in a descending order by their timestamp (i.e. the most recent trade or the trade with a timestamp closest to `endDateTime` is listed first)."
+        },
+        {
+          "info": {
+            "name": "List trading accounts",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.anchorage-staging.com/v2/trading/accounts"
+          },
+          "docs": "Permissions required: **Read trade activity**\n\nGet the list of trading accounts"
+        },
+        {
+          "info": {
+            "name": "Get a trading account by id",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.anchorage-staging.com/v2/trading/accounts/:accountId",
+            "params": [
+              {
+                "name": "accountId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the trading account to get details for"
+              }
+            ]
+          },
+          "docs": "Permissions required: **Read trade activity**\n\nGet trading account details by ID."
+        },
+        {
+          "info": {
+            "name": "List trading account balances",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.anchorage-staging.com/v2/trading/accounts/:accountId/balances",
+            "params": [
+              {
+                "name": "accountId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the trading account to get the balances for"
+              },
+              {
+                "name": "assetType",
+                "value": "",
+                "type": "query",
+                "description": "The asset type to display balance for"
+              }
+            ]
+          },
+          "docs": "Permissions required: **Read trade activity**\n\nGet the trading account balances of fiat and digital assets"
+        },
+        {
+          "info": {
+            "name": "Get trading account credit limit and usage",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.anchorage-staging.com/v2/trading/accounts/:accountId/credit",
+            "params": [
+              {
+                "name": "accountId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the trading account to get the credit for"
+              }
+            ]
+          },
+          "docs": "Permissions required: **Read trade activity**\n\nGet the credit limit and usage of a trading account per asset.\nCurrent USD prices are not returned, only assets and their quantity.\n\nStill under development, return empty replies."
+        },
+        {
+          "info": {
+            "name": "Get market data snapshot",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.anchorage-staging.com/v2/trading/marketdata",
+            "params": [
+              {
+                "name": "symbol",
+                "value": "",
+                "type": "query",
+                "description": "The trading pair symbol (e.g., BTC-USD, ETH-USD)"
+              },
+              {
+                "name": "accountId",
+                "value": "",
+                "type": "query",
+                "description": "The account ID (either accountId or subaccountId must be provided)"
+              },
+              {
+                "name": "subaccountId",
+                "value": "",
+                "type": "query",
+                "description": "The subaccount ID (either accountId or subaccountId must be provided)"
+              },
+              {
+                "name": "sizeBuckets",
+                "value": "",
+                "type": "query",
+                "description": "Comma-separated list of size buckets for market depth (e.g., 0.1,0.5,1.0)"
+              },
+              {
+                "name": "amountBuckets",
+                "value": "",
+                "type": "query",
+                "description": "Comma-separated list of amount buckets for market depth (e.g., 1000,5000,10000). Amount buckets represent USD values. Note: When using amount buckets, the price levels in the response may show size as aggregated notional value rather than asset quantity."
+              },
+              {
+                "name": "depth",
+                "value": "",
+                "type": "query",
+                "description": "Number of price levels to return for bids and offers. Must be greater than zero. The API will return up to the requested depth, limited by available liquidity in the order book. Defaults to 5 if none of depth, sizeBuckets, or amountBuckets are specified."
+              },
+              {
+                "name": "priceIncrement",
+                "value": "",
+                "type": "query",
+                "description": "Price increment for market data aggregation (decimal string for precision)"
+              }
+            ]
+          },
+          "docs": "Permissions required: **Execute trades** or **Read trade activity**\n\nGet real-time market data snapshot for a trading symbol from the liquidity provider."
+        },
+        {
+          "info": {
+            "name": "List supported trading pairs",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.anchorage-staging.com/v2/trading/pairs"
+          },
+          "docs": "Permissions required: **Execute trades** or **Read trade activity**\n\nList all of the supported trading pairs for your organization.\nEach trading pair object includes a description and trading\nsymbol (ex. BTC-USD), which usually corresponds to two asset ticker symbols.\nOptionally, a trading pair object includes a reference data object that details the trading precision context: minimum size increment and price increment."
+        },
+        {
+          "info": {
+            "name": "Place an async order",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.anchorage-staging.com/v2/trading/async-order",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Permissions required: **Execute trades**\n\nPlace an order, either Limit, StopLoss, StopLimit or TakeProfitLimit currently FillOrKill, ImediateOrCancel or GoodTillCancel are supported.\n\nOne of `accountId` or `subaccountId` must be specified but not both."
+        },
+        {
+          "info": {
+            "name": "Cancel an async order",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.anchorage-staging.com/v2/trading/async-order/cancel",
+            "params": [
+              {
+                "name": "orderId",
+                "value": "",
+                "type": "query",
+                "description": "The orderId for the async order to cancel"
+              },
+              {
+                "name": "clOrderId",
+                "value": "",
+                "type": "query",
+                "description": "The clOrderId for the async order to cancel"
+              }
+            ]
+          },
+          "docs": "Permissions required: **Execute trades**\n\nCancels an async order."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

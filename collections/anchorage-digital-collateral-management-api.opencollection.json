@@ -1,0 +1,261 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Anchorage Digital API Reference Addresses Collateral Management API",
+    "version": "2.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "Api-Access-Key",
+      "value": "{{Api-Access-Key}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Collateral Management",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List packages",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.anchorage-staging.com/v2/collateral_management/packages",
+            "params": [
+              {
+                "name": "afterId",
+                "value": "",
+                "type": "query",
+                "description": "When paginating this is used to provide the starting point for the page to fetch (retrieved from the previous response body)"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of results to return per query"
+              }
+            ]
+          },
+          "docs": "Permissions required: **Read vault activity**\n\n\nGet collateral packages."
+        },
+        {
+          "info": {
+            "name": "Create a new collateral package",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.anchorage-staging.com/v2/collateral_management/packages",
+            "headers": [
+              {
+                "name": "Api-Signature",
+                "value": ""
+              },
+              {
+                "name": "Api-Timestamp",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Permissions required: **Manage Collateral Packages** and **Read vault activity**\n\n\nCreates a new collateral package in the Collateral Management service."
+        },
+        {
+          "info": {
+            "name": "Update a collateral package",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.anchorage-staging.com/v2/collateral_management/packages/:packageId",
+            "headers": [
+              {
+                "name": "Api-Signature",
+                "value": ""
+              },
+              {
+                "name": "Api-Timestamp",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "packageId",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the package to update."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Permissions required: **Manage Collateral Packages** and **Read vault activity**\n\n\nUpdates an existing collateral package in the Collateral Management service."
+        },
+        {
+          "info": {
+            "name": "List exposures",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.anchorage-staging.com/v2/collateral_management/exposures",
+            "params": [
+              {
+                "name": "afterId",
+                "value": "",
+                "type": "query",
+                "description": "When paginating this is used to provide the starting point for the page to fetch (retrieved from the previous response body)"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of results to return per query"
+              }
+            ]
+          },
+          "docs": "Permissions required: **Read vault activity**\n\n\nGet Exposures."
+        },
+        {
+          "info": {
+            "name": "Create a new exposure",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.anchorage-staging.com/v2/collateral_management/exposures",
+            "headers": [
+              {
+                "name": "Api-Signature",
+                "value": ""
+              },
+              {
+                "name": "Api-Timestamp",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Permissions required: **Manage Collateral Exposures** and **Read vault activity**\n\nCreates a new exposure in the Collateral Management service."
+        },
+        {
+          "info": {
+            "name": "Update an operation",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.anchorage-staging.com/v2/collateral_management/operations/:operationId",
+            "headers": [
+              {
+                "name": "Api-Signature",
+                "value": ""
+              },
+              {
+                "name": "Api-Timestamp",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "operationId",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the operation to update."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Permissions required: **Manage Collateral Packages** and **Read vault activity**\n\n\nUpdate an existing operation in the Collateral Management service.\nOnly the fields provided in the request body will be updated."
+        },
+        {
+          "info": {
+            "name": "List collateral and exposure operations",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.anchorage-staging.com/v2/collateral_management/operations",
+            "params": [
+              {
+                "name": "afterId",
+                "value": "",
+                "type": "query",
+                "description": "When paginating this is used to provide the starting point for the page to fetch (retrieved from the previous response body)"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of results to return per query"
+              }
+            ]
+          },
+          "docs": "Permissions required: **Read vault activity**\n\n\nGet all the operations that were booked for collateral packages and exposures."
+        },
+        {
+          "info": {
+            "name": "Create a new operation",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.anchorage-staging.com/v2/collateral_management/operations",
+            "headers": [
+              {
+                "name": "Api-Signature",
+                "value": ""
+              },
+              {
+                "name": "Api-Timestamp",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Permissions required: **Manage Collateral Packages** and **Read vault activity**\n\n\nCreate a new operation in the Collateral Management service."
+        },
+        {
+          "info": {
+            "name": "Get available assets for specific price sources",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.anchorage-staging.com/v2/collateral_management/price_sources",
+            "params": [
+              {
+                "name": "exchange",
+                "value": "",
+                "type": "query",
+                "description": "Optional filter to return data for a specific exchange only."
+              }
+            ]
+          },
+          "docs": "Permissions required: **Read vault activity**\n\n\nReturns the assets (trading pairs) available for specific price sources (exchanges).\nThis endpoint queries live price data from the Kafka cache and returns supported exchanges.\n\nOptionally filter by a specific exchange using the 'exchange' query parameter."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

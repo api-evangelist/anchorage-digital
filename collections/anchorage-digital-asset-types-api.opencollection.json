@@ -1,0 +1,51 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Anchorage Digital API Reference Addresses Asset Types API",
+    "version": "2.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "Api-Access-Key",
+      "value": "{{Api-Access-Key}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Asset Types",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List supported asset types",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.anchorage-staging.com/v2/asset-types",
+            "params": [
+              {
+                "name": "assetTypes",
+                "value": "",
+                "type": "query",
+                "description": "The asset type IDs to be used as filter for the organization asset types.\n\nAn asset type is considering to be passing this filter, if this set is not empty.\n"
+              },
+              {
+                "name": "assetFeatures",
+                "value": "",
+                "type": "query",
+                "description": "The asset features to be used as filter for the organization asset types.\n\nAn asset type is considering to be passing this filter, if this set is not empty, and at least one of the features is supported by the asset type.\n"
+              }
+            ]
+          },
+          "docs": "Permissions required: none\n\n\n\nList all of the supported asset types for your organization. Each asset type object includes the name of the asset (ex. Bitcoin) as well as the asset type (ex. BTC), which usually corresponds to the asset's ticker symbol.\n\n\n#### Filters\n\n\nYou may optionally supply the following filters:\n\n\n- Specify the `asset types` to filter the organization asset types. Multiple asset types should be separated by commas.\n\n\n  For example:\n\n  To filter a single asset type to only Bi"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

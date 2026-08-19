@@ -1,0 +1,66 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Anchorage Digital API Reference Addresses Stablecoins API",
+    "version": "2.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "Api-Access-Key",
+      "value": "{{Api-Access-Key}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Stablecoins",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Create a Stablecoin Conversion",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.anchorage-staging.com/v2/stablecoins/conversion",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Permissions required: **Convert Stablecoins**\n\n\nCreate a stablecoin conversion, either issuance or redemption. Issuance is when USD is converted to the stablecoin. Redemption is when the stablecoin asset is converted to USD."
+        },
+        {
+          "info": {
+            "name": "Get Issue/Redeem History",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.anchorage-staging.com/v2/stablecoins/history",
+            "params": [
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of results to return (default 100, max 100)"
+              },
+              {
+                "name": "lastCreatedAt",
+                "value": "",
+                "type": "query",
+                "description": "Cursor for pagination - timestamp of the last result from the previous page (RFC3339 format)"
+              }
+            ]
+          },
+          "docs": "Permissions required: **Convert Stablecoins**\n\n\nRetrieve the history of stablecoin issuance and redemption operations for your organization.\nResults are paginated and ordered by creation time (newest first)."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
