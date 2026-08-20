@@ -248,6 +248,8 @@ apis:
   humanURL: https://docs.anchorage.com/knowledge-base/api-reference/introduction
   baseURL: https://api.anchorage.com/v2
   tags:
+  - APIKeys
+  tags_raw:
   - API Key
   properties:
   - type: OpenAPI
@@ -603,6 +605,8 @@ apis:
   humanURL: https://docs.anchorage.com/knowledge-base/api-reference/introduction
   baseURL: https://api.anchorage.com/v2
   tags:
+  - Transaction
+  tags_raw:
   - Transactions
   properties:
   - type: OpenAPI
@@ -676,6 +680,8 @@ apis:
   humanURL: https://docs.anchorage.com/knowledge-base/api-reference/introduction
   baseURL: https://api.anchorage.com/v2
   tags:
+  - Vault
+  tags_raw:
   - Vaults
   properties:
   - type: OpenAPI
