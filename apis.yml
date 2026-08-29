@@ -784,6 +784,9 @@ maintainers:
 - FN: APIs.json
   email: info@apis.io
 common:
+  - type: CapabilityMap
+    url: capabilities/anchorage-digital-capability-edges.yml
+    name: Anchorage Digital Business Capability Map
 # --- identity / link properties ---
 - type: Website
   url: https://anchorage.com/
